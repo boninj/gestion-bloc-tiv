@@ -1,0 +1,11 @@
+<?php
+if(@is_object($db_con)) return;
+
+$db_con = new mysqli("localhost", "user", "passwd", "schema");
+
+if ($db_con->connect_errno) {
+    printf("Échec de la connexion : %s\n", $db_con->connect_error);
+    exit();
+}
+
+?>
