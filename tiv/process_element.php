@@ -1,5 +1,5 @@
 <?php
-include_once("config.inc.php");
+include_once("definition_element.inc.php");
 include_once("connect_db.inc.php");
 
 $id = $_POST["id"];

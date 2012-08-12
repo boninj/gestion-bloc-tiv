@@ -138,6 +138,7 @@ $inspecteur_tiv_elements = array(
   "numero_tiv",
   "adresse_tiv",
   "telephone_tiv",
+  "actif",
 );
 
 $inspecteur_tiv_rules = '
@@ -155,6 +156,9 @@ $inspecteur_tiv_rules = '
     telephone_tiv: {
         required: true,
     },
+    actif: {
+        required: true,
+    },
   }';
 
 $inspecteur_tiv_forms = array(
@@ -162,6 +166,7 @@ $inspecteur_tiv_forms = array(
   "numero_tiv"    => array("required", "text", "Numéro de TIV de l'inspecteur"),
   "adresse_tiv"   => array("required", "text", "Adresse du TIV"),
   "telephone_tiv" => array("required", "text", "Téléphone du TIV"),
+  "actif"         => array("required", array("oui", "non"), "Le TIV est-il actif ?"),
 );
 
 function get_columns_from_element($element) {

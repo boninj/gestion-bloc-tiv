@@ -1,32 +1,28 @@
--- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
--- http://www.phpmyadmin.net
+-- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Client: localhost
--- Généré le : Dim 12 Août 2012 à 15:56
--- Version du serveur: 5.5.24
--- Version de PHP: 5.3.10-1ubuntu3.2
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: tiv
+-- ------------------------------------------------------
+-- Server version	5.5.24-0ubuntu0.12.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Base de données: `tiv`
+-- Table structure for table `bloc`
 --
 
--- --------------------------------------------------------
-
---
--- Structure de la table `bloc`
---
-
-CREATE TABLE IF NOT EXISTS `bloc` (
+DROP TABLE IF EXISTS `bloc`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bloc` (
   `id` int(15) NOT NULL,
   `id_club` int(15) NOT NULL,
   `nom_proprietaire` varchar(255) NOT NULL,
@@ -42,14 +38,16 @@ CREATE TABLE IF NOT EXISTS `bloc` (
   `pression_service` int(5) NOT NULL,
   PRIMARY KEY (`id`,`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Structure de la table `bloc_sauvegarde`
+-- Table structure for table `bloc_sauvegarde`
 --
 
-CREATE TABLE IF NOT EXISTS `bloc_sauvegarde` (
+DROP TABLE IF EXISTS `bloc_sauvegarde`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bloc_sauvegarde` (
   `id` int(15) NOT NULL,
   `id_club` int(15) NOT NULL,
   `nom_proprietaire` varchar(255) NOT NULL,
@@ -64,14 +62,16 @@ CREATE TABLE IF NOT EXISTS `bloc_sauvegarde` (
   `pression_service` int(5) NOT NULL,
   PRIMARY KEY (`id`,`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Structure de la table `detendeur`
+-- Table structure for table `detendeur`
 --
 
-CREATE TABLE IF NOT EXISTS `detendeur` (
+DROP TABLE IF EXISTS `detendeur`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `detendeur` (
   `id` int(15) NOT NULL,
   `modele` varchar(128) NOT NULL,
   `id_1ier_etage` varchar(64) NOT NULL,
@@ -79,62 +79,73 @@ CREATE TABLE IF NOT EXISTS `detendeur` (
   `id_octopus` varchar(64) NOT NULL,
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des detendeurs du club';
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Structure de la table `inspecteur_tiv`
+-- Table structure for table `inspecteur_tiv`
 --
 
-CREATE TABLE IF NOT EXISTS `inspecteur_tiv` (
+DROP TABLE IF EXISTS `inspecteur_tiv`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inspecteur_tiv` (
   `id` int(16) NOT NULL,
   `nom` varchar(255) NOT NULL,
   `numero_tiv` varchar(16) NOT NULL,
   `adresse_tiv` varchar(255) NOT NULL,
-  `telephone_tiv` varchar(32) NOT NULL
+  `telephone_tiv` varchar(32) NOT NULL,
+  `actif` varchar(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des inspecteurs TIV du club';
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Structure de la table `inspection_tiv`
+-- Table structure for table `inspection_tiv`
 --
 
-CREATE TABLE IF NOT EXISTS `inspection_tiv` (
+DROP TABLE IF EXISTS `inspection_tiv`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inspection_tiv` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   `id_bloc` int(16) NOT NULL,
   `id_inspecteur_tiv` int(16) NOT NULL,
   `date` date NOT NULL,
-  `remarque` int(16) NOT NULL,
+  `etat_exterieur` varchar(16) NOT NULL,
+  `remarque_exterieur` varchar(255) NOT NULL,
+  `etat_interieur` varchar(16) NOT NULL,
+  `remarque_interieur` varchar(255) NOT NULL,
+  `etat_filtage` varchar(16) NOT NULL,
+  `remarque_filetage` varchar(255) NOT NULL,
   `decision` varchar(16) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_bloc` (`id_bloc`),
-  KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`),
+  CONSTRAINT `inspection_tiv_ibfk_1` FOREIGN KEY (`id_bloc`) REFERENCES `bloc` (`id`),
+  CONSTRAINT `inspection_tiv_ibfk_2` FOREIGN KEY (`id_inspecteur_tiv`) REFERENCES `inspection_tiv` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Structure de la table `stab`
+-- Table structure for table `stab`
 --
 
-CREATE TABLE IF NOT EXISTS `stab` (
+DROP TABLE IF EXISTS `stab`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stab` (
   `id` int(15) NOT NULL,
   `modele` varchar(128) NOT NULL,
   `taille` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des stabs du club';
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Contraintes pour les tables exportées
---
-
---
--- Contraintes pour la table `inspection_tiv`
---
-ALTER TABLE `inspection_tiv`
-  ADD CONSTRAINT `inspection_tiv_ibfk_1` FOREIGN KEY (`id_bloc`) REFERENCES `bloc` (`id`),
-  ADD CONSTRAINT `inspection_tiv_ibfk_2` FOREIGN KEY (`id_inspecteur_tiv`) REFERENCES `inspection_tiv` (`id`);
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2012-08-12 16:32:09
