@@ -4,4 +4,4 @@ L'application a été développé sur un serveur Apache PHP avec une base MySQL.
 
 La création de la base se fait à l'aide du fichier schema.sql et la déclaration de la connexion se fait en modifiant le fichier connect_db.inc.php (un fichier template connect_db.inc.php.template d'exemple est présent dans l'application).
 
-Cette application est soumise à la licence GPL. Enfin, à souligner, le logiciel est fourni "en l'état" sans garantie d'aucune sorte, exoresse ou implice. En dehors de ça bon TIV !
+Cette application est soumise à la licence GPL. Enfin, à souligner, le logiciel est fourni "en l'état" sans garantie d'aucune sorte, expresse ou implice. En dehors de ça bon TIV !
