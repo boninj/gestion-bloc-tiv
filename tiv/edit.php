@@ -1,6 +1,9 @@
 <?php
-$element = $_GET['element'];
-$id = $_GET['id'];
+# Si parametre _GET present, on est peut-être utilisé par ajout_element.php
+if(array_key_exists("element", $_GET)) {
+  $element = $_GET['element'];
+  $id = $_GET['id'];
+}
 $title = "Edition d'un $element - club Aqua Sénart";
 include_once('head.inc.php');
 include_once('config.inc.php');
