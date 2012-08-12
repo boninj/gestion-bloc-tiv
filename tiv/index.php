@@ -10,6 +10,7 @@ include_once('head.inc.php');
 <div id="MenuNavigation">
   <ul>
     <li><a href="#accueil"        title="Accueil gestion matériel"     >Accueil</a></li>
+    <li><a href="#admin"          title="Administration du site"       >Administration</a></li>
     <li><a href="#bloc"           title="Liste des blocs du club"      >Blocs</a></li>
     <li><a href="#detendeur"      title="Liste des détendeurs du club" >Détendeurs</a></li>
     <li><a href="#stab"           title="Liste des stabs du club"      >Stabs</a></li>
@@ -18,6 +19,9 @@ include_once('head.inc.php');
   </ul>
   <div id="accueil">
     <?php include("accueil.php");?>
+  </div>
+  <div id="admin">
+    <?php include("admin.php");?>
   </div>
   <div id="bloc">
     <?php $element = "bloc";           include("affichage_element.php");?>
