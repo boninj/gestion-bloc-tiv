@@ -19,7 +19,6 @@ $values = $db_result->fetch_array();
   $(document).ready(function(){
     $("#edit_form").validate({
 <?php echo $bloc_rules; ?>,
-      messages: { required: 'toto' },
       submitHandler: function(form) {
         // do other stuff for a valid form
         $.post('process_element.php', $("#edit_form").serialize(), function(data) {
