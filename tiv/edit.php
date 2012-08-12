@@ -6,7 +6,7 @@ if(array_key_exists("element", $_GET)) {
 }
 $title = "Edition d'un $element - club Aqua Sénart";
 include_once('head.inc.php');
-include_once('config.inc.php');
+include_once('definition_element.inc.php');
 require_once('connect_db.inc.php');
 
 $to_retrieve = $element."_forms";

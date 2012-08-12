@@ -1,5 +1,5 @@
 <?php
-require_once('config.inc.php');
+require_once('definition_element.inc.php');
 require_once('connect_db.inc.php');
 
 $class_alerte_reepreuve = "ok";
