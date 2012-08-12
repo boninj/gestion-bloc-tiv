@@ -41,30 +41,6 @@ CREATE TABLE `bloc` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `bloc_sauvegarde`
---
-
-DROP TABLE IF EXISTS `bloc_sauvegarde`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bloc_sauvegarde` (
-  `id` int(15) NOT NULL,
-  `id_club` int(15) NOT NULL,
-  `nom_proprietaire` varchar(255) NOT NULL,
-  `adresse` varchar(255) NOT NULL,
-  `constructeur` varchar(128) NOT NULL,
-  `marque` varchar(128) NOT NULL,
-  `numero` varchar(128) NOT NULL,
-  `capacite` varchar(32) NOT NULL,
-  `date_premiere_epreuve` date NOT NULL,
-  `date_derniere_epreuve` date NOT NULL,
-  `pression_epreuve` int(5) NOT NULL,
-  `pression_service` int(5) NOT NULL,
-  PRIMARY KEY (`id`,`numero`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `detendeur`
 --
 
@@ -77,7 +53,8 @@ CREATE TABLE `detendeur` (
   `id_1ier_etage` varchar(64) NOT NULL,
   `id_2e_etage` varchar(64) NOT NULL,
   `id_octopus` varchar(64) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des detendeurs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -94,7 +71,8 @@ CREATE TABLE `inspecteur_tiv` (
   `numero_tiv` varchar(16) NOT NULL,
   `adresse_tiv` varchar(255) NOT NULL,
   `telephone_tiv` varchar(32) NOT NULL,
-  `actif` varchar(3) NOT NULL
+  `actif` varchar(3) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des inspecteurs TIV du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -119,10 +97,8 @@ CREATE TABLE `inspection_tiv` (
   `decision` varchar(16) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_bloc` (`id_bloc`),
-  KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`),
-  CONSTRAINT `inspection_tiv_ibfk_1` FOREIGN KEY (`id_bloc`) REFERENCES `bloc` (`id`),
-  CONSTRAINT `inspection_tiv_ibfk_2` FOREIGN KEY (`id_inspecteur_tiv`) REFERENCES `inspection_tiv` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,7 +111,8 @@ DROP TABLE IF EXISTS `stab`;
 CREATE TABLE `stab` (
   `id` int(15) NOT NULL,
   `modele` varchar(128) NOT NULL,
-  `taille` varchar(32) NOT NULL
+  `taille` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des stabs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -148,4 +125,4 @@ CREATE TABLE `stab` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-12 16:32:09
+-- Dump completed on 2012-08-12 21:24:48
