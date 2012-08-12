@@ -12,6 +12,19 @@
 <h2>Préparation d'un TIV</h2>
 <script>
   $(function() {
+    $.validator.messages.required = "Champ obligatoire";
+    $("#preparation_tiv").validate({
+      debug: true,
+      rules: {
+        date_tiv: {
+            required: true,
+            date: true,
+        },
+      },
+      submitHandler: function(form) {
+        if(confirm("Lancer la procédure ?")) form.submit();
+      }
+    });
     $('#date_tiv' ).datepicker({
       changeMonth: true,
       changeYear: true,
