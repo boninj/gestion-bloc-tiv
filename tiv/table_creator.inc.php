@@ -44,7 +44,8 @@ while($line = $db_result->fetch_array(MYSQLI_NUM)) {
   $id = $line[0];
   if(!$read_only) {
     $element_to_manage = "id=$id&element=".(isset($real_element) ? $real_element : $element);
-    $line [] = "<a href='edit.php?$element_to_manage'>Edit</a> / <a href='delete.php?$element_to_manage'>Suppr.</a>";
+    $delete_confirmation = "return(confirm(\"Suppression élément $element (id = $id) ?\"));";
+    $line [] = "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
   }
   print join("</td><td>", $line);
   print "</td>\n    </tr>\n";
