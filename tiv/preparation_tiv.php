@@ -5,8 +5,6 @@ include_once('connect_db.inc.php');
 
 $tivs = $_POST["tivs"];
 $date_tiv = $_POST["date_tiv"];
-$time_tiv = strtotime($date_tiv);
-$max_date = strtotime("-55 months", $time_tiv);
 
 $current_tiv = 0;
 $db_result = $db_con->query("SELECT id, date_derniere_epreuve FROM bloc ORDER BY capacite,constructeur");
