@@ -3,7 +3,7 @@ $date_tiv = $_GET["date"];
 require_once("gestion_impression.inc.php");
 require_once("connect_db.inc.php");
 
-$pdf = new PdfTIV($date_tiv);
+$pdf = new PdfTIV($date_tiv, $db_con);
 $pdf->AliasNbPages();
 /*$pdf->AddPage();
 $pdf->SetFont('Times','B',16);
@@ -37,23 +37,7 @@ $db_result = $db_con->query($db_query);
 while($result = $db_result->fetch_array()) {
   // Affichage de l'entête de la fiche (capacité du bloc, date des réépreuves etc.)
   $pdf->AddPage();
-  $pdf->SetFont('Times', 'B', 12);
-  $pdf->Cell(30,10,utf8_decode("Bloc n° club "), 0, 0);
-  $pdf->SetFont('Times',  '', 10);
-  $pdf->Cell(8,8,$result[1], 1, 0);
-  $pdf->Cell(5);
-  $pdf->SetFont('Times', 'B', 12);
-  $pdf->Cell(50,10,utf8_decode("Numéro du constructeur"), 0, 0);
-  $pdf->SetFont('Times',  '', 10);
-  $pdf->Cell(25,8,$result[2], 1, 1);
-  $pdf->SetFont('Times',  '', 12);
-  $pdf->Cell(25,8,utf8_decode("Capacité : ".$result[5]." litres - Pression service : ".$result[9]." bars - Pression épreuve : ".$result[10]." bars"), 0, 1);
-  $pdf->Cell(25,8,utf8_decode("Première épreuve : ".$result[8]), 0, 0);
-  $pdf->Cell(32);
-  $pdf->Cell(25,8,utf8_decode("Dernière épreuve : ".$result[7]), 0, 0);
-  $pdf->Cell(32);
-  $prochaine_epreuve = date("Y-m-d", strtotime("+5 years", strtotime($result[7])));
-  $pdf->Cell(25,8,utf8_decode("Prochaine épreuve : ".$prochaine_epreuve), 0, 1);
+  $pdf->addBlocInformation($result[1]);
   // Information concernant l'inspection TIV
   $pdf->Cell(0,5,"", 'B', 1, 1); // Ligne de séparation
   $pdf->SetFont('Times', 'B', 14);
