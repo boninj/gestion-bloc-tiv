@@ -10,6 +10,9 @@ if(array_key_exists("date_tiv", $_GET)) {
   $date_tiv = $_POST['date_tiv'];
 }
 
+print "<h2>Impression des fiches TIVs</h2>\n";
+print "<p><a href='impression_fiche_tiv.php?date=$date_tiv'>Récupérer le PDF</a></p>\n";
+
 print "<h2>Informations relatives à l'inspection TIV du $date_tiv</h2>\n";
 
 $db_query = "SELECT inspection_tiv.id, bloc.date_derniere_epreuve FROM inspection_tiv,bloc ".
@@ -38,9 +41,6 @@ $db_query = "SELECT inspection_tiv.id, bloc.id, bloc.constructeur, bloc.marque, 
 $element = "inspection_tiv";
 $columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc", "Nom de l'inspecteur TIV", "Date dernière épreuve");
 include('table_creator.inc.php');
-
-print "<h2>Impression des fiches TIVs</h2>\n";
-print "<p><a href='impression_fiche_tiv.php?date=$date_tiv'>Récupérer le PDF</a></p>\n";
 
 print "<p><a href='index.php#admin'>Revenir au menu administration</a></p>\n";
 include_once('foot.inc.php');

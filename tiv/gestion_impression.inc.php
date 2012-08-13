@@ -61,7 +61,7 @@ class PdfTIV extends FPDF {
     $this->SetFont('Times', 'B', 12);
     foreach($status as $state) {
       if(strlen($state) == 0) continue;
-      $len = inspection_tivElement::getPDFLength($state);
+      $len = $this->GetStringWidth($state) + 2;
       $this->Cell($len, 8, utf8_decode($state), 0, 0);
       $this->Cell(5, 5, ($inspection["etat_$element"] == $state ? "X" : ""), 1, 0);
       $this->Cell(5);

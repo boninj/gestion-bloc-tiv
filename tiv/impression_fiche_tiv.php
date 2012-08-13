@@ -44,7 +44,7 @@ while($result = $db_result->fetch_array()) {
   $pdf->SetFont('Times', 'B', 14);
   $pdf->Cell(50,10,utf8_decode("Vérificateur TIV n° "), 0, 0);
   $pdf->SetFont('Times',  '', 12);
-  $pdf->Cell(50,8,$result[11], 1, 0);
+  $pdf->Cell(17,8,$result[11], 1, 0);
   $pdf->Cell(3);
   // Affichage numéro fiche tiv
   $pdf->SetFont('Times', 'B', 14);
