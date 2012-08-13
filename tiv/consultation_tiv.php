@@ -39,6 +39,9 @@ $element = "inspection_tiv";
 $columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc", "Nom de l'inspecteur TIV", "Date dernière épreuve");
 include('table_creator.inc.php');
 
+print "<h2>Impression des fiches TIVs</h2>\n";
+print "<p><a href='impression_fiche_tiv.php?date=$date_tiv'>Récupérer le PDF</a></p>\n";
+
 print "<p><a href='index.php#admin'>Revenir au menu administration</a></p>\n";
 include_once('foot.inc.php');
 ?>
