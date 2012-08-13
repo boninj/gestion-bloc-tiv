@@ -10,18 +10,22 @@ class PdfTIV extends FPDF {
     $this->_date = $date;
     $this->_db_con = $db_con;
     parent::__construct();
+    self::AliasNbPages();
   }
   function Header() {
-    $this->Image('logo_club.png', 10, 6, 10);
+    global $logo_club;
+    global $nom_club;
+    $this->Image($logo_club, 10, 6, 10);
     $this->SetFont('Arial','B',10);
     $this->Cell(10);
-    $this->Cell(180, 8, utf8_decode('Fiche TIV du '.$this->_date.' - club Aqua Sénart'), 'B', 0, 'C');
+    $this->Cell(0, 8, utf8_decode('Fiche TIV du '.$this->_date." - club $nom_club"), 'B', 0, 'C');
     $this->Ln(11);
   }
   function Footer() {
+    global $nom_club;
     $this->SetY(-15);
     $this->SetFont('Arial','I',8);
-    $this->Cell(0,10,utf8_decode('Inspection TIV du '.$this->_date.' - Club Aqua Sénart - Page '.$this->PageNo().'/{nb}'),0,0,'C');
+    $this->Cell(0,10,utf8_decode('Inspection TIV du '.$this->_date." - Club $nom_club - Page ".$this->PageNo().'/{nb}'),0,0,'C');
   }
   function addInspecteurResume() {
     $this->AddPage();
@@ -40,7 +44,7 @@ class PdfTIV extends FPDF {
     $w = array(10, 55, 40, 0);
     $this->SetFillColor(127,127,127);
     for($i = 0; $i < count($header); $i++) {
-      $this->Cell($w[$i], 10, utf8_decode($header[$i]), 1, 0, 'C',1);
+      $this->Cell($w[$i], 10, utf8_decode($header[$i]), 1, 0, 'C', 1);
     }
     $this->Ln();
     $this->SetFont('Times','',13);
@@ -73,16 +77,78 @@ class PdfTIV extends FPDF {
     $this->Cell(0,10,utf8_decode("Vous trouverez l'ensemble des fiches TIV dans les pages suivantes."), 0, 1);
   }
   function addResume() {
-    $this->AliasNbPages();
     $this->addInspecteurResume();
     $this->Ln(10);
     $this->addInspectionResume();
+  }
+  function addInspecteurFile() {
+    global $nom_club;
+    global $adresse_club;
+    global $numero_club;
+    $db_query = "SELECT DISTINCT id_inspecteur_tiv, inspecteur_tiv.nom, numero_tiv, adresse_tiv, telephone_tiv, id_inspecteur_tiv ".
+                "FROM inspection_tiv, inspecteur_tiv ".
+                "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = inspecteur_tiv.id ".
+                "GROUP BY inspection_tiv.id_inspecteur_tiv ORDER BY inspecteur_tiv.nom DESC";
+    $db_result = $this->_db_con->query($db_query);
+    while($result = $db_result->fetch_array()) {
+      $this->addPage('L');
+      $this->SetFont('Times', '', 12);
+      $this->Cell(0, 10, utf8_decode("FÉDÉRATION FRANÇAISE D'ÉTUDES ET DE SPORTS SOUS-MARINS"), 0, 0,'C');
+      $this->SetFont('Times', '', 10);
+      $this->SetX(10);
+      $this->MultiCell(20,4, utf8_decode("À retourner à la C.T.R."));
+      $this->Ln(5);
+      $this->Cell(110);
+      $this->SetFont('Times', '', 12);
+      $this->Cell(48, 5, utf8_decode("Fiche de contrôle visuel"), 1, 0, 'C');
+      $this->Ln(12);
+      // Cartouche entête gauche
+      $y = $this->GetY();
+      $this->Cell(48, 5, utf8_decode("Date de la visite :"));
+      $this->Cell(48, 5, date('d/m/Y', strtotime($this->_date)), 'B', 1, 'R');
+      $this->Ln(3);
+      $this->Cell(48, 5, utf8_decode("Nom du visiteur :"));
+      $this->Cell(48, 5, utf8_decode($result[1]), 'B', 1, 'R');
+      $this->Ln(3);
+      $this->Cell(48, 5, utf8_decode("Numéro du T.I.V. :"));
+      $this->Cell(48, 5, utf8_decode($result[2]), 'B', 1, 'R');
+      $this->Ln(3);
+      $this->Cell(48, 5, utf8_decode("Adresse du T.I.V. :"));
+      $this->MultiCell(48, 5, utf8_decode($result[3]), 'B', 'R');
+      $this->Ln(3);
+      $this->Cell(48, 5, utf8_decode("Tél. du T.I.V. :"));
+      $this->Cell(48, 5, utf8_decode($result[4]), 'B', 1, 'R');
+      // Cartouche entête droit
+      $this->Line(120, 45, 120, 90);
+      $this->SetXY(130, $y);
+      $this->Cell(34, 5, utf8_decode("Nom du club :"));
+      $this->Cell(28, 5, utf8_decode($nom_club), 'B', 0, 'C');
+      $this->Cell(5);
+      $this->Cell(28, 5, utf8_decode("Numéro :"));
+      $this->Cell(28, 5, utf8_decode($numero_club), 'B', 1, 'C');
+      $this->Ln(2); $this->SetX(130);
+      $this->Cell(34, 5, utf8_decode("Adresse du club :"));
+      $this->MultiCell(89, 5, utf8_decode($adresse_club), 'B', 'C');
+      $this->Ln(2); $this->SetX(127);
+      $y = $this->GetY();
+      $this->Cell(128, 24, "", 1);
+      $this->SetXY(130, $y + 3);
+      $this->Cell(58, 5, utf8_decode("Nombre de bouteille acceptées :"));
+      $db_query = "SELECT COUNT(inspection_tiv.id_bloc) ".
+                  "FROM inspection_tiv ".
+                  "WHERE id_inspecteur_tiv = ".$result[5]." AND decision = 'Bon'";
+      $db_count = $this->_db_con->query($db_query);
+      $count = $db_count->fetch_array();
+      $this->Cell(10, 5, utf8_decode($count[0]), 'B', 1, 'R');
+      $this->Ln(3); $this->SetX(130);
+      $this->Cell(58, 5, utf8_decode("Signature du T.I.V. :"));
+    }
   }
   function addBlocFile() {
     $db_query = "SELECT inspection_tiv.id, id_bloc, inspecteur_tiv.numero_tiv, decision, inspecteur_tiv.nom ".
                 "FROM inspection_tiv, inspecteur_tiv ".
                 "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = inspecteur_tiv.id ".
-                "ORDER BY inspecteur_tiv.id DESC";
+                "ORDER BY inspecteur_tiv.nom DESC";
     $db_result = $this->_db_con->query($db_query);
     while($result = $db_result->fetch_array()) {
       // Affichage de l'entête de la fiche (capacité du bloc, date des réépreuves etc.)

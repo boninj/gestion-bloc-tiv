@@ -1,0 +1,6 @@
+<?php
+$nom_club     = "Nom du club";
+$numero_club  = "XX.XX.XXXX";
+$adresse_club = "Adresse du club\nCode postal Ville";
+$logo_club    = "logo_club.png";
+?>

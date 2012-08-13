@@ -1,4 +1,6 @@
 <?php
+include_once("configuration.inc.php");
+
 class TIVElement {
   var $_name;
   var $_values;
