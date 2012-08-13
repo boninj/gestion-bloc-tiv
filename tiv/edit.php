@@ -32,7 +32,7 @@ if($element === "inspection_tiv") {
   });
 </script>
 <?php
-print $edit_class->constructEditForm($id, "edit_$element");
+print $edit_class->constructEditForm($id, "edit_form");
 print "<p><a href='".$edit_class->getBackUrl()."'>".$edit_class->getUrlTitle()."</a></p>\n";
 include_once('foot.inc.php');
 ?>
