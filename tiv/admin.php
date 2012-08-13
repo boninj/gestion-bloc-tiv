@@ -47,17 +47,22 @@ while($result = $db_result->fetch_array()) {
         if(confirm("Lancer la procédure ?")) form.submit();
       }
     });
-    $('#date_tiv' ).datepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'yy-mm-dd',
-      appendText: '(yyyy-mm-dd)',
-    });
   });
 </script>
 <p>A noter que la préparation d'un TIV consiste à pré-affecter les blocs aux différentes personnes qui feront plus tard le TIV.</p>
 <form name="preparation_tiv" id="preparation_tiv" action="preparation_tiv.php" method="POST">
-<p>Date de préparation du TIV :<input type="text" name="date_tiv" id="date_tiv" size="10" value=""/>
+<script>
+$(function() {
+  $( "#admin-date-tiv-selector" ).datepicker({
+    changeMonth: true,
+    changeYear: true,
+    dateFormat: 'yy-mm-dd',
+    appendText: '(yyyy-mm-dd)',
+  });
+  $( "#admin-date-tiv-selector" ).datepicker({ altFormat: 'yyyy-mm-dd' });
+});
+</script>
+<p>Date de préparation du TIV :<input type="text" name="date_tiv" id="admin-date-tiv-selector" size="10" value=""/>
 <input type="submit" name="lancer" value="Procéder à la pré-affectation" /></p>
 <p><a href="#" id="choix-tiv-toggle">Choisir les personnes faisant le TIV</a></p>
 <div id="choix-tiv">
