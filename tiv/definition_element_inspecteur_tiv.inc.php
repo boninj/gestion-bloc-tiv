@@ -40,6 +40,9 @@ class inspecteur_tivElement extends TIVElement {
   function inspecteur_tivElement() {
     parent::__construct();
   }
+  function getUpdateLabel() {
+    return "Mettre à jour l&#145;inspecteur TIV";
+  }
   static function getElements() {
     global $inspecteur_tiv_elements; return $inspecteur_tiv_elements;
   }

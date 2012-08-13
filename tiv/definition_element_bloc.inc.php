@@ -3,6 +3,9 @@ class blocElement extends TIVElement {
   function blocElement() {
     parent::__construct();
   }
+  function getUpdateLabel() {
+    return "Mettre à jour le bloc";
+  }
   static function getElements() {
     return array(
       "id",

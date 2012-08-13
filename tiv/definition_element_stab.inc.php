@@ -24,6 +24,10 @@ $stab_forms = array(
 
 class stabElement extends TIVElement {
   function stabElement() {
+    parent::__construct();
+  }
+  function getUpdateLabel() {
+    return "Mettre à jour la stab";
   }
   static function getElements() {
     global $stab_elements; return $stab_elements;

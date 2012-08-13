@@ -70,8 +70,23 @@ class inspection_tivElement extends TIVElement {
   function inspection_tivElement() {
     parent::__construct();
   }
+  function getUpdateLabel() {
+    return "Mettre à jour les informations sur l&#145;inspection TIV";
+  }
   function setDate($date) {
     $this->_date = $date;
+  }
+  function getFormInput($label, $value) {
+    if($label === "id_inspecteur_tiv") {
+      $db_query = "SELECT id,nom FROM inspecteur_tiv";
+      $db_result = $this->_db_con->query($db_query);
+      $options = array("" => "");
+      while($result = $db_result->fetch_array()) {
+        $options[$result["id"]] = $result["nom"];
+      }
+      return self::constructSelectInputLabels($label, $options, $value);
+    }
+    return parent::getFormInput($label, $value);
   }
   function getEditUrl($id) {
     $element_to_manage = "id=$id&element=".$this->_name."&date=".$this->_date;
