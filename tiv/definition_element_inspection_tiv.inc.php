@@ -83,6 +83,10 @@ class inspection_tivElement extends TIVElement {
     if($grenaillage) $etat_bloc[] = "Grenaillage";
     return $etat_bloc;
   }
+  static function getPDFLength($state) {
+    $etat_bloc = array("Bon" => 9, "A suivre" => 17, "Mauvais" => 17, "Grenaillage" => 23);
+    return $etat_bloc[$state];
+  }
   static function getForms() {
     return array(
       "id_bloc"              => array("required", "text", "Numéro du bloc associé"),
@@ -94,8 +98,8 @@ class inspection_tivElement extends TIVElement {
       "remarque_interieur"   => array("required", false, "Remarque sur l'état interne du bloc"),
       "etat_filetage"        => array("required", self::getPossibleStatus(), "État du filetage du bloc"),
       "remarque_filetage"    => array("required", false, "Remarque sur le filetage du bloc"),
-      "etat_robineterie"     => array("required", self::getPossibleStatus(), "État du filetage du bloc"),
-      "remarque_robineterie" => array("required", false, "Remarque sur le filetage du bloc"),
+      "etat_robineterie"     => array("required", self::getPossibleStatus(), "État de la robineterie du bloc"),
+      "remarque_robineterie" => array("required", false, "Remarque sur la robineterie du bloc"),
       "decision"             => array("required", array("OK", "Rebuté"), "Le bloc est-il accepté ?"),
     );
   }

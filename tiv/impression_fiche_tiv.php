@@ -38,27 +38,26 @@ while($result = $db_result->fetch_array()) {
   // Affichage de l'entête de la fiche (capacité du bloc, date des réépreuves etc.)
   $pdf->AddPage();
   $pdf->addBlocInformation($result[1]);
+  // Ligne de séparation
+  $pdf->Cell(0,5,"", 'B', 1, 1);
   // Information concernant l'inspection TIV
-  $pdf->Cell(0,5,"", 'B', 1, 1); // Ligne de séparation
   $pdf->SetFont('Times', 'B', 14);
   $pdf->Cell(50,10,utf8_decode("Vérificateur TIV n° "), 0, 0);
   $pdf->SetFont('Times',  '', 12);
-  $pdf->Cell(50,8,$result[11], 1, 1);
-  // Aspect externe
-  $pdf->SetFont('Times', 'BU', 12);
-  $pdf->Ln(8);
-  $pdf->Cell(30, 8, utf8_decode("Etat extérieur :"), 0, 0);
-  $pdf->SetFont('Times', 'B', 12);
-  $pdf->Cell(10, 8, utf8_decode("Bon"), 0, 0);
-  $pdf->Cell(5, 5, "", 1, 0);
-  $pdf->Cell(5);
-  $pdf->Cell(18, 8, utf8_decode("A suivre"), 0, 0);
-  $pdf->Cell(5, 5, "", 1, 0);
-  $pdf->Cell(5);
-  $pdf->Cell(18, 8, utf8_decode("Mauvais"), 0, 0);
-  $pdf->Cell(5, 5, "", 1, 1);
-  $pdf->Cell(0,8,utf8_decode("Commentaire et action si état autre que bon :"), 0, 1);
-  $pdf->Cell(0, 20, "", 1, 1);
+  $pdf->Cell(50,8,$result[11], 1, 0);
+  $pdf->Cell(3);
+  // Affichage numéro fiche tiv
+  $pdf->SetFont('Times', 'B', 14);
+  $pdf->Cell(30,10,utf8_decode("Fiche TIV n° "), 0, 0);
+  $pdf->SetFont('Times',  '', 12);
+  $pdf->Cell(15,8,$result[0], 1, 1);
+  foreach(array("exterieur", "interieur", "filetage", "robineterie") as $element)
+    $pdf->addAspectInformation($result[0], $element);
+  // Ligne de séparation
+  $pdf->Cell(0,2,"", 'B', 1, 1);
+  // Conclusion + signature
+  $pdf->Ln(1);
+  $pdf->Cell(50,8,"Conclusions : ", 0, 0);
 }
 
 $pdf->Output();

@@ -1,4 +1,5 @@
 <?php
+require_once("definition_element.inc.php");
 require_once("connect_db.inc.php");
 require_once('fpdf17/fpdf.php');
 
@@ -24,8 +25,8 @@ class PdfTIV extends FPDF {
   }
   function addBlocInformation($id_bloc) {
     $db_query = "SELECT id, id_club, numero, capacite, date_premiere_epreuve, date_derniere_epreuve, pression_service, pression_epreuve ".
-            "FROM bloc ".
-            "WHERE id ='$id_bloc'";
+                "FROM bloc ".
+                "WHERE id ='$id_bloc'";
     $db_result = $this->_db_con->query($db_query);
     $bloc = $db_result->fetch_array();
     $this->SetFont('Times', 'B', 12);
@@ -49,24 +50,25 @@ class PdfTIV extends FPDF {
   }
   function addAspectInformation($id_inspection, $element) {
     $db_query = "SELECT id, etat_$element, remarque_$element ".
-            "FROM inspection_tiv ".
-            "WHERE id ='$id_inspection'";
+                "FROM inspection_tiv ".
+                "WHERE id ='$id_inspection'";
     $db_result = $this->_db_con->query($db_query);
     $inspection = $db_result->fetch_array();
+    $status = inspection_tivElement::getPossibleStatus($element == "interieur");
     $this->SetFont('Times', 'BU', 12);
     $this->Ln(8);
-    $this->Cell(30, 8, utf8_decode("Etat extérieur :"), 0, 0);
+    $this->Cell(33, 8, utf8_decode("État $element :"), 0, 0);
     $this->SetFont('Times', 'B', 12);
-    $this->Cell(10, 8, utf8_decode("Bon"), 0, 0);
-    $this->Cell(5, 5, "", 1, 0);
-    $this->Cell(5);
-    $this->Cell(18, 8, utf8_decode("A suivre"), 0, 0);
-    $this->Cell(5, 5, "", 1, 0);
-    $this->Cell(5);
-    $this->Cell(18, 8, utf8_decode("Mauvais"), 0, 0);
-    $this->Cell(5, 5, "", 1, 1);
+    foreach($status as $state) {
+      if(strlen($state) == 0) continue;
+      $len = inspection_tivElement::getPDFLength($state);
+      $this->Cell($len, 8, utf8_decode($state), 0, 0);
+      $this->Cell(5, 5, ($inspection["etat_$element"] == $state ? "X" : ""), 1, 0);
+      $this->Cell(5);
+    }
+    $this->Cell(5, 7, "", 0, 1);
     $this->Cell(0,8,utf8_decode("Commentaire et action si état autre que bon :"), 0, 1);
-    $this->Cell(0, 20, "", 1, 1);
+    $this->Cell(0, 20, utf8_decode($inspection["remarque_$element"]), 1, 1);
   }
 }
 

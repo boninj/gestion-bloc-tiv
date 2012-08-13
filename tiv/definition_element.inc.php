@@ -88,6 +88,7 @@ class TIVElement {
   function constructEditForm($id, $form_name, $action = "") {
     $this->_values = $this->retrieveValues($id);
     print "<fieldset><legend>".$this->getLegend($id)."</legend>\n";
+    print "<p id=\"results\"></p>\n";
     print "<div id='edit_".$this->_name."'></div>\n";
     print "<form name='$form_name' id='$form_name' action='$action' method='POST'>\n";
     print "<input type='hidden' name='id' value='$id' />\n";
