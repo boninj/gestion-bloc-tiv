@@ -1,178 +1,90 @@
 <?php
-$bloc_elements = array(
-  "id",
-  "id_club",
-  "nom_proprietaire",
-  "adresse",
-  "constructeur",
-  "marque",
-  "numero",
-  "capacite",
-  "date_premiere_epreuve",
-  "date_derniere_epreuve",
-  "date_dernier_tiv",
-  "pression_service"
-);
-
-$bloc_rules = '
-  debug: true,
-  rules: {
-    club_id: {
-        required: true,
-    },
-    nom_proprietaire: {
-        required: true,
-    },
-    adresse: {
-        required: true,
-    },
-    constructeur: {
-        required: true,
-    },
-    marque: {
-        required: true,
-    },
-    numero: {
-        required: true,
-    },
-    capacite: {
-        required: true,
-    },
-    date_premiere_epreuve: {
-        required: true,
-        date: true
-    },
-    date_derniere_epreuve: {
-        required: true,
-        date: true
-    },
-    date_dernier_tiv: {
-        required: true,
-        date: true
-    },
-    pression_service: {
-        required: true,
-        number: true
-    },
-  }';
-
-$bloc_capacite = array("6", "10", "12 long", "12 court", "15");
-$bloc_pression = array("150", "176", "200", "232", "300");
-$bloc_forms = array(
-  "id_club"               => array("required", "number", "Référence du bloc au sein du club"),
-  "nom_proprietaire"      => array("required", false,    "Nom du propriétaire du bloc"),
-  "adresse"               => array("required", false,    "Adresse du propriétaire du bloc"),
-  "constructeur"          => array("required", false,    "Constructeur du bloc (ex : ROTH)"),
-  "marque"                => array("required", false,    "Marque du bloc (ex : Aqualung)"),
-  "numero"                => array("required", false,    "Numéro de constructeur du bloc"),
-  "capacite"              => array("required", $bloc_capacite,    "Capacité du bloc"),
-  "date_premiere_epreuve" => array("required", "date",   "Date de la première épreuve du bloc"),
-  "date_derniere_epreuve" => array("required", "date",   "Date de la dernière épreuve du bloc (tous les 5 ans)"),
-  "date_dernier_tiv"      => array("required", "date",   "Date de la dernière inspection visuelle (tous les ans)"),
-  "pression_service"      => array("required", $bloc_pression, "Pression de service du bloc (ex : 200 bars)"),
-);
-
-$detendeur_elements = array(
-  "id",
-  "modele",
-  "id_1ier_etage",
-  "id_2e_etage",
-  "id_octopus",
-  "date",
-);
-$detendeur_rules = '
-  debug: true,
-  rules: {
-    modele: {
-        required: true,
-    },
-    id_1ier_etage: {
-        required: true,
-    },
-    id_2e_etage: {
-        required: true,
-    },
-    id_octopus: {
-        required: true,
-    },
-    date: {
-        required: true,
-        date: true
-    },
-  }';
-
-$detendeur_forms = array(
-  "modele"         => array("required", "number", "Modèle de détendeur"),
-  "id_1ier_etage"  => array("required", false,    "Référence constructeur du 1ier étage"),
-  "id_2e_etage"    => array("required", false,    "Référence constructeur du 2ieme étage"),
-  "id_octopus"     => array("required", false,    "Référence constructeur de l'octopus"),
-  "date"           => array("required", "date",   "Date de construction du détendeur"),
-);
-
-$stab_elements = array(
-  "id",
-  "modele",
-  "taille",
-);
-
-$stab_rules = '
-  debug: true,
-  rules: {
-    modele: {
-        required: true,
-    },
-    taille: {
-        required: true,
-    },
-  }';
-
-$stab_taille = array("junior", "XS", "S", "M", "M/L", "L", "XL", "XXL");
-$stab_forms = array(
-  "modele"       => array("required", "number",      "Modèle de stab"),
-  "taille"       => array("required", $stab_taille , "Taille de la stab"),
-);
-
-$inspecteur_tiv_elements = array(
-  "id",
-  "nom",
-  "numero_tiv",
-  "adresse_tiv",
-  "telephone_tiv",
-  "actif",
-);
-
-$inspecteur_tiv_rules = '
-  debug: true,
-  rules: {
-    nom: {
-        required: true,
-    },
-    numero_tiv: {
-        required: true,
-    },
-    adresse_tiv: {
-        required: true,
-    },
-    telephone_tiv: {
-        required: true,
-    },
-    actif: {
-        required: true,
-    },
-  }';
-
-$inspecteur_tiv_forms = array(
-  "nom"           => array("required", "text",      "Nom de l'inspecteur TIV"),
-  "numero_tiv"    => array("required", "text", "Numéro de TIV de l'inspecteur"),
-  "adresse_tiv"   => array("required", "text", "Adresse du TIV"),
-  "telephone_tiv" => array("required", "text", "Téléphone du TIV"),
-  "actif"         => array("required", array("oui", "non"), "Le TIV est-il actif ?"),
-);
-
-function get_columns_from_element($element) {
-  $array = $element."_elements";
-  global $$array;
-  return $$array;
+class TIVElement {
+  var $_name;
+  var $_values;
+  var $_db_con;
+  function TIVElement() {
+    $this->_name = str_replace("Element", "", get_class($this));
+  }
+  function setDBCon($db_con) {
+    $this->_db_con = $db_con;
+  }
+  static function getElements() { }
+  static function getFormsRules() { }
+  static function getForms() { }
+  function getBackUrl() {
+    $url_retour = "#".$this->_name;
+    return $url_retour;
+  }
+  function getUrlTitle() {
+    return "Retour à la liste des ".$this->_name."s";
+  }
+  function getLegend($id) {
+    return "Édition du ".$this->_name." $id";
+  }
+  function getElementLabel($label) {
+    $forms_definition = $this::getForms();
+    return $forms_definition[$label][2];
+  }
+  function getFormInput($label, $value) {
+    $forms_definition = $this::getForms();
+    $form_input = "";
+    if(is_array($forms_definition[$label][1])) {
+      $form_input = "<select id=\"$label\" name=\"$label\">\n";
+      foreach($forms_definition[$label][1] as $option) {
+        $selected = ($option === $value ? " selected='selected'" : "");
+        $form_input .= "<option$selected>$option</option>\n";
+      }
+      $form_input .= "</select>\n";
+    } elseif($forms_definition[$label][1] === "date") {
+      $form_input = "
+      <script>
+      $(function() {
+        $( \"#$label\" ).datepicker({
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: 'yy-mm-dd',
+          appendText: '(yyyy-mm-dd)',
+        });
+        $( \"#$label\" ).datepicker({ altFormat: 'yyyy-mm-dd' });
+      });
+      </script>\n";
+      $form_input .= "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"10\" value=\"$value\"/>\n";
+    } else {
+      $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"30\" value=\"$value\"/>";
+    }
+    return $form_input;
+  }
+  function retrieveValues($id) {
+    $db_query = "SELECT ".implode(",", array_keys($this::getForms()))." FROM ".$this->_name." WHERE id = $id";
+    $db_result =  $this->_db_con->query($db_query);
+    return $db_result->fetch_array();
+  }
+  function constructEditForm($id, $form_name, $action = "") {
+    $this->_values = $this->retrieveValues($id);
+    print "<fieldset><legend>".$this->getLegend($id)."</legend>\n";
+    print "<div id='edit_".$this->_name."'></div>\n";
+    print "<form name='$form_name' id='$form_name' action='$action' method='POST'>\n";
+    print "<input type='hidden' name='id' value='$id' />\n";
+    print "<input type='hidden' name='element' value='".$this->_name."' />\n";
+    print "<table>\n";
+    print "  <tbody>\n";
+    foreach(array_keys($this->getForms()) as $elt) {
+      $value = $this->_values[$elt];
+      print "<tr><td>".$this->getElementLabel($elt)."</td><td>".$this->getFormInput($elt, $value)."</td></tr>\n";
+    }
+    print "  </tbody>\n";
+    print "</table>\n";
+    print "<input type='submit' name='lancer' value='Mettre à jour le/la ".$this->_name."'>\n";
+    print "</form>\n";
+    print "</fieldset>\n";
+  }
 }
+
+include_once("definition_element_bloc.inc.php");
+include_once("definition_element_detendeur.inc.php");
+include_once("definition_element_stab.inc.php");
+include_once("definition_element_inspecteur_tiv.inc.php");
+include_once("definition_element_inspection_tiv.inc.php");
 
 ?>

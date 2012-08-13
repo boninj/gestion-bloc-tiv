@@ -7,8 +7,25 @@
 <option value='detendeur'>Détendeur</option>
 <option value='inspecteur_tiv'>Inspecteur TIV</option>
 </select>
-<input type="submit" name="submit" onclick='return(confirm("Procéder à la création ?"));' value="Procéder à la création du nouvel élément"></p>
+<input type="submit" name="submit" onclick='return(confirm("Procéder à la création ?"));' value="Procéder à la création du nouvel élément"/></p>
 </form>
+<h2>Consultation d'un TIV</h2>
+<p>
+<form name="consultation_tiv" id="consultation_tiv" action="consultation_tiv.php" method="POST">
+Choisissez votre TIV :
+<select id="date_tiv" name="date_tiv" onchange="submit()" >
+  <option></option>
+<?php
+include_once("connect_db.inc.php");
+$db_result = $db_con->query("SELECT date FROM inspection_tiv GROUP BY date");
+while($result = $db_result->fetch_array()) {
+  print "  <option>".$result["date"]."</option>\n";
+}
+?>
+</select>
+<input type="submit" name="submit" value="Consulter"/>
+</form>
+</p>
 <h2>Préparation d'un TIV</h2>
 <script>
   $(function() {
@@ -49,7 +66,7 @@
 include_once("connect_db.inc.php");
 $db_result = $db_con->query("SELECT id,nom,actif FROM inspecteur_tiv ORDER BY nom");
 while($result = $db_result->fetch_array()) {
-  print "<option value='".$result["id"]."'".($result["actif"] === "oui" ? " selected" : "").">".$result["nom"]."</option>\n";
+  print "  <option value='".$result["id"]."'".($result["actif"] === "oui" ? " selected" : "").">".$result["nom"]."</option>\n";
 }
 ?>
 </select>
