@@ -8,14 +8,10 @@ $date_tiv = $_POST["date_tiv"];
 $time_tiv = strtotime($date_tiv);
 $max_date = strtotime("-55 months", $time_tiv);
 
-reset($tivs);
-$db_result = $db_con->query("SELECT id FROM bloc ORDER BY capacite,constructeur");
+$current_tiv = 0;
+$db_result = $db_con->query("SELECT id, date_derniere_epreuve FROM bloc ORDER BY capacite,constructeur");
 while($bloc = $db_result->fetch_array()) {
-  if(!($tiv = current($tivs))) {
-    reset($tivs); $tiv = current($tivs);
-  } else {
-    next($tivs);
-  }
+  $tiv = $tivs[$current_tiv++%count($tivs)];
   $request = "INSERT INTO inspection_tiv (id, id_bloc, id_inspecteur_tiv, date) VALUES ".
              "(0, ".$bloc["id"].", $tiv, '$date_tiv')";
   if(!$db_con->query($request)) {
