@@ -13,7 +13,7 @@
 <p>
 <form name="consultation_tiv" id="consultation_tiv" action="consultation_tiv.php" method="POST">
 Choisissez votre TIV :
-<select id="date_tiv" name="date_tiv" onchange="submit()" >
+<select id="date-tiv-consultation" name="date_tiv" onselect="submit()" >
   <option></option>
 <?php
 include_once("connect_db.inc.php");
