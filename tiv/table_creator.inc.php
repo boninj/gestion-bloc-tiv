@@ -1,3 +1,19 @@
+<?php
+if(!isset($real_element)) $real_element = $element;
+
+$class_element = $real_element."Element";
+$to_retrieve = "\$element_class = new $class_element();";
+unset($real_element);
+eval($to_retrieve);
+if(!@is_array($columns)) {
+  $columns = $element_class::getElements();
+}
+
+if($element === "inspection_tiv") {
+  $element_class->setDate($date_tiv);
+}
+
+?>
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
     $('#liste_<?php print $element; ?>s').dataTable( {
@@ -43,9 +59,7 @@ while($line = $db_result->fetch_array(MYSQLI_NUM)) {
   print "    <tr class=\"".$tr_class[$i++%2]."\">\n      <td>";
   $id = $line[0];
   if(!$read_only) {
-    $element_to_manage = "id=$id&element=".(isset($real_element) ? $real_element : $element);
-    $delete_confirmation = "return(confirm(\"Suppression élément $element (id = $id) ?\"));";
-    $line [] = "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
+    $line [] = $element_class->getEditUrl($id);
   }
   print join("</td><td>", $line);
   print "</td>\n    </tr>\n";
@@ -59,3 +73,6 @@ while($line = $db_result->fetch_array(MYSQLI_NUM)) {
     </tr>
   </tfoot>
 </table>
+<?php
+unset($columns);
+?>

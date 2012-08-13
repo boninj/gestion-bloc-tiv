@@ -2,6 +2,7 @@
 $title = "Consultation d'une séance de TIV";
 include_once('head.inc.php');
 include_once('connect_db.inc.php');
+include_once('definition_element.inc.php');
 
 if(array_key_exists("date_tiv", $_GET)) {
   $date_tiv = $_GET['date_tiv'];

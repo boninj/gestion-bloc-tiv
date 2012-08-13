@@ -13,6 +13,10 @@ $class_element = $element."Element";
 $to_retrieve = "\$edit_class = new $class_element();";
 eval($to_retrieve);
 $edit_class->setDBCon($db_con);
+if($element === "inspection_tiv") {
+  $edit_class->setDate($_GET["date"]);
+}
+
 ?>
 <script type="text/javascript">
   $.validator.messages.required = "Champ obligatoire";

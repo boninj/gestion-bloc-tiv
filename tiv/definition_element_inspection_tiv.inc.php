@@ -66,8 +66,17 @@ $inspection_tiv_forms  = array(
 );
 
 class inspection_tivElement extends TIVElement {
+  var $_date;
   function inspection_tivElement() {
     parent::__construct();
+  }
+  function setDate($date) {
+    $this->_date = $date;
+  }
+  function getEditUrl($id) {
+    $element_to_manage = "id=$id&element=".$this->_name."&date=".$this->_date;
+    $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
+    return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
   }
   static function getElements() {
     global $inspection_tiv_elements; return $inspection_tiv_elements;
@@ -79,7 +88,7 @@ class inspection_tivElement extends TIVElement {
     global $inspection_tiv_forms; return $inspection_tiv_forms;
   }
   function getBackUrl() {
-    $url_retour = "consultation_tiv.php";
+    $url_retour = "consultation_tiv.php?date_tiv=".$this->_date;
     return $url_retour;
   }
 }

@@ -12,6 +12,11 @@ class TIVElement {
   static function getElements() { }
   static function getFormsRules() { }
   static function getForms() { }
+  function getEditUrl($id) {
+    $element_to_manage = "id=$id&element=".$this->_name;
+    $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
+    return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
+  }
   function getBackUrl() {
     $url_retour = "#".$this->_name;
     return $url_retour;
