@@ -9,7 +9,7 @@ $time_tiv = strtotime($date_tiv);
 $max_date = strtotime("-55 months", $time_tiv);
 
 reset($tivs);
-$db_result = $db_con->query("SELECT id FROM bloc WHERE date_derniere_epreuve > '".date("Y-M-D", $max_date)."' ORDER BY capacite,constructeur");
+$db_result = $db_con->query("SELECT id FROM bloc ORDER BY capacite,constructeur");
 while($bloc = $db_result->fetch_array()) {
   if(!($tiv = current($tivs))) {
     reset($tivs); $tiv = current($tivs);
@@ -24,5 +24,6 @@ while($bloc = $db_result->fetch_array()) {
   }
 }
 
+include_once('consultation_tiv.php');
 include_once('foot.inc.php');
 ?>
