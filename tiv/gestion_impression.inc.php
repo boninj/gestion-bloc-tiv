@@ -38,8 +38,9 @@ class PdfTIV extends FPDF {
     $db_result = $this->_db_con->query($db_query);
     $header = array("id", "Nom inspecteur", "numéro TIV", "Nombre de bouteille à inspecter");
     $w = array(10, 55, 40, 0);
+    $this->SetFillColor(127,127,127);
     for($i = 0; $i < count($header); $i++) {
-      $this->Cell($w[$i], 10, utf8_decode($header[$i]), 1, 0, 'C');
+      $this->Cell($w[$i], 10, utf8_decode($header[$i]), 1, 0, 'C',1);
     }
     $this->Ln();
     $this->SetFont('Times','',13);
