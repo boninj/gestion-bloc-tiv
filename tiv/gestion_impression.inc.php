@@ -21,7 +21,7 @@ class PdfTIV extends FPDF {
   function Footer() {
     $this->SetY(-15);
     $this->SetFont('Arial','I',8);
-    $this->Cell(0,10,utf8_decode('Inspection TIV - Club Aqua Sénart - Page '.$this->PageNo().'/{nb}'),0,0,'C');
+    $this->Cell(0,10,utf8_decode('Inspection TIV du '.$this->_date.' - Club Aqua Sénart - Page '.$this->PageNo().'/{nb}'),0,0,'C');
   }
   function addBlocInformation($id_bloc) {
     $db_query = "SELECT id, id_club, numero, capacite, date_premiere_epreuve, date_derniere_epreuve, pression_service, pression_epreuve ".
@@ -39,7 +39,7 @@ class PdfTIV extends FPDF {
     $this->SetFont('Times',  '', 10);
     $this->Cell(25,8,$bloc["numero"], 1, 1);
     $this->SetFont('Times',  '', 12);
-    $this->Cell(25,8,utf8_decode("Capacité : ".$bloc["capacite"]." litres - Pression service : ".$bloc["pression_service"]." bars - ".
+    $this->Cell(25,8,utf8_decode("Capacité (litres) : ".$bloc["capacite"]." - Pression service : ".$bloc["pression_service"]." bars - ".
                                 "Pression épreuve : ".$bloc["pression_epreuve"]." bars"), 0, 1);
     $this->Cell(25,8,utf8_decode("Première épreuve : ".$bloc["date_premiere_epreuve"]), 0, 0);
     $this->Cell(32);
@@ -49,6 +49,10 @@ class PdfTIV extends FPDF {
     $this->Cell(25,8,utf8_decode("Prochaine épreuve : ".$prochaine_epreuve), 0, 1);
   }
   function addAspectInformation($id_inspection, $element) {
+    $labels = array("interieur" => "intérieur", "exterieur" => "extérieur");
+    $label = $element;
+    if(array_key_exists($element, $labels)) $label = $labels[$element];
+
     $db_query = "SELECT id, etat_$element, remarque_$element ".
                 "FROM inspection_tiv ".
                 "WHERE id ='$id_inspection'";
@@ -57,7 +61,7 @@ class PdfTIV extends FPDF {
     $status = inspection_tivElement::getPossibleStatus($element == "interieur");
     $this->SetFont('Times', 'BU', 12);
     $this->Ln(8);
-    $this->Cell(33, 8, utf8_decode("État $element :"), 0, 0);
+    $this->Cell(33, 8, utf8_decode("État $label :"), 0, 0);
     $this->SetFont('Times', 'B', 12);
     foreach($status as $state) {
       if(strlen($state) == 0) continue;
@@ -68,7 +72,7 @@ class PdfTIV extends FPDF {
     }
     $this->Cell(5, 7, "", 0, 1);
     $this->Cell(0,8,utf8_decode("Commentaire et action si état autre que bon :"), 0, 1);
-    $this->Cell(0, 20, utf8_decode($inspection["remarque_$element"]), 1, 1);
+    $this->MultiCell(0, 8, ($inspection["remarque_$element"] ? utf8_decode($inspection["remarque_$element"]) : "\n "), 1, 1);
   }
 }
 
