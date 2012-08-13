@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `bloc`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bloc` (
-  `id` int(15) NOT NULL,
+  `id` int(15) NOT NULL AUTO_INCREMENT,
   `id_club` int(15) NOT NULL,
   `nom_proprietaire` varchar(255) NOT NULL,
   `adresse` varchar(255) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE `bloc` (
   `pression_epreuve` int(5) NOT NULL,
   `pression_service` int(5) NOT NULL,
   PRIMARY KEY (`id`,`numero`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,13 +92,15 @@ CREATE TABLE `inspection_tiv` (
   `remarque_exterieur` varchar(255) NOT NULL,
   `etat_interieur` varchar(16) NOT NULL,
   `remarque_interieur` varchar(255) NOT NULL,
-  `etat_filtage` varchar(16) NOT NULL,
+  `etat_filetage` varchar(16) NOT NULL,
   `remarque_filetage` varchar(255) NOT NULL,
+  `etat_robineterie` varchar(16) NOT NULL,
+  `remarque_robineterie` varchar(255) NOT NULL,
   `decision` varchar(16) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_bloc` (`id_bloc`),
   KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,4 +127,4 @@ CREATE TABLE `stab` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-12 21:24:48
+-- Dump completed on 2012-08-13 13:57:27
