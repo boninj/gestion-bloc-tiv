@@ -12,13 +12,47 @@ class TIVElement {
   static function getElements() { }
   static function getFormsRules() { }
   static function getForms() { }
+  static function constructTextInput($label, $size, $value) {
+    $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"$size\" value=\"$value\"/>\n";
+    return $form_input;
+  }
+  static function constructSelectInputLabels($label, $labels, $value) {
+    $form_input = "<select id=\"$label\" name=\"$label\">\n";
+    foreach(array_keys($labels) as $option) {
+      $selected = ($option == $value ? " selected='selected'" : "");
+      $form_input .= "<option value='$option'$selected>".$labels[$option]."</option>\n";
+    }
+    $form_input .= "</select>\n";
+    return $form_input;
+  }
+  static function constructSelectInput($label, $options, $value) {
+    $labels = array();
+    foreach($options as $opt) { $labels[$opt] = $opt; }
+    return self::constructSelectInputLabels($label, $labels, $value);
+  }
+  static function constructDateInput($label, $value) {
+    $form_input = "
+    <script>
+    $(function() {
+      $( \"#$label\" ).datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'yy-mm-dd',
+        appendText: '(yyyy-mm-dd)',
+      });
+      $( \"#$label\" ).datepicker({ altFormat: 'yyyy-mm-dd' });
+    });
+    </script>\n";
+    $form_input .= self::constructTextInput($label, 10, $value);
+    return $form_input;
+  }
   function getEditUrl($id) {
     $element_to_manage = "id=$id&element=".$this->_name;
     $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
     return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
   }
   function getBackUrl() {
-    $url_retour = "#".$this->_name;
+    $url_retour = "./#".$this->_name;
     return $url_retour;
   }
   function getUrlTitle() {
@@ -35,30 +69,16 @@ class TIVElement {
     $forms_definition = $this::getForms();
     $form_input = "";
     if(is_array($forms_definition[$label][1])) {
-      $form_input = "<select id=\"$label\" name=\"$label\">\n";
-      foreach($forms_definition[$label][1] as $option) {
-        $selected = ($option === $value ? " selected='selected'" : "");
-        $form_input .= "<option$selected>$option</option>\n";
-      }
-      $form_input .= "</select>\n";
+      $form_input = $this->constructSelectInput($label, $forms_definition[$label][1], $value);
     } elseif($forms_definition[$label][1] === "date") {
-      $form_input = "
-      <script>
-      $(function() {
-        $( \"#$label\" ).datepicker({
-          changeMonth: true,
-          changeYear: true,
-          dateFormat: 'yy-mm-dd',
-          appendText: '(yyyy-mm-dd)',
-        });
-        $( \"#$label\" ).datepicker({ altFormat: 'yyyy-mm-dd' });
-      });
-      </script>\n";
-      $form_input .= "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"10\" value=\"$value\"/>\n";
+      $form_input = $this->constructDateInput($label, $value);
     } else {
-      $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"30\" value=\"$value\"/>";
+      $form_input = $this->constructTextInput($label, 30, $value);
     }
     return $form_input;
+  }
+  function getUpdateLabel() {
+    return "Mettre à jour le/la ".$this->_name;
   }
   function retrieveValues($id) {
     $db_query = "SELECT ".implode(",", array_keys($this::getForms()))." FROM ".$this->_name." WHERE id = $id";
@@ -80,7 +100,7 @@ class TIVElement {
     }
     print "  </tbody>\n";
     print "</table>\n";
-    print "<input type='submit' name='lancer' value='Mettre à jour le/la ".$this->_name."'>\n";
+    print "<input type='submit' name='lancer' value='".$this->getUpdateLabel()."'>\n";
     print "</form>\n";
     print "</fieldset>\n";
   }
