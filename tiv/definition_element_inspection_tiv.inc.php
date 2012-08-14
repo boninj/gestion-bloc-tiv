@@ -116,6 +116,9 @@ class inspection_tivElement extends TIVElement {
       "decision"             => array("required", array("OK", "Rebuté"), "Le bloc est-il accepté ?"),
     );
   }
+  function getUrlTitle() {
+    return "Retour à la liste des fiches d'inspections TIV du ".$this->_date;
+  }
   function getBackUrl() {
     $url_retour = "consultation_tiv.php?date_tiv=".$this->_date;
     return $url_retour;
