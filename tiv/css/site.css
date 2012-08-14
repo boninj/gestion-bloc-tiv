@@ -104,7 +104,7 @@ b, strong {
 label.error {
     width: auto;
     display: inline;
-    color: #F33;
+    color: #F11;
     border-left: 1px dotted #F33;
     padding-left: 5px;
 }
@@ -114,7 +114,14 @@ div.ok {
 }
 
 div.error {
-    color: #D77;
+    font-weight: bold;
+    color: #F11;
+}
+
+div.warning {
+    width: auto;
+    display: inline;
+    color: #FA3;
 }
 
 /*label {

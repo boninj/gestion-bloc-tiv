@@ -4,13 +4,30 @@ class blocElement extends TIVElement {
     parent::__construct();
   }
   function getExtraInformation($id) {
+    $db_result = $this->_db_con->query("SELECT date_derniere_epreuve,date_dernier_tiv FROM bloc WHERE id = $id");
+    $result = $db_result->fetch_array();
+    $derniere_epreuve = strtotime($result[0]);
+    $next_epreuve = strtotime("+5 years", $derniere_epreuve);
+    $next_epreuve_minus_one = strtotime("+4 years", $derniere_epreuve);
+    $message_expiration = false;
+    if($next_epreuve < time()) {
+      $message_expiration = "<div class='error'>ATTENTION !!! CE BLOC A DÉPASSÉ SA DATE DE RÉÉPREUVE (".date("d/m/Y", $next_epreuve).") !!!</div>\n";
+    } else if($next_epreuve_minus_one < time()) {
+      $message_expiration = "<div class='warning'>Attention, ce bloc va dépassé sa date de réépreuve dans moins de 1 an (".date("d/m/Y", $next_epreuve).")</div>\n";
+    }
     $db_result = $this->_db_con->query("SELECT id,date FROM inspection_tiv WHERE id_bloc = $id ORDER BY date");
     $extra_info = array();
     while($result = $db_result->fetch_array()) {
       $extra_info []= "<a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>Inspection TIV du ".$result[1]."</a> ".
                       "<a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."'>(fiche PDF)</a>";
     }
-    return "<h3>Liste des fiches d'inspection TIV associées au bloc :</h3>\n<ul>\n<li>".implode("</li>\n<li>", $extra_info)."</li>\n</ul>\n";
+    if($message_expiration) $message = "<p>$message_expiration</p>\n";
+    if(count($extra_info) > 0) {
+      $message .= "<h3>Liste des fiches d'inspection TIV associées au bloc :</h3>\n<ul>\n<li>".implode("</li>\n<li>", $extra_info)."</li>\n</ul>\n";
+    } else {
+      $message .= "<p>Pas de fiche d'inspection TIV associée au bloc.</p>";
+    }
+    return $message;
   }
   function getUpdateLabel() {
     return "Mettre à jour le bloc";
