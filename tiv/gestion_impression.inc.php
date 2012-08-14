@@ -53,6 +53,8 @@ class PdfTIV extends FPDF {
         $this->Cell($w[$i],10,utf8_decode($result[$i]), 1, 0);
       $this->Ln();
     }
+    $this->Ln(5);
+    $this->Cell(0, 5,utf8_decode("Vous trouverez les fiches récapitulatives de chaque inspecteur TIV dans les pages suivantes."), 0, 1);
   }
   function addInspectionResume() {
     $this->SetFont('Times','B',16);
@@ -142,6 +144,59 @@ class PdfTIV extends FPDF {
       $this->Cell(10, 5, utf8_decode($count[0]), 'B', 1, 'R');
       $this->Ln(3); $this->SetX(130);
       $this->Cell(58, 5, utf8_decode("Signature du T.I.V. :"));
+      // Affichage du tableau récapitulant les bouteilles inspectées par le TIV
+      $this->Ln(17);
+      $this->addInspecteurFileBlocsInformations($result[0]);
+    }
+  }
+  function addInspecteurFileBlocsInformationsTableHeader() {
+    $bloc_header = array("Fabricant" => 27, "Marque" => 37, "Numéro bouteille" => 27,
+      "Date première épreuve" => 24, "Date dernière épreuve" => 24, "Date dernière visite" => 24,
+      "Observations lors de la visite" => 53, "Décision" => 27, "Commentaires" => 27);
+    $sub_header = array("Observations lors de la visite" => array("Extérieur" => 17, "Intérieur" => 19, "Filetage" => 17));
+    $this->SetFont('Times', '', 10);
+    $this->SetFillColor(192,192,192);
+    $y = $this->GetY();
+    foreach(array_keys($bloc_header) as $row) {
+      $size = 12;
+      if($this->GetStringWidth($row) > 29) $size /= 2;
+      $x = $this->GetX();
+      $this->MultiCell($bloc_header[$row], $size, utf8_decode($row), 1, 'C', 1);
+      if(array_key_exists($row, $sub_header)) {
+        $this->SetY($y + $size);
+        $this->SetX($x);
+        foreach(array_keys($sub_header[$row]) as $sub_row) {
+          $this->Cell($sub_header[$row][$sub_row], $size, utf8_decode($sub_row), 1, 0, 'C', 1);
+        }
+      }
+      $this->SetY($y);
+      $this->SetX($x + $bloc_header[$row]);
+    }
+    $this->Ln();
+  }
+  function addInspecteurFileBlocsInformations($id_inspecteur) {
+    $this->addInspecteurFileBlocsInformationsTableHeader();
+    $to_retrieve = array("constructeur" => 27, "marque" => 37, "numero" => 27, "date_premiere_epreuve" => 24,
+                         "date_derniere_epreuve" => 24, "date" => 24, "etat_exterieur" => 17, "etat_interieur" => 19,
+                         "etat_filetage" => 17, "decision" => 27);
+    $db_query = "SELECT ".implode(",", array_keys($to_retrieve))." ".
+                "FROM inspection_tiv, bloc ".
+                "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = $id_inspecteur AND bloc.id = id_bloc";
+    $db_result = $this->_db_con->query($db_query);
+    // Compteur pour savoir le nombre de ligne que nous pouvons créer
+    $max_line_count = 8; // 8 lignes pour la première page puis 14 sur une page vierge
+    $page_line_count = 1;
+    while($result = $db_result->fetch_array()) {
+      foreach(array_keys($to_retrieve) as $elt) {
+        $this->Cell($to_retrieve[$elt], 10, utf8_decode($result[$elt]), 1, 0, 'C');
+      }
+      $this->Cell(27, 10, "", 1, 1);
+      if($page_line_count++ >= $max_line_count) {
+        $page_line_count = 0;
+        $max_line_count = 14;
+        $this->AddPage('L');
+        $this->addInspecteurFileBlocsInformationsTableHeader();
+      }
     }
   }
   function addBlocFile() {

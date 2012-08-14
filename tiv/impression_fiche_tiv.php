@@ -6,7 +6,7 @@ require_once("connect_db.inc.php");
 $pdf = new PdfTIV($date_tiv, $db_con);
 
 // Affiche un résumé du PDF
-// $pdf->addResume();
+$pdf->addResume();
 // Affiche les fiches résumant les blocs inspectés par chacun
 $pdf->addInspecteurFile();
 // Affiche les fiches des blocs à inspecter
