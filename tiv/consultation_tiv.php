@@ -11,7 +11,7 @@ if(array_key_exists("date_tiv", $_GET)) {
 }
 
 print "<h2>Impression des fiches TIVs</h2>\n";
-print "<p><a href='impression_fiche_tiv.php?date=$date_tiv'>Récupérer le PDF</a></p>\n";
+print "<p><a href='impression_fiche_tiv.php?date=$date_tiv&show_resume=1&show_inspecteur=1&show_all_bloc=1'>Récupérer le PDF</a></p>\n";
 
 print "<h2>Informations relatives à l'inspection TIV du $date_tiv</h2>\n";
 

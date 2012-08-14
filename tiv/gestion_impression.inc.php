@@ -138,7 +138,7 @@ class PdfTIV extends FPDF {
       $this->Cell(58, 5, utf8_decode("Nombre de bouteille acceptées :"));
       $db_query = "SELECT COUNT(inspection_tiv.id_bloc) ".
                   "FROM inspection_tiv ".
-                  "WHERE id_inspecteur_tiv = ".$result[5]." AND decision = 'Bon'";
+                  "WHERE id_inspecteur_tiv = ".$result[5]." AND decision = 'OK' AND date = '".$this->_date."'";
       $db_count = $this->_db_con->query($db_query);
       $count = $db_count->fetch_array();
       $this->Cell(10, 5, utf8_decode($count[0]), 'B', 1, 'R');
@@ -199,10 +199,13 @@ class PdfTIV extends FPDF {
       }
     }
   }
-  function addBlocFile() {
+  function addBlocFile($id_bloc = false) {
+    $bloc_condition = "1";
+    if($id_bloc) $bloc_condition = "id_bloc = $id_bloc";
     $db_query = "SELECT inspection_tiv.id, id_bloc, inspecteur_tiv.numero_tiv, decision, inspecteur_tiv.nom ".
                 "FROM inspection_tiv, inspecteur_tiv ".
                 "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = inspecteur_tiv.id ".
+                "AND $bloc_condition ".
                 "ORDER BY inspecteur_tiv.nom DESC";
     $db_result = $this->_db_con->query($db_query);
     while($result = $db_result->fetch_array()) {

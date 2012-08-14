@@ -3,6 +3,15 @@ class blocElement extends TIVElement {
   function blocElement() {
     parent::__construct();
   }
+  function getExtraInformation($id) {
+    $db_result = $this->_db_con->query("SELECT id,date FROM inspection_tiv WHERE id_bloc = $id ORDER BY date");
+    $extra_info = array();
+    while($result = $db_result->fetch_array()) {
+      $extra_info []= "<a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>Inspection TIV du ".$result[1]."</a> ".
+                      "<a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."'>(fiche PDF)</a>";
+    }
+    return "<h3>Liste des fiches d'inspection TIV associées au bloc :</h3>\n<ul>\n<li>".implode("</li>\n<li>", $extra_info)."</li>\n</ul>\n";
+  }
   function getUpdateLabel() {
     return "Mettre à jour le bloc";
   }
