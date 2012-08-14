@@ -199,6 +199,25 @@ class PdfTIV extends FPDF {
       }
     }
   }
+  function addBlocAlert($id_bloc) {
+    $this->SetFont('Times', 'B', 14);
+    $this->SetTextColor(255, 0, 0);
+    $this->SetDrawColor(255, 0, 0);
+    $db_query = "SELECT date_derniere_epreuve,date_dernier_tiv ".
+                "FROM bloc ".
+                "WHERE id = $id_bloc";
+    $db_result = $this->_db_con->query($db_query);
+    $result = $db_result->fetch_array();
+    $date_epreuve = strtotime($result[0]);
+    $date_prochaine_epreuve = strtotime("+5 years", $date_epreuve);
+    $date_timestamp = strtotime($this->_date);
+    if($date_epreuve < strtotime("-55 months", $date_timestamp)) {
+      $this->SetXY(130, 21);
+      $this->Cell(0, 8, utf8_decode("Réépreuve avant le ".date("d/m/Y", $date_prochaine_epreuve)), 1, 0, 'C');
+    }
+    $this->SetTextColor(0, 0, 0);
+    $this->SetDrawColor(0, 0, 0);
+  }
   function addBlocFile($id_bloc = false) {
     $bloc_condition = "1";
     if($id_bloc) $bloc_condition = "id_bloc = $id_bloc";
@@ -238,6 +257,8 @@ class PdfTIV extends FPDF {
       $this->Cell(10);
       $this->Cell(30,8,"Signatures : ", 0, 0);
       $this->MultiCell(60,10,utf8_decode($result[4])."\n\n ", 1, 'C');
+      // Affichage d'un message d'alerte en cas de dépassement de la date d'épreuve/tiv sur le bloc
+      $this->addBlocAlert($result[1]);
     }
   }
   function addBlocInformation($id_bloc) {
