@@ -48,6 +48,8 @@ class TIVElement {
     $form_input .= self::constructTextInput($label, 10, $value);
     return $form_input;
   }
+  function getExtraInformation($id) {
+  }
   function getEditUrl($id) {
     $element_to_manage = "id=$id&element=".$this->_name;
     $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";

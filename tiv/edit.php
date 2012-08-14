@@ -17,6 +17,11 @@ if($element === "inspection_tiv") {
   $edit_class->setDate($_GET["date"]);
 }
 
+if($extra_info = $edit_class->getExtraInformation($id)) {
+  print "<h2>Informations supplémentaires</h2>\n";
+  print $extra_info;
+}
+print "<h2>Édition d'un l'élément</h2>\n";
 ?>
 <script type="text/javascript">
   $.validator.messages.required = "Champ obligatoire";
@@ -33,6 +38,7 @@ if($element === "inspection_tiv") {
 </script>
 <?php
 print $edit_class->constructEditForm($id, "edit_form");
+
 print "<p><a href='".$edit_class->getBackUrl()."'>".$edit_class->getUrlTitle()."</a></p>\n";
 include_once('foot.inc.php');
 ?>

@@ -4,6 +4,13 @@ class inspection_tivElement extends TIVElement {
   function inspection_tivElement() {
     parent::__construct();
   }
+  function getExtraInformation($id) {
+    $db_result = $this->_db_con->query("SELECT id_bloc,id_inspecteur_tiv FROM inspection_tiv WHERE id = $id");
+    $result = $db_result->fetch_array();
+    $extra_info = "<p><a href='edit.php?id=".$result[0]."&element=bloc'>Afficher la fiche du bloc</a></p>\n".
+                  "<p><a href='edit.php?id=".$result[1]."&element=inspecteur_tiv'>Afficher la fiche de l'inspecteur TIV</a></p>\n";
+    return $extra_info;
+  }
   function getUpdateLabel() {
     return "Mettre à jour les informations sur l&#145;inspection TIV";
   }
@@ -17,6 +24,14 @@ class inspection_tivElement extends TIVElement {
       $options = array("" => "");
       while($result = $db_result->fetch_array()) {
         $options[$result["id"]] = $result["nom"];
+      }
+      return self::constructSelectInputLabels($label, $options, $value);
+    } else if($label === "id_bloc") {
+      $db_query = "SELECT id,id_club,constructeur,marque,capacite FROM bloc";
+      $db_result = $this->_db_con->query($db_query);
+      $options = array("" => "");
+      while($result = $db_result->fetch_array()) {
+        $options[$result["id"]] = "id = ".$result["id"]." (n° ".$result["id_club"].") - ".$result["constructeur"]." (".$result["marque"].") - ".$result["capacite"];
       }
       return self::constructSelectInputLabels($label, $options, $value);
     }
