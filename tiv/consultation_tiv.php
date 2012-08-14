@@ -69,8 +69,7 @@ if($bloc_to_update > 0) {
   <form name='update_bloc_tiv' id='update_bloc_tiv' action='update_bloc_tiv.php' method='POST'>
   <input type='hidden' name='date_tiv' value='$date_tiv' />
   <input type='submit' name='lancer' value='Lancer la mise à jour des blocs à partir des fiches de cette journée de TIV'
-  onclick='return(confirm(\"Cette procédure va mettre à jour les blocs du club à l'aide du contenu
-  des fiches de l&#145;inspection TIV à l&#145;état OK. Lancer la MAJ ?\"));' />
+  onclick='return(confirm(\"Lancer la MAJ des bloc(s) ?\"));' />
   </form>";
 } else {
   print "<h2>Cette inspection n'a pas de bloc à l'état OK ou ne permet pas de mettre à jour les dates d'inspection des blocs</h2>\n";
