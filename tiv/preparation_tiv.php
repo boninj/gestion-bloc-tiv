@@ -5,9 +5,13 @@ include_once('connect_db.inc.php');
 
 $tivs = $_POST["tivs"];
 $date_tiv = $_POST["date_tiv"];
+$bloc_condition = "1";
+if(array_key_exists("id_bloc", $_POST)) {
+  $bloc_condition = "id = ".$_POST["id_bloc"];
+}
 
 $current_tiv = 0;
-$db_result = $db_con->query("SELECT id, date_derniere_epreuve FROM bloc ORDER BY capacite,constructeur");
+$db_result = $db_con->query("SELECT id, date_derniere_epreuve FROM bloc WHERE $bloc_condition ORDER BY capacite,constructeur");
 while($bloc = $db_result->fetch_array()) {
   $tiv = $tivs[$current_tiv++%count($tivs)];
   $request = "INSERT INTO inspection_tiv (id, id_bloc, id_inspecteur_tiv, date) VALUES ".

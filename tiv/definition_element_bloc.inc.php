@@ -3,7 +3,53 @@ class blocElement extends TIVElement {
   function blocElement() {
     parent::__construct();
   }
+  function getTIVForm($id) {
+    $form = "<script>
+  $(function() {
+    $.validator.messages.required = 'Champ obligatoire';
+    $('#preparation_tiv').validate({
+      debug: false,
+      rules: {
+        date_tiv: {
+            required: true,
+            date: true,
+        },
+      },
+      submitHandler: function(form) {
+        form.submit();
+      }
+    });
+  });
+</script>
+<h3>Création d'une fiche TIV individuelle</h3>
+<form name='preparation_tiv' id='preparation_tiv' action='preparation_tiv.php' method='POST'>
+<input type='hidden' name='id_bloc' value='$id'/>
+<script>
+$(function() {
+  $( '#admin-date-tiv-selector' ).datepicker({
+    changeMonth: true,
+    changeYear: true,
+    dateFormat: 'yy-mm-dd',
+    appendText: '(yyyy-mm-dd)',
+  });
+  $( '#admin-date-tiv-selector' ).datepicker({ altFormat: 'yyyy-mm-dd' });
+});
+</script>
+<p>Date de l'inspection TIV :<input type='text' name='date_tiv' id='admin-date-tiv-selector' size='10' value=''/>
+- Nom de l'inspecteur TIV : <select id='tivs' name='tivs[]'>
+  <option></option>\n";
+    $db_result = $this->_db_con->query("SELECT id,nom,actif FROM inspecteur_tiv WHERE actif = 'oui' ORDER BY nom");
+    while($result = $db_result->fetch_array()) {
+      $form .= "  <option value='".$result["id"]."'>".$result["nom"]."</option>\n";
+    }
+    $form .= "</select>
+</div>
+<input type='submit' name='lancer' value='Créer la fiche TIV' /></p>
+</form>";
+    return $form;
+  }
   function getExtraInformation($id) {
+    // Recherche d'info sur les dates d'epreuves et dernière inspection
     $db_result = $this->_db_con->query("SELECT date_derniere_epreuve,date_dernier_tiv FROM bloc WHERE id = $id");
     $result = $db_result->fetch_array();
     $derniere_epreuve = strtotime($result[0]);
@@ -15,18 +61,21 @@ class blocElement extends TIVElement {
     } else if($next_epreuve_minus_one < time()) {
       $message_expiration = "<div class='warning'>Attention, ce bloc va dépassé sa date de réépreuve dans moins de 1 an (".date("d/m/Y", $next_epreuve).")</div>\n";
     }
-    $db_result = $this->_db_con->query("SELECT id,date FROM inspection_tiv WHERE id_bloc = $id ORDER BY date");
+    // Récupération d'information sur les fiches TIV du bloc
+    $db_result = $this->_db_con->query("SELECT id,date FROM inspection_tiv WHERE id_bloc = $id ORDER BY date DESC");
     $extra_info = array();
     while($result = $db_result->fetch_array()) {
       $extra_info []= "<a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>Inspection TIV du ".$result[1]."</a> ".
                       "<a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."'>(fiche PDF)</a>";
     }
+    // Composition des messages
     if($message_expiration) $message = "<p>$message_expiration</p>\n";
     if(count($extra_info) > 0) {
       $message .= "<h3>Liste des fiches d'inspection TIV associées au bloc :</h3>\n<ul>\n<li>".implode("</li>\n<li>", $extra_info)."</li>\n</ul>\n";
     } else {
       $message .= "<p>Pas de fiche d'inspection TIV associée au bloc.</p>";
     }
+    $message .= $this->getTIVForm($id);
     return $message;
   }
   function getUpdateLabel() {
