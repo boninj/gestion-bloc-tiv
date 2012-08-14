@@ -33,14 +33,23 @@ print "Il est prévu d'inspecter $total blocs au total dont $reepreuve réépreu
 
 print "<h2>Liste des inspections prévues pour le $date_tiv</h2>\n";
 
-$db_query = "SELECT inspection_tiv.id, bloc.id, bloc.constructeur, bloc.marque, bloc.capacite, inspecteur_tiv.nom, bloc.date_derniere_epreuve ".
+$db_query = "SELECT inspection_tiv.id, bloc.id, bloc.constructeur, bloc.marque, bloc.capacite, inspecteur_tiv.nom, bloc.date_derniere_epreuve, decision ".
             "FROM inspection_tiv, bloc, inspecteur_tiv ".
             "WHERE inspection_tiv.date = '$date_tiv' AND id_bloc = bloc.id AND id_inspecteur_tiv = inspecteur_tiv.id ".
             "ORDER BY inspecteur_tiv.nom";
 
 $element = "inspection_tiv";
-$columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc", "Nom de l'inspecteur TIV", "Date dernière épreuve");
+$columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc",
+                 "Nom de l'inspecteur TIV", "Date dernière épreuve", "Décision");
 include('table_creator.inc.php');
+
+print "<h2>Valider le TIV</h2>
+<form name='update_bloc_tiv' id='update_bloc_tiv' action='update_bloc_tiv.php' method='POST'>
+<input type='hidden' name='id_inspection' value='$date_tiv' />
+<input type='submit' name='lancer' value='Lancer la mise à jour des blocs à partir de ce TIV'
+onclick='return(confirm(\"Cette procédure va mettre à jour les blocs du club à l'aide du contenu
+des fiches de l&#145;inspection TIV à l&#145;état OK. Lancer la MAJ ?\"));' />
+</form>";
 
 print "<p><a href='index.php#admin'>Revenir au menu administration</a></p>\n";
 include_once('foot.inc.php');
