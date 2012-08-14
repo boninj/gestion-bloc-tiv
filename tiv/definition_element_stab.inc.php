@@ -25,7 +25,7 @@ class stabElement extends TIVElement {
   }
   static function getForms() {
     $stab_taille = array("junior", "XS", "S", "M", "M/L", "L", "XL", "XXL");
-    return = array(
+    return array(
       "modele"       => array("required", "number",      "Modèle de stab"),
       "taille"       => array("required", $stab_taille , "Taille de la stab"),
     );

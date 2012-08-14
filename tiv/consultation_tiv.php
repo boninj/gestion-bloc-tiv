@@ -9,7 +9,20 @@ if(array_key_exists("date_tiv", $_GET)) {
 } else {
   $date_tiv = $_POST['date_tiv'];
 }
-
+?>
+<form name="consultation_tiv" id="consultation_tiv" action="consultation_tiv.php" method="POST">
+Changer de date de TIV :
+<select id="date-tiv-consultation" name="date_tiv" onchange="submit()" >
+  <option></option>
+<?php
+$db_result = $db_con->query("SELECT date, count(id_bloc) FROM inspection_tiv GROUP BY date");
+while($result = $db_result->fetch_array()) {
+  print "  <option value='".$result["date"]."'>".$result["date"]." (".$result[1]." blocs contrôlé(s))</option>\n";
+}
+?>
+</select>
+</form>
+<?php
 print "<h2>Impression des fiches TIVs</h2>\n";
 print "<p><a href='impression_fiche_tiv.php?date=$date_tiv&show_resume=1&show_inspecteur=1&show_all_bloc=1'>Récupérer le PDF</a></p>\n";
 
@@ -33,23 +46,35 @@ print "Il est prévu d'inspecter $total blocs au total dont $reepreuve réépreu
 
 print "<h2>Liste des inspections prévues pour le $date_tiv</h2>\n";
 
-$db_query = "SELECT inspection_tiv.id, bloc.id, bloc.constructeur, bloc.marque, bloc.capacite, inspecteur_tiv.nom, bloc.date_derniere_epreuve, decision ".
+$db_query = "SELECT inspection_tiv.id, bloc.id, bloc.constructeur, bloc.marque, bloc.capacite, ".
+            "inspecteur_tiv.nom, bloc.date_derniere_epreuve, bloc.date_dernier_tiv,decision ".
             "FROM inspection_tiv, bloc, inspecteur_tiv ".
             "WHERE inspection_tiv.date = '$date_tiv' AND id_bloc = bloc.id AND id_inspecteur_tiv = inspecteur_tiv.id ".
             "ORDER BY inspecteur_tiv.nom";
 
 $element = "inspection_tiv";
 $columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc",
-                 "Nom de l'inspecteur TIV", "Date dernière épreuve", "Décision");
+                 "Nom de l'inspecteur TIV", "Date dernière épreuve", "Date dernier TIV", "Décision");
 include('table_creator.inc.php');
 
-print "<h2>Valider le TIV</h2>
-<form name='update_bloc_tiv' id='update_bloc_tiv' action='update_bloc_tiv.php' method='POST'>
-<input type='hidden' name='id_inspection' value='$date_tiv' />
-<input type='submit' name='lancer' value='Lancer la mise à jour des blocs à partir de ce TIV'
-onclick='return(confirm(\"Cette procédure va mettre à jour les blocs du club à l'aide du contenu
-des fiches de l&#145;inspection TIV à l&#145;état OK. Lancer la MAJ ?\"));' />
-</form>";
+// Inspection de la séance de TIV afin de savoir s'il faut mettre à jour nos blocs.
+$db_query = "SELECT count(id_bloc) FROM inspection_tiv,bloc ".
+            "WHERE date = '$date_tiv' AND decision = 'OK' AND date_dernier_tiv < '$date_tiv' AND id_bloc = bloc.id";
+$db_result = $db_con->query($db_query);
+$result = $db_result->fetch_array();
+$bloc_to_update = $result[0];
+
+if($bloc_to_update > 0) {
+  print "<h2>Valider le TIV ($bloc_to_update bloc(s) à mettre à jour)</h2>
+  <form name='update_bloc_tiv' id='update_bloc_tiv' action='update_bloc_tiv.php' method='POST'>
+  <input type='hidden' name='date_tiv' value='$date_tiv' />
+  <input type='submit' name='lancer' value='Lancer la mise à jour des blocs à partir des fiches de cette journée de TIV'
+  onclick='return(confirm(\"Cette procédure va mettre à jour les blocs du club à l'aide du contenu
+  des fiches de l&#145;inspection TIV à l&#145;état OK. Lancer la MAJ ?\"));' />
+  </form>";
+} else {
+  print "<h2>Cette inspection n'a pas de bloc à l'état OK ou ne permet pas de mettre à jour les dates d'inspection des blocs</h2>\n";
+}
 
 print "<p><a href='index.php#admin'>Revenir au menu administration</a></p>\n";
 include_once('foot.inc.php');
