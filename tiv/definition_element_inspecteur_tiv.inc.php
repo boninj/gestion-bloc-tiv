@@ -40,6 +40,18 @@ class inspecteur_tivElement extends TIVElement {
   function inspecteur_tivElement() {
     parent::__construct();
   }
+  function getExtraInformation($id) {
+    $db_query = "SELECT inspection_tiv.id,date,id_club ".
+                "FROM inspection_tiv,bloc ".
+                "WHERE id_inspecteur_tiv = $id AND id_bloc = bloc.id ORDER BY date, id_club";
+    $db_result = $this->_db_con->query($db_query);
+    $extra_info = array();
+    while($result = $db_result->fetch_array()) {
+      $extra_info []= "<a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>Inspection TIV du ".$result[1]." (bloc n° ".$result[2].")</a> ".
+                      "<a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."'>(fiche PDF)</a>";
+    }
+    return "<h3>Liste des fiches d'inspection TIV associées à l'inspecteur :</h3>\n<ul>\n<li>".implode("</li>\n<li>", $extra_info)."</li>\n</ul>\n";
+  }
   function getUpdateLabel() {
     return "Mettre à jour l&#145;inspecteur TIV";
   }
