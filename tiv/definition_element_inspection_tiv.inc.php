@@ -3,6 +3,7 @@ class inspection_tivElement extends TIVElement {
   var $_date;
   function inspection_tivElement() {
     parent::__construct();
+    $this->_update_label = "Mettre à jour les informations sur l&#145;inspection TIV";
   }
   function getExtraInformation($id) {
     $db_result = $this->_db_con->query("SELECT id_bloc,id_inspecteur_tiv FROM inspection_tiv WHERE id = $id");
@@ -11,9 +12,6 @@ class inspection_tivElement extends TIVElement {
                   "<p><a href='edit.php?id=".$result[1]."&element=inspecteur_tiv'>Afficher la fiche de l'inspecteur TIV</a></p>\n".
                   "<p><a href='impression_fiche_tiv.php?id_bloc=".$result[0]."&date=".$this->_date."'>Extraire la fiche PDF de l'inspection TIV</a></p>";
     return $extra_info;
-  }
-  function getUpdateLabel() {
-    return "Mettre à jour les informations sur l&#145;inspection TIV";
   }
   function setDate($date) {
     $this->_date = $date;

@@ -5,8 +5,10 @@ class TIVElement {
   var $_name;
   var $_values;
   var $_db_con;
+  var $_update_label;
   function TIVElement() {
     $this->_name = str_replace("Element", "", get_class($this));
+    $this->_update_label = "Mettre à jour le/la ".$this->_name;
   }
   function setDBCon($db_con) {
     $this->_db_con = $db_con;
@@ -82,7 +84,7 @@ class TIVElement {
     return $form_input;
   }
   function getUpdateLabel() {
-    return "Mettre à jour le/la ".$this->_name;
+    return $this->_update_label;
   }
   function retrieveValues($id) {
     $db_query = "SELECT ".implode(",", array_keys($this::getForms()))." FROM ".$this->_name." WHERE id = $id";

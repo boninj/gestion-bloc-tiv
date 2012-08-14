@@ -2,6 +2,7 @@
 class blocElement extends TIVElement {
   function blocElement() {
     parent::__construct();
+    $this->_update_label = "Mettre à jour le bloc";
   }
   function getTIVForm($id) {
     $form = "<script>
@@ -77,9 +78,6 @@ $(function() {
     }
     $message .= $this->getTIVForm($id);
     return $message;
-  }
-  function getUpdateLabel() {
-    return "Mettre à jour le bloc";
   }
   static function getElements() {
     return array(

@@ -39,9 +39,7 @@ $detendeur_forms = array(
 class detendeurElement extends TIVElement {
   function detendeurElement() {
     parent::__construct();
-  }
-  function getUpdateLabel() {
-    return "Mettre à jour le détendeur";
+    $this->_update_label = "Mettre à jour le détendeur";
   }
   static function getElements() {
     global $detendeur_elements; return $detendeur_elements;
