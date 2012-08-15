@@ -1,8 +1,28 @@
 <?php
 class blocElement extends TIVElement {
+  var $_current_time;
   function blocElement() {
     parent::__construct();
     $this->_update_label = "Mettre à jour le bloc";
+    $this->_current_time = time();
+  }
+  function getAlertClass($record) {
+    // Test présence champ nécessaire aux tests à réaliser
+    foreach(array("date_dernier_tiv", "date_derniere_epreuve") as $elt) {
+      if(!array_key_exists($elt, $record)) { return false; }
+    }
+    // Calcul sur le temps prochaine épreuve
+    $date_derniere_epreuve = strtotime($record["date_derniere_epreuve"]);
+    $date_prochaine_epreuve = strtotime("+5 years", $date_derniere_epreuve);
+    if($date_prochaine_epreuve < $this->_current_time) {
+      return "critical-epreuve";
+    }
+    // Calcul sur le temps prochain TIV
+    $date_dernier_tiv = strtotime($record["date_dernier_tiv"]);
+    $date_prochain_tiv = strtotime("+1 years", $date_dernier_tiv);
+    if($date_prochain_tiv < $this->_current_time) {
+      return "critical-tiv";
+    }
   }
   function getTIVForm($id) {
     $form = "<script>
@@ -92,7 +112,7 @@ $(function() {
       "date_premiere_epreuve",
       "date_derniere_epreuve",
       "date_dernier_tiv",
-      "pression_service"
+      "pression_service",
     );
   }
   static function getFormsRules() {

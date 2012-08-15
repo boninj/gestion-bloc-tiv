@@ -50,6 +50,8 @@ class TIVElement {
     $form_input .= self::constructTextInput($label, 10, $value);
     return $form_input;
   }
+  function getAlertClass($record) {
+  }
   function getExtraInformation($id) {
   }
   function getEditUrl($id) {

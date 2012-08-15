@@ -55,13 +55,24 @@ $db_result =  $db_con->query($db_query);
 unset($db_query);
 $tr_class = array("odd", "even");
 $i = 0;
-while($line = $db_result->fetch_array(MYSQLI_NUM)) {
-  print "    <tr class=\"".$tr_class[$i++%2]."\">\n      <td>";
-  $id = $line[0];
-  if(!$read_only) {
-    $line [] = $element_class->getEditUrl($id);
+while($line = $db_result->fetch_array()) {
+  $current_class = $tr_class[$i++%2];
+  // Recherche d'une classe pouvant correspondre à l'état de la ligne courante
+  // Pour mettre en avant un bloc ayant passé sa date de TIV par exemple.
+  if($tmp = $element_class->getAlertClass($line)) {
+    $current_class = $tmp;
   }
-  print join("</td><td>", $line);
+  // Affichage de la ligne HTML
+  print "    <tr class=\"$current_class\">\n      <td>";
+  $id = $line[0];
+  $to_display = array();
+  for($i = 0; $i < $db_result->field_count; $i++) {
+    $to_display []= $line[$i];
+  }
+  if(!$read_only) {
+    $to_display [] = $element_class->getEditUrl($id);
+  }
+  print join("</td><td>", $to_display);
   print "</td>\n    </tr>\n";
 }
 
