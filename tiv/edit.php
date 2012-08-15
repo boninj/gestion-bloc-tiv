@@ -31,6 +31,7 @@ print "<h2>Édition d'un l'élément</h2>\n";
       submitHandler: function(form) {
         $.post('process_element.php', $("#edit_form").serialize(), function(data) {
           $('#results').html(data);
+          setTimeout("window.location.reload(true)", 1000);
         });
       }
     });
