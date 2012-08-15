@@ -6,7 +6,7 @@ class blocElement extends TIVElement {
     $this->_update_label = "Mettre à jour le bloc";
     $this->_current_time = time();
   }
-  function getAlertClass($record) {
+  function updateRecord(&$record) {
     // Test présence champ nécessaire aux tests à réaliser
     foreach(array("date_dernier_tiv", "date_derniere_epreuve") as $elt) {
       if(!array_key_exists($elt, $record)) { return false; }
@@ -15,13 +15,21 @@ class blocElement extends TIVElement {
     $date_derniere_epreuve = strtotime($record["date_derniere_epreuve"]);
     $date_prochaine_epreuve = strtotime("+5 years", $date_derniere_epreuve);
     if($date_prochaine_epreuve < $this->_current_time) {
+      $record["date_derniere_epreuve"] = "<div class='error'>".$record["date_derniere_epreuve"]."</label>";
       return "critical-epreuve";
     }
     // Calcul sur le temps prochain TIV
     $date_dernier_tiv = strtotime($record["date_dernier_tiv"]);
     $date_prochain_tiv = strtotime("+1 years", $date_dernier_tiv);
     if($date_prochain_tiv < $this->_current_time) {
+      $record["date_dernier_tiv"] = "<div class='error'>".$record["date_dernier_tiv"]."</label>";
       return "critical-tiv";
+    }
+    // Calcul sur le temps prochain TIV dans moins d'un mois
+    $date_prochain_tiv_minus_one_month = strtotime("-1 month", $date_prochain_tiv);
+    if($date_prochain_tiv_minus_one_month < $this->_current_time) {
+      $record["date_dernier_tiv"] = "<div class='warning'>".$record["date_dernier_tiv"]."</label>";
+      return "warning-tiv";
     }
   }
   function getTIVForm($id) {

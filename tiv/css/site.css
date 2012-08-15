@@ -120,8 +120,9 @@ div.error {
 
 div.warning {
     width: auto;
+    font-weight: bold;
     display: inline;
-    color: #FA3;
+    color: #F73;
 }
 
 /*label {

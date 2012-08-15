@@ -336,6 +336,10 @@ tr.critical-tiv {
         background-color: #FFDD00;
 }
 
+tr.warning-tiv {
+        background-color: #EDED44;
+}
+
 /*
  * Sorting classes for columns
  */
