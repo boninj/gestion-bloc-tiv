@@ -16,6 +16,20 @@ class inspection_tivElement extends TIVElement {
   function setDate($date) {
     $this->_date = $date;
   }
+  function getHTMLLine(&$record, &$columns, $read_only, $default_class) {
+    $current_class = $default_class;
+    print "    <tr class=\"$current_class\">\n      <td>";
+    $id = $record[0];
+    $to_display = array();
+    for($i = 0; $i < count($columns); $i++) {
+      $to_display []= $record[$i];
+    }
+    if(!$read_only) {
+      $to_display [] = $this->getEditUrl($id);
+    }
+    print implode("</td><td>", $to_display);
+    print "</td>\n    </tr>\n";
+  }
   function getFormInput($label, $value) {
     if($label === "id_inspecteur_tiv") {
       $db_query = "SELECT id,nom FROM inspecteur_tiv";

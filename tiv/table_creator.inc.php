@@ -60,21 +60,7 @@ while($line = $db_result->fetch_array()) {
   // Met à jour l'état de la ligne courante afin de rajouter des informations
   // et renvoie une classe d'affichage css en cas de modification
   // pour mettre en avant un bloc ayant passé sa date de TIV par exemple.
-  if($tmp = $element_class->updateRecord($line)) {
-    $current_class = $tmp;
-  }
-  // Affichage de la ligne HTML
-  print "    <tr class=\"$current_class\">\n      <td>";
-  $id = $line[0];
-  $to_display = array();
-  foreach($element_class->getElements() as $elt) {
-    $to_display []= $line[$elt];
-  }
-  if(!$read_only) {
-    $to_display [] = $element_class->getEditUrl($id);
-  }
-  print join("</td><td>", $to_display);
-  print "</td>\n    </tr>\n";
+  print $element_class->getHTMLLine($line, $columns, $read_only, $current_class);
 }
 
 ?>

@@ -51,6 +51,24 @@ class TIVElement {
     return $form_input;
   }
   function updateRecord(&$record) {
+    return false;
+  }
+  function getHTMLLine(&$record, &$columns, $read_only, $default_class) {
+    $current_class = $default_class;
+    if($tmp = $this->updateRecord($record)) {
+      $current_class = $tmp;
+    }
+    print "    <tr class=\"$current_class\">\n      <td>";
+    $id = $record[0];
+    $to_display = array();
+    foreach($columns as $elt) {
+      $to_display []= $record[$elt];
+    }
+    if(!$read_only) {
+      $to_display [] = $this->getEditUrl($id);
+    }
+    print implode("</td><td>", $to_display);
+    print "</td>\n    </tr>\n";
   }
   function getExtraInformation($id) {
   }
