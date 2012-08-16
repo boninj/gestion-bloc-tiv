@@ -99,14 +99,24 @@ $(function() {
     // Recherche d'info sur les dates d'epreuves et dernière inspection
     $db_result = $this->_db_con->query("SELECT date_derniere_epreuve,date_dernier_tiv FROM bloc WHERE id = $id");
     $result = $db_result->fetch_array();
+    // Construction des timestamps pour calcul date
     $derniere_epreuve = strtotime($result[0]);
+    $dernier_tiv = strtotime($result[1]);
+    // Construction des dates d'expiration
     $next_epreuve = strtotime("+5 years", $derniere_epreuve);
     $next_epreuve_minus_one = strtotime("+4 years", $derniere_epreuve);
-    $message_expiration = false;
-    if($next_epreuve < time()) {
+    $next_tiv = strtotime("+12 months", $dernier_tiv);
+    $next_tiv_minus_one = strtotime("+11 months", $dernier_tiv);
+    $message_expiration = "";
+    if($next_epreuve < $this->_current_time) {
       $message_expiration = "<div class='error'>ATTENTION !!! CE BLOC A DÉPASSÉ SA DATE DE RÉÉPREUVE (".date("d/m/Y", $next_epreuve).") !!!</div>\n";
-    } else if($next_epreuve_minus_one < time()) {
+    } else if($next_epreuve_minus_one < $this->_current_time) {
       $message_expiration = "<div class='warning'>Attention, ce bloc va dépassé sa date de réépreuve dans moins de 1 an (".date("d/m/Y", $next_epreuve).")</div>\n";
+    }
+    if($next_tiv < $this->_current_time) {
+      $message_expiration .= "<div class='warning'>Attention !!! ce bloc a dépassé sa date de TIV (".date("d/m/Y", $next_tiv).")</div>\n";
+    } else if($next_tiv_minus_one < $this->_current_time) {
+      $message_expiration .= "<div class='warning'>Attention, ce bloc va dépassé sa date de TIV moins de 1 mois (".date("d/m/Y", $next_tiv).")</div>\n";
     }
     // Récupération d'information sur les fiches TIV du bloc
     $db_result = $this->_db_con->query("SELECT id,date FROM inspection_tiv WHERE id_bloc = $id ORDER BY date DESC");
@@ -117,7 +127,7 @@ $(function() {
     }
     // Composition des messages
     $message = "";
-    if($message_expiration) $message = "<p>$message_expiration</p>\n";
+    if(strlen($message_expiration) > 0) $message = "<p>$message_expiration</p>\n";
     if(count($extra_info) > 0) {
       $message .= "<h3>Liste des fiches d'inspection TIV associées au bloc :</h3>\n<ul>\n<li>".implode("</li>\n<li>", $extra_info)."</li>\n</ul>\n";
     } else {
