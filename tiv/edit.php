@@ -7,14 +7,14 @@ if(array_key_exists("element", $_GET)) {
 $title = "Edition d'un $element - club Aqua Sénart";
 include_once('head.inc.php');
 include_once('definition_element.inc.php');
-require_once('connect_db.inc.php');
+include_once('connect_db.inc.php');
 
 $class_element = $element."Element";
 $to_retrieve = "\$edit_class = new $class_element(\$db_con);";
-eval($to_retrieve);
 if($element === "inspection_tiv") {
-  $edit_class->setDate($_GET["date"]);
+  $to_retrieve = "\$edit_class = new $class_element('".$_GET["date"]."', \$db_con);";
 }
+eval($to_retrieve);
 
 if($extra_info = $edit_class->getExtraInformation($id)) {
   print "<h2>Informations supplémentaires</h2>\n";
