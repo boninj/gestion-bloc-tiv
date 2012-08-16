@@ -9,9 +9,7 @@ include_once('head.inc.php');
 include_once('definition_element.inc.php');
 include_once('connect_db.inc.php');
 
-$class_element = $element."Element";
-$to_retrieve = "\$edit_class = new $class_element(\$db_con);";
-eval($to_retrieve);
+$edit_class = get_element_handler($element, $db_con);
 
 if($extra_info = $edit_class->getExtraInformation($id)) {
   print "<h2>Informations supplémentaires</h2>\n";

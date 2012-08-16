@@ -1,6 +1,13 @@
 <?php
 include_once("configuration.inc.php");
 
+function get_element_handler($element, &$db_con) {
+  $class_element = $element."Element";
+  $to_retrieve = "\$edit_class = new $class_element(\$db_con);";
+  eval($to_retrieve);
+  return $edit_class;
+}
+
 class TIVElement {
   var $_name;
   var $_values;
