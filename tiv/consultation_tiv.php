@@ -53,7 +53,9 @@ $db_query = "SELECT inspection_tiv.id, bloc.id, bloc.constructeur, bloc.marque, 
             "ORDER BY inspecteur_tiv.nom";
 
 $element = "inspection_tiv";
-include('table_creator.inc.php');
+$inspection_tiv = new inspection_tivElement();
+$inspection_tiv->setDBCon($db_con);
+print $inspection_tiv->getHTMLTable("liste-inspection-tiv", $element, $db_query);
 
 // Inspection de la séance de TIV afin de savoir s'il faut mettre à jour nos blocs.
 $db_query = "SELECT count(id_bloc) FROM inspection_tiv,bloc ".
