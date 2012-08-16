@@ -92,7 +92,7 @@ class TIVElement {
     $table .= "</table>\n";
     return $table;
   }
-  function getJSOptions($id, $label) {
+  function getJSOptions($id, $label, $display = 25) {
     return "<script type='text/javascript' charset='utf-8'>
   $(document).ready(function() {
     $('#$id').dataTable( {
@@ -111,7 +111,7 @@ class TIVElement {
           'sLast': 'Dernier',
         }
       },
-      'iDisplayLength': 25,
+      'iDisplayLength': $display,
       'sPaginationType': 'full_numbers',
       'bJQueryUI': true,
     } );
