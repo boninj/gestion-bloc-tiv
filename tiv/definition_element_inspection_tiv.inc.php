@@ -28,7 +28,7 @@ class inspection_tivElement extends TIVElement {
   }
   function getHTMLLineTable(&$record, $read_only, $default_class) {
     $current_class = $default_class;
-    print "    <tr class=\"$current_class\">\n      <td>";
+    $line = "    <tr class=\"$current_class\">\n      <td>";
     $id = $record[0];
     $to_display = array();
     for($i = 0; $i < count($this->_columns); $i++) {
@@ -37,8 +37,9 @@ class inspection_tivElement extends TIVElement {
     if(!$read_only) {
       $to_display [] = $this->getEditUrl($id);
     }
-    print implode("</td><td>", $to_display);
-    print "</td>\n    </tr>\n";
+    $line .= implode("</td><td>", $to_display);
+    $line .= "</td>\n    </tr>\n";
+    return $line;
   }
   function getFormInput($label, $value) {
     if($label === "id_inspecteur_tiv") {
