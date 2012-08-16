@@ -5,9 +5,13 @@ class blocElement extends TIVElement {
     parent::__construct($db_con);
     $this->_update_label = "Mettre à jour le bloc";
     $this->_current_time = time();
+    $this->_elements = array(
+      "id", "id_club", "nom_proprietaire", "constructeur", "marque", "numero", "capacite",
+      "date_derniere_epreuve", "date_dernier_tiv", "pression_service",
+    );
   }
   function constructResume($table_label, $time, $column, $div_label_to_update, $error_label, $error_class) {
-    $db_query = "SELECT ".join(",", blocElement::getElements())." FROM bloc ".
+    $db_query = "SELECT ".join(",", $this->_elements)." FROM bloc ".
                 "WHERE $column < '".date("Y-M-D", $time)."'";
     $table_code = $this->getHTMLTable($table_label, $this->_name, $db_query);
     if($this->_record_count > 0) {
@@ -121,22 +125,6 @@ $(function() {
     }
     $message .= $this->getTIVForm($id);
     return $message;
-  }
-  static function getElements() {
-    return array(
-      "id",
-      "id_club",
-      "nom_proprietaire",
-      "adresse",
-      "constructeur",
-      "marque",
-      "numero",
-      "capacite",
-      "date_premiere_epreuve",
-      "date_derniere_epreuve",
-      "date_dernier_tiv",
-      "pression_service",
-    );
   }
   static function getFormsRules() {
     return '

@@ -5,6 +5,10 @@ class inspection_tivElement extends TIVElement {
   function inspection_tivElement($db_con = false, $date = false) {
     parent::__construct($db_con);
     $this->_update_label = "Mettre à jour les informations sur l&#145;inspection TIV";
+    $this->_elements = array(
+      "id", "id_bloc", "id_inspecteur_tiv", "date", "etat_exterieur", "remarque_exterieur", "etat_interieur",
+      "remarque_interieur", "etat_filetage", "remarque_filetage", "etat_robineterie", "remarque_robineterie",
+      "decision",);
     $this->_columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc",
                             "Nom de l'inspecteur TIV", "Date dernière épreuve", "Date dernier TIV", "Décision");
     if(!$date) {
@@ -74,23 +78,6 @@ class inspection_tivElement extends TIVElement {
     $element_to_manage = "id=$id&element=".$this->_name."&date=".$this->_date;
     $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
     return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
-  }
-  static function getElements() {
-    return array(
-      "id",
-      "id_bloc",
-      "id_inspecteur_tiv",
-      "date",
-      "etat_exterieur",
-      "remarque_exterieur",
-      "etat_interieur",
-      "remarque_interieur",
-      "etat_filetage",
-      "remarque_filetage",
-      "etat_robineterie",
-      "remarque_robineterie",
-      "decision",
-    );
   }
   static function getFormsRules() {
     return '

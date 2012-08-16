@@ -3,13 +3,7 @@ class stabElement extends TIVElement {
   function stabElement($db_con = false) {
     parent::__construct($db_con);
     $this->_update_label = "Mettre à jour la stab";
-  }
-  static function getElements() {
-    return array(
-      "id",
-      "modele",
-      "taille",
-    );
+    $this->_elements =  array("id", "modele", "taille",);
   }
   static function getFormsRules() {
     return '

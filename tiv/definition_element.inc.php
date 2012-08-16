@@ -15,17 +15,19 @@ class TIVElement {
   var $_update_label;
   var $_record_count;
   var $_tr_class;
+  var $_elements;
   function TIVElement($db_con = false) {
     $this->_name = str_replace("Element", "", get_class($this));
     $this->_update_label = "Mettre à jour le/la ".$this->_name;
     $this->_record_count = 0;
     $this->_tr_class = array("odd", "even");
     $this->_db_con = $db_con;
+    $this->_elements = array();
   }
   function setDBCon($db_con) {
     $this->_db_con = $db_con;
   }
-  static function getElements() { }
+  function getElements() { return $this->_elements; }
   static function getFormsRules() { }
   static function getForms() { }
   static function constructTextInput($label, $size, $value) {
