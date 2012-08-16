@@ -12,6 +12,4 @@ if($element === "inspection_tiv") {
 }
 
 print $element_class->getHTMLTable("liste_$element", $element);
-unset($db_query);
-$i = $element_class->_record_count; // Hack baveux en attendant plus propre
 ?>
