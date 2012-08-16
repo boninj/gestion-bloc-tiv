@@ -8,9 +8,9 @@ class inspection_tivElement extends TIVElement {
     $this->_elements = array(
       "id", "id_bloc", "id_inspecteur_tiv", "date", "etat_exterieur", "remarque_exterieur", "etat_interieur",
       "remarque_interieur", "etat_filetage", "remarque_filetage", "etat_robineterie", "remarque_robineterie",
-      "decision",);
+      "decision", "remarque",);
     $this->_columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc",
-                            "Nom de l'inspecteur TIV", "Date dernière épreuve", "Date dernier TIV", "Décision");
+                            "Nom de l'inspecteur TIV", "Date dernière épreuve", "Date dernier TIV", "Décision", "Remarque");
     if(!$date) {
       if(array_key_exists("date", $_GET)) {
         $date = $_GET['date'];
@@ -154,6 +154,7 @@ class inspection_tivElement extends TIVElement {
       "etat_robineterie"     => array("required", self::getPossibleStatus(), "État de la robineterie du bloc"),
       "remarque_robineterie" => array("required", false, "Remarque sur la robineterie du bloc"),
       "decision"             => array("required", array("", "OK", "Rebuté"), "Le bloc est-il accepté ?"),
+      "remarque"             => array("required", "text", "Commentaire sur l'inspection."),
     );
   }
 }

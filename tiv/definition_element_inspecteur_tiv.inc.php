@@ -6,23 +6,25 @@ class inspecteur_tivElement extends TIVElement {
     $this->_elements = array("id", "nom", "numero_tiv", "adresse_tiv", "telephone_tiv", "actif",);
   }
   function getExtraInformation($id) {
-    $db_query = "SELECT inspection_tiv.id,date,id_club ".
+    $db_query = "SELECT inspection_tiv.id,date,id_club,decision,id_bloc ".
                 "FROM inspection_tiv,bloc ".
                 "WHERE id_inspecteur_tiv = $id AND id_bloc = bloc.id ORDER BY date, id_club";
     $db_result = $this->_db_con->query($db_query);
     $extra_info = array();
     $count = 0;
     while($result = $db_result->fetch_array()) {
-      $extra_info []= "<td><a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>Inspection TIV du ".$result[1]."</a></td>".
+      $extra_info []= "<td>".$result[1]."</td>".
                       "<td>bloc n° ".$result[2]."</a></td>".
-                      "<td><a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."'>fiche PDF</a></td>";
+                      "<td>".$result[3]."</a></td>".
+                      "<td><a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>Fiche TIV n° ".$result[0]."</a>".
+                      "/<a href='impression_fiche_tiv.php?id_bloc=".$result[4]."&date=".$result[1]."'>fiche PDF</a></td>";
       $count++;
     }
     if($count > 0) {
       return "<h3>Liste des fiches d'inspection TIV associées à l'inspecteur :</h3>\n".
              $this->getJSOptions("liste-inspections", "fiche", 10).
 "<table cellpadding='0' cellspacing='0' border='0' class='display' id='liste-inspections'>
-<thead><tr><th>Date inspection TIV</th><th>Références bloc</th><th>Fiche PDF</th></tr></thead>
+<thead><tr><th>Date inspection TIV</th><th>Références bloc</th><th>Décision</th><th>Éditer la fiche / Accéder au PDF</th></tr></thead>
 <tbody>
 <tr>".implode("</tr>\n<tr>", $extra_info)."</tr>
 </tbody></table>\n";
