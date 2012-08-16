@@ -57,9 +57,9 @@ class TIVElement {
   function updateRecord(&$record) {
     return false;
   }
-  function getHTMLTable($element, $read_only, $db_query = false) {
-    $table = $this->getJSOptions($element);
-    $table .= "<table cellpadding='0' cellspacing='0' border='0' class='display' id='liste_".$element."s'>\n";
+  function getHTMLTable($id, $label, $db_query = false, $read_only = false) {
+    $table = $this->getJSOptions($id, $label);
+    $table .= "<table cellpadding='0' cellspacing='0' border='0' class='display' id='$id'>\n";
     $table .= "  <thead>".$this->getHTMLHeaderTable($read_only)."</thead>\n";
     $table .= "  <tbody>\n";
     if(!$db_query) $db_query = "SELECT ".join(",", $this->getElements())." FROM ".$this->_name;
@@ -78,20 +78,18 @@ class TIVElement {
     $table .= "</table>\n";
     return $table;
   }
-  function getJSOptions($name, $real_name = false) {
-    if(!$real_name) $real_name = $name;
-    $table_name = "liste_".$name."s";
+  function getJSOptions($id, $label) {
     return "<script type='text/javascript' charset='utf-8'>
   $(document).ready(function() {
-    $('#$table_name').dataTable( {
+    $('#$id').dataTable( {
       'oLanguage': {
-        'sZeroRecords': 'Pas de ".$real_name."s correspondants',
-        'sInfo': 'Affichage des ".$real_name."s _START_ à _END_ sur _TOTAL_ ".$real_name."s',
-        'sInfoEmpty': 'Aucun $real_name trouvé(e)',
-        'sInfoFiltered': '(Suite à l&#145;application du filtre de recherche sur les _MAX_ ".$real_name."s)',
-        'sSearch': 'Recherche d&#145;un $real_name :',
+        'sZeroRecords': 'Pas de ".$label."s correspondants',
+        'sInfo': 'Affichage des ".$label."s _START_ à _END_ sur _TOTAL_ ".$label."s',
+        'sInfoEmpty': 'Aucun $label trouvé(e)',
+        'sInfoFiltered': '(Suite à l&#145;application du filtre de recherche sur les _MAX_ ".$label."s)',
+        'sSearch': 'Recherche d&#145;un $label :',
         'bLengthChange': true,
-        'sLengthMenu': 'Afficher _MENU_ ".$real_name."s par page',
+        'sLengthMenu': 'Afficher _MENU_ ".$label."s par page',
         'oPaginate': {
           'sFirst': 'Début',
           'sPrevious': 'Précédent',
