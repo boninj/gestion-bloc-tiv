@@ -11,9 +11,6 @@ include_once('connect_db.inc.php');
 
 $class_element = $element."Element";
 $to_retrieve = "\$edit_class = new $class_element(\$db_con);";
-if($element === "inspection_tiv") {
-  $to_retrieve = "\$edit_class = new $class_element('".$_GET["date"]."', \$db_con);";
-}
 eval($to_retrieve);
 
 if($extra_info = $edit_class->getExtraInformation($id)) {

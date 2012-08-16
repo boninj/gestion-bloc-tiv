@@ -2,11 +2,18 @@
 class inspection_tivElement extends TIVElement {
   var $_date;
   var $_columns;
-  function inspection_tivElement($date, $db_con = false) {
+  function inspection_tivElement($db_con = false, $date = false) {
     parent::__construct($db_con);
     $this->_update_label = "Mettre à jour les informations sur l&#145;inspection TIV";
     $this->_columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc",
                             "Nom de l'inspecteur TIV", "Date dernière épreuve", "Date dernier TIV", "Décision");
+    if(!$date) {
+      if(array_key_exists("date", $_GET)) {
+        $date = $_GET['date'];
+      } else if(array_key_exists("date", $_POST)) {
+        $date = $_POST['date'];
+      }
+    }
     $this->_date = $date;
   }
   function getExtraInformation($id) {
