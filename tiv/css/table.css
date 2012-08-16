@@ -332,6 +332,10 @@ tr.critical-epreuve {
         background-color: #FFCC00;
 }
 
+tr.warning-epreuve {
+        background-color: #FFDDAA;
+}
+
 tr.critical-tiv {
         background-color: #FFDD00;
 }

@@ -1,6 +1,10 @@
 <?php
 class blocElement extends TIVElement {
   var $_current_time;
+  var $_epreuve_month_count;
+  var $_epreuve_month_count_warn;
+  var $_tiv_month_count;
+  var $_tiv_month_count_warn;
   function blocElement($db_con = false) {
     parent::__construct($db_con);
     $this->_update_label = "Mettre à jour le bloc";
@@ -9,6 +13,16 @@ class blocElement extends TIVElement {
       "id", "id_club", "nom_proprietaire", "constructeur", "marque", "numero", "capacite",
       "date_derniere_epreuve", "date_dernier_tiv", "pression_service",
     );
+    $this->_epreuve_month_count = 60;
+    $this->_epreuve_month_count_warn = 55;
+    $this->_tiv_month_count = 12;
+    $this->_tiv_month_count_warn = 11;
+  }
+  function getEpreuveWarnMonthCount() {
+    return $this->_epreuve_month_count - $this->_epreuve_month_count_warn;
+  }
+  function getTIVWarnMonthCount() {
+    return $this->_tiv_month_count - $this->_tiv_month_count_warn;
   }
   function constructResume($table_label, $time, $column, $div_label_to_update, $error_label, $error_class) {
     $db_query = "SELECT ".join(",", $this->_elements)." FROM bloc ".
@@ -31,21 +45,27 @@ document.getElementById('$div_label_to_update').className='$error_class';
     }
     // Calcul sur le temps prochaine épreuve
     $date_derniere_epreuve = strtotime($record["date_derniere_epreuve"]);
-    $date_prochaine_epreuve = strtotime("+5 years", $date_derniere_epreuve);
+    $date_prochaine_epreuve = strtotime("+".$this->_epreuve_month_count." months", $date_derniere_epreuve);
     if($date_prochaine_epreuve < $this->_current_time) {
       $record["date_derniere_epreuve"] = "<div class='error'>".$record["date_derniere_epreuve"]."</label>";
       return "critical-epreuve";
     }
+    // Calcul alerte sur le temps prochaine épreuve
+    $date_prochaine_epreuve_warn = strtotime("+".$this->_epreuve_month_count_warn." months", $date_derniere_epreuve);
+    if($date_prochaine_epreuve_warn < $this->_current_time) {
+      $record["date_derniere_epreuve"] = "<div class='warning'>".$record["date_derniere_epreuve"]."</label>";
+      return "warning-epreuve";
+    }
     // Calcul sur le temps prochain TIV
     $date_dernier_tiv = strtotime($record["date_dernier_tiv"]);
-    $date_prochain_tiv = strtotime("+1 years", $date_dernier_tiv);
+    $date_prochain_tiv = strtotime("+".$this->_tiv_month_count." months", $date_dernier_tiv);
     if($date_prochain_tiv < $this->_current_time) {
       $record["date_dernier_tiv"] = "<div class='error'>".$record["date_dernier_tiv"]."</label>";
       return "critical-tiv";
     }
-    // Calcul sur le temps prochain TIV dans moins d'un mois
-    $date_prochain_tiv_minus_one_month = strtotime("-1 month", $date_prochain_tiv);
-    if($date_prochain_tiv_minus_one_month < $this->_current_time) {
+    // Calcul alerte sur le temps prochain TIV
+    $date_prochain_tiv_warn = strtotime("+".$this->_tiv_month_count_warn." month", $date_dernier_tiv);
+    if($date_prochain_tiv_warn < $this->_current_time) {
       $record["date_dernier_tiv"] = "<div class='warning'>".$record["date_dernier_tiv"]."</label>";
       return "warning-tiv";
     }
@@ -103,20 +123,23 @@ $(function() {
     $derniere_epreuve = strtotime($result[0]);
     $dernier_tiv = strtotime($result[1]);
     // Construction des dates d'expiration
-    $next_epreuve = strtotime("+5 years", $derniere_epreuve);
-    $next_epreuve_minus_one = strtotime("+4 years", $derniere_epreuve);
-    $next_tiv = strtotime("+12 months", $dernier_tiv);
-    $next_tiv_minus_one = strtotime("+11 months", $dernier_tiv);
-    $message_expiration = "";
+    $next_epreuve = strtotime("+".$this->_epreuve_month_count." months", $derniere_epreuve);
+    $next_epreuve_minus_one = strtotime("+".$this->_epreuve_month_count_warn." months", $derniere_epreuve);
+    $next_tiv = strtotime("+".$this->_tiv_month_count." months", $dernier_tiv);
+    $next_tiv_minus_one = strtotime("+".$this->_tiv_month_count_warn." months", $dernier_tiv);
+    $message_expiration  = "<div>Date prochaine réépreuve : <strong>".date("d/m/Y", $next_epreuve)."</strong> - ".
+                           "Date prochain TIV : <strong>".date("d/m/Y", $next_tiv)."</strong></div>\n";
     if($next_epreuve < $this->_current_time) {
-      $message_expiration = "<div class='error'>ATTENTION !!! CE BLOC A DÉPASSÉ SA DATE DE RÉÉPREUVE (".date("d/m/Y", $next_epreuve).") !!!</div>\n";
+      $message_expiration = "<div class='error'>ATTENTION !!! CE BLOC A DÉPASSÉ SA DATE DE RÉÉPREUVE (le ".date("d/m/Y", $next_epreuve).") !!!</div>\n";
     } else if($next_epreuve_minus_one < $this->_current_time) {
-      $message_expiration = "<div class='warning'>Attention, ce bloc va dépassé sa date de réépreuve dans moins de 1 an (".date("d/m/Y", $next_epreuve).")</div>\n";
+      $message_expiration = "<div class='warning'>Attention, ce bloc va bientôt dépasser sa date de réépreuve ".
+                            "(dans moins de ".$this->getEpreuveWarnMonthCount()." mois, le ".date("d/m/Y", $next_epreuve).")</div>\n";
     }
     if($next_tiv < $this->_current_time) {
-      $message_expiration .= "<div class='warning'>Attention !!! ce bloc a dépassé sa date de TIV (".date("d/m/Y", $next_tiv).")</div>\n";
+      $message_expiration .= "<div class='error'>Attention !!! ce bloc a dépassé sa date de TIV (le ".date("d/m/Y", $next_tiv).")</div>\n";
     } else if($next_tiv_minus_one < $this->_current_time) {
-      $message_expiration .= "<div class='warning'>Attention, ce bloc va dépassé sa date de TIV moins de 1 mois (".date("d/m/Y", $next_tiv).")</div>\n";
+      $message_expiration .= "<div class='warning'>Attention, ce bloc va bientôt dépasser sa date de TIV ".
+                             "(dans moins de ".$this->getTIVWarnMonthCount()." mois, le ".date("d/m/Y", $next_tiv).")</div>\n";
     }
     // Récupération d'information sur les fiches TIV du bloc
     $db_result = $this->_db_con->query("SELECT id,date FROM inspection_tiv WHERE id_bloc = $id ORDER BY date DESC");
@@ -127,7 +150,7 @@ $(function() {
     }
     // Composition des messages
     $message = "";
-    if(strlen($message_expiration) > 0) $message = "<p>$message_expiration</p>\n";
+    $message = "<p>$message_expiration</p>\n";
     if(count($extra_info) > 0) {
       $message .= "<h3>Liste des fiches d'inspection TIV associées au bloc :</h3>\n<ul>\n<li>".implode("</li>\n<li>", $extra_info)."</li>\n</ul>\n";
     } else {
