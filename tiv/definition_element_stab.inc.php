@@ -1,7 +1,7 @@
 <?php
 class stabElement extends TIVElement {
-  function stabElement() {
-    parent::__construct();
+  function stabElement($db_con = false) {
+    parent::__construct($db_con);
     $this->_update_label = "Mettre à jour la stab";
   }
   static function getElements() {

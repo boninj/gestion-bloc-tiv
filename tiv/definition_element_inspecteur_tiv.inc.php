@@ -1,7 +1,7 @@
 <?php
 class inspecteur_tivElement extends TIVElement {
-  function inspecteur_tivElement() {
-    parent::__construct();
+  function inspecteur_tivElement($db_con = false) {
+    parent::__construct($db_con);
     $this->_update_label = "Mettre à jour l&#145;inspecteur TIV";
   }
   function getExtraInformation($id) {

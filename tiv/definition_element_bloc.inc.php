@@ -1,8 +1,8 @@
 <?php
 class blocElement extends TIVElement {
   var $_current_time;
-  function blocElement() {
-    parent::__construct();
+  function blocElement($db_con = false) {
+    parent::__construct($db_con);
     $this->_update_label = "Mettre à jour le bloc";
     $this->_current_time = time();
   }
