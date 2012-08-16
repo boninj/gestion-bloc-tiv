@@ -10,9 +10,8 @@ include_once('definition_element.inc.php');
 require_once('connect_db.inc.php');
 
 $class_element = $element."Element";
-$to_retrieve = "\$edit_class = new $class_element();";
+$to_retrieve = "\$edit_class = new $class_element(\$db_con);";
 eval($to_retrieve);
-$edit_class->setDBCon($db_con);
 if($element === "inspection_tiv") {
   $edit_class->setDate($_GET["date"]);
 }

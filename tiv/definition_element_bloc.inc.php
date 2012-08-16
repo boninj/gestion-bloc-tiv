@@ -112,6 +112,7 @@ $(function() {
                       "<a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."'>(fiche PDF)</a>";
     }
     // Composition des messages
+    $message = "";
     if($message_expiration) $message = "<p>$message_expiration</p>\n";
     if(count($extra_info) > 0) {
       $message .= "<h3>Liste des fiches d'inspection TIV associées au bloc :</h3>\n<ul>\n<li>".implode("</li>\n<li>", $extra_info)."</li>\n</ul>\n";

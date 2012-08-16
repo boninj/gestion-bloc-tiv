@@ -5,8 +5,7 @@ require_once('connect_db.inc.php');
 $message_alerte_reepreuve = "Rien à signaler concernant les réépreuves";
 $message_alerte_tiv       = "Rien à signaler concernant les inspections TIV";
 
-$bloc_element = new blocElement();
-$bloc_element->setDBCon($db_con);
+$bloc_element = new blocElement($db_con);
 
 print $bloc_element->constructResume("blocs-reepreuve", strtotime("-55 month"), "date_derniere_epreuve", "message_important_reepreuve",
                                      "__COUNT__ bloc(s) nécessite une ré-épreuve dans moins de 5 mois.", 'error');
