@@ -1,4 +1,4 @@
-<h2>Déclaration d'un nouveau matériel</h2>
+<h2>Déclaration d'un nouvel élément dans la base</h2>
 <form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
 <p>Type d'élément à déclarer :
 <select id="element" name="element">
