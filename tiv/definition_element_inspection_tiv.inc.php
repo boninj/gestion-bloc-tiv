@@ -34,12 +34,12 @@ class inspection_tivElement extends TIVElement {
     $db_query = "SELECT date_dernier_tiv FROM bloc,inspection_tiv WHERE inspection_tiv.id = $id AND id_bloc = bloc.id AND date_dernier_tiv < '".$this->_date."'";
     $db_result = $this->_db_con->query($db_query);
     if(!$db_result->fetch_array()) {
-      return "Pas d'opération supplémentaire possible. La date de cette fiche TIV est inférieur/égale à la dernière date TIV du bloc.";
+      return "<div class='ok'>Pas d'opération possible. La date de cette fiche TIV est inférieur/égale à la dernière date TIV du bloc.</div>";
     }
     $db_query = "SELECT decision FROM inspection_tiv WHERE id = $id AND decision = 'OK'";
     $db_result = $this->_db_con->query($db_query);
     if(!$db_result->fetch_array()) {
-      return "Pas d'opération supplémentaire possible. Veuillez changer la décision afin de pouvoir mettre à jour le bloc.";
+      return "<div class='warning'>Pas d'opération supplémentaire possible. Veuillez changer la décision à 'OK' afin de pouvoir mettre à jour le bloc.</div>";
     }
     $form  = "<form name='update_bloc' id='update_bloc' action='update_bloc_tiv.php' method='POST'>\n";
     $form .= "<input type='hidden' name='date_tiv' value='".$this->_date."' />\n";
@@ -151,7 +151,7 @@ class inspection_tivElement extends TIVElement {
       "remarque_filetage"    => array("required", false, "Remarque sur le filetage du bloc"),
       "etat_robineterie"     => array("required", self::getPossibleStatus(), "État de la robineterie du bloc"),
       "remarque_robineterie" => array("required", false, "Remarque sur la robineterie du bloc"),
-      "decision"             => array("required", array("OK", "Rebuté"), "Le bloc est-il accepté ?"),
+      "decision"             => array("required", array("", "OK", "Rebuté"), "Le bloc est-il accepté ?"),
     );
   }
 }
