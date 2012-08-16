@@ -184,10 +184,7 @@ class TIVElement {
   }
   function constructEditForm($id, $form_name, $action = "") {
     $this->_values = $this->retrieveValues($id);
-    $form = "<fieldset><legend>".$this->getLegend($id)."</legend>\n";
-    $form .= "<p id=\"results\"></p>\n";
-    $form .= "<div id='edit_".$this->_name."'></div>\n";
-    $form .= "<form name='$form_name' id='$form_name' action='$action' method='POST'>\n";
+    $form  = "<form name='$form_name' id='$form_name' action='$action' method='POST'>\n";
     $form .= "<input type='hidden' name='id' value='$id' />\n";
     $form .= "<input type='hidden' name='element' value='".$this->_name."' />\n";
     $form .= "<table>\n";
@@ -200,7 +197,6 @@ class TIVElement {
     $form .= "</table>\n";
     $form .= "<input type='submit' name='lancer' value='".$this->getUpdateLabel()."'>\n";
     $form .= "</form>\n";
-    $form .= "</fieldset>\n";
     return $form;
   }
 }

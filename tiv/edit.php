@@ -21,7 +21,7 @@ print "<h2>Édition d'un l'élément</h2>\n";
   $.validator.messages.required = "Champ obligatoire";
   $(document).ready(function(){
     $("#edit_form").validate({
-<?php echo $edit_class->getFormsRules(); ?>,
+<?php print $edit_class->getFormsRules(); ?>,
       submitHandler: function(form) {
         $.post('process_element.php', $("#edit_form").serialize(), function(data) {
           $('#results').html(data);
@@ -32,7 +32,10 @@ print "<h2>Édition d'un l'élément</h2>\n";
   });
 </script>
 <?php
+print "<fieldset><legend>".$edit_class->getLegend($id)."</legend>\n";
+print "<p id=\"results\"></p>\n";
 print $edit_class->constructEditForm($id, "edit_form");
+print "</fieldset>\n";
 
 if($extra_operation = $edit_class->getExtraOperation($id)) {
   print "<h2>Opérations supplémentaires</h2>\n";
