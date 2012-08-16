@@ -19,6 +19,8 @@ class inspection_tivElement extends TIVElement {
       }
     }
     $this->_date = $date;
+    $this->_url_title_label = "Retour à la liste des fiches d'inspections TIV du ".$this->_date;
+    $this->_back_url        = "consultation_tiv.php?date_tiv=".$this->_date;
   }
   function getExtraInformation($id) {
     $db_result = $this->_db_con->query("SELECT id_bloc,id_inspecteur_tiv FROM inspection_tiv WHERE id = $id");
@@ -151,13 +153,6 @@ class inspection_tivElement extends TIVElement {
       "remarque_robineterie" => array("required", false, "Remarque sur la robineterie du bloc"),
       "decision"             => array("required", array("OK", "Rebuté"), "Le bloc est-il accepté ?"),
     );
-  }
-  function getUrlTitle() {
-    return "Retour à la liste des fiches d'inspections TIV du ".$this->_date;
-  }
-  function getBackUrl() {
-    $url_retour = "consultation_tiv.php?date_tiv=".$this->_date;
-    return $url_retour;
   }
 }
 ?>

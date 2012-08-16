@@ -17,8 +17,12 @@ class TIVElement {
   var $_tr_class;
   var $_elements;
   function TIVElement($db_con = false) {
+    // Init chaîne de texte
     $this->_name = str_replace("Element", "", get_class($this));
-    $this->_update_label = "Mettre à jour le/la ".$this->_name;
+    $this->_update_label    = "Mettre à jour le/la ".$this->_name;
+    $this->_url_title_label = "Retour à la liste des ".$this->_name."s";
+    $this->_legend_label    = "Édition du ".$this->_name." __ID__";
+    $this->_back_url        = "./#".$this->_name;
     $this->_record_count = 0;
     $this->_tr_class = array("odd", "even");
     $this->_db_con = $db_con;
@@ -149,14 +153,13 @@ class TIVElement {
     return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
   }
   function getBackUrl() {
-    $url_retour = "./#".$this->_name;
-    return $url_retour;
+    return $this->_back_url;
   }
   function getUrlTitle() {
-    return "Retour à la liste des ".$this->_name."s";
+    return $this->_url_title_label;
   }
   function getLegend($id) {
-    return "Édition du ".$this->_name." $id";
+    return str_replace("__ID__", $id, $this->_legend_label);
   }
   function getElementLabel($label) {
     $forms_definition = $this::getForms();
