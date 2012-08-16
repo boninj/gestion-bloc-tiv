@@ -34,6 +34,11 @@ print "<h2>Édition d'un l'élément</h2>\n";
 <?php
 print $edit_class->constructEditForm($id, "edit_form");
 
+if($extra_operation = $edit_class->getExtraOperation($id)) {
+  print "<h2>Opérations supplémentaires</h2>\n";
+  print $extra_operation;
+}
+
 print "<p><a href='".$edit_class->getBackUrl()."'>".$edit_class->getUrlTitle()."</a></p>\n";
 include_once('foot.inc.php');
 ?>

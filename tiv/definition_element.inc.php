@@ -141,6 +141,8 @@ class TIVElement {
   }
   function getExtraInformation($id) {
   }
+  function getExtraOperation($id) {
+  }
   function getEditUrl($id) {
     $element_to_manage = "id=$id&element=".$this->_name;
     $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
