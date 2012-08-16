@@ -1,9 +1,12 @@
 <?php
 class inspection_tivElement extends TIVElement {
   var $_date;
+  var $_columns;
   function inspection_tivElement() {
     parent::__construct();
     $this->_update_label = "Mettre à jour les informations sur l&#145;inspection TIV";
+    $this->_columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc",
+                            "Nom de l'inspecteur TIV", "Date dernière épreuve", "Date dernier TIV", "Décision");
   }
   function getExtraInformation($id) {
     $db_result = $this->_db_con->query("SELECT id_bloc,id_inspecteur_tiv FROM inspection_tiv WHERE id = $id");
@@ -16,12 +19,19 @@ class inspection_tivElement extends TIVElement {
   function setDate($date) {
     $this->_date = $date;
   }
-  function getHTMLLine(&$record, &$columns, $read_only, $default_class) {
+  function getHTMLHeaderTable($read_only = false) {
+    $header = "    <tr>\n      <th>";
+    $header .= join("</th><th>", $this->_columns);
+    if(!$read_only) $header .= "</th><th>Opérations";
+    $header .= "</th>\n    </tr>\n";
+    return $header;
+  }
+  function getHTMLLineTable(&$record, $read_only, $default_class) {
     $current_class = $default_class;
     print "    <tr class=\"$current_class\">\n      <td>";
     $id = $record[0];
     $to_display = array();
-    for($i = 0; $i < count($columns); $i++) {
+    for($i = 0; $i < count($this->_columns); $i++) {
       $to_display []= $record[$i];
     }
     if(!$read_only) {

@@ -10,9 +10,8 @@ $message_alerte_tiv       = "Rien à signaler concernant les inspections TIV";
 
 $max_repreuve_mois = "55";
 
-$columns = blocElement::getElements();
 $bloc_max_epreuve_age = strtotime("-$max_repreuve_mois month");
-$db_query = "SELECT ".join(",", $columns)." FROM bloc WHERE date_derniere_epreuve < '".date("Y-M-D", $bloc_max_epreuve_age)."'";
+$db_query = "SELECT ".join(",", blocElement::getElements())." FROM bloc WHERE date_derniere_epreuve < '".date("Y-M-D", $bloc_max_epreuve_age)."'";
 
 $element = "bloc_reepreuve";
 $real_element = "bloc";
@@ -28,9 +27,8 @@ $('#message_important_reepreuve').html(\"$message_alerte_reepreuve\");
 document.getElementById('message_important_reepreuve').className='$class_alerte_reepreuve';
 </script>\n";
 
-$columns = blocElement::getElements();
 $bloc_max_tiv_age = strtotime("-11 month");
-$db_query = "SELECT ".join(",", $columns)." FROM bloc WHERE date_dernier_tiv < '".date("Y-M-D", $bloc_max_tiv_age)."'";
+$db_query = "SELECT ".join(",", blocElement::getElements())." FROM bloc WHERE date_dernier_tiv < '".date("Y-M-D", $bloc_max_tiv_age)."'";
 
 $element = "bloc_tiv";
 $real_element = "bloc";

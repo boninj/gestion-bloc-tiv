@@ -1,13 +1,11 @@
 <?php
 if(!isset($real_element)) $real_element = $element;
+if(!isset($read_only)) $read_only = false;
 
 $class_element = $real_element."Element";
 $to_retrieve = "\$element_class = new $class_element();";
 unset($real_element);
 eval($to_retrieve);
-if(!@is_array($columns)) {
-  $columns = $element_class::getElements();
-}
 
 if($element === "inspection_tiv") {
   $element_class->setDate($date_tiv);
@@ -39,18 +37,10 @@ if($element === "inspection_tiv") {
   } );
 </script>
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="liste_<?php print $element; ?>s">
-  <thead>
-    <tr>
-      <th><?php
-  if(!isset($read_only)) $read_only = false;
-  print join("</th><th>", $columns);
-  if(!$read_only) print "</th><th>Opérations";
-?></th>
-    </tr>
-  </thead>
+  <thead><?php print $element_class->getHTMLHeaderTable($read_only); ?></thead>
   <tbody>
 <?php
-if(!isset($db_query)) $db_query = "SELECT ".join(",", $columns)." FROM $element";
+if(!isset($db_query)) $db_query = "SELECT ".join(",", $element_class::getElements())." FROM $element";
 $db_result =  $db_con->query($db_query);
 unset($db_query);
 $tr_class = array("odd", "even");
@@ -60,17 +50,10 @@ while($line = $db_result->fetch_array()) {
   // Met à jour l'état de la ligne courante afin de rajouter des informations
   // et renvoie une classe d'affichage css en cas de modification
   // pour mettre en avant un bloc ayant passé sa date de TIV par exemple.
-  print $element_class->getHTMLLine($line, $columns, $read_only, $current_class);
+  print $element_class->getHTMLLineTable($line, $read_only, $current_class);
 }
 
 ?>
   </tbody>
-  <tfoot>
-    <tr>
-      <th><?php print join("</th><th>", $columns);?></th><th>Opérations</th>
-    </tr>
-  </tfoot>
+  <tfoot><?php print $element_class->getHTMLHeaderTable($read_only); ?></tfoot>
 </table>
-<?php
-unset($columns);
-?>

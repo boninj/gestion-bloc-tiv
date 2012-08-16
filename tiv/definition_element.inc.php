@@ -53,7 +53,14 @@ class TIVElement {
   function updateRecord(&$record) {
     return false;
   }
-  function getHTMLLine(&$record, &$columns, $read_only, $default_class) {
+  function getHTMLHeaderTable($read_only = false) {
+    $header = "    <tr>\n      <th>";
+    $header .= join("</th><th>", $this->getElements());
+    if(!$read_only) $header .= "</th><th>Opérations";
+    $header .= "</th>\n    </tr>\n";
+    return $header;
+  }
+  function getHTMLLineTable(&$record, $read_only, $default_class) {
     $current_class = $default_class;
     if($tmp = $this->updateRecord($record)) {
       $current_class = $tmp;
@@ -61,7 +68,7 @@ class TIVElement {
     print "    <tr class=\"$current_class\">\n      <td>";
     $id = $record[0];
     $to_display = array();
-    foreach($columns as $elt) {
+    foreach($this->getElements() as $elt) {
       $to_display []= $record[$elt];
     }
     if(!$read_only) {

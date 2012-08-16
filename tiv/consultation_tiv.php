@@ -53,8 +53,6 @@ $db_query = "SELECT inspection_tiv.id, bloc.id, bloc.constructeur, bloc.marque, 
             "ORDER BY inspecteur_tiv.nom";
 
 $element = "inspection_tiv";
-$columns = array("Référence TIV", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc",
-                 "Nom de l'inspecteur TIV", "Date dernière épreuve", "Date dernier TIV", "Décision");
 include('table_creator.inc.php');
 
 // Inspection de la séance de TIV afin de savoir s'il faut mettre à jour nos blocs.
