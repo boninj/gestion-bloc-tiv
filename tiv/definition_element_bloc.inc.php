@@ -6,6 +6,20 @@ class blocElement extends TIVElement {
     $this->_update_label = "Mettre à jour le bloc";
     $this->_current_time = time();
   }
+  function constructResume($table_label, $time, $column, $div_label_to_update, $error_label, $error_class) {
+    $db_query = "SELECT ".join(",", blocElement::getElements())." FROM bloc ".
+                "WHERE $column < '".date("Y-M-D", $time)."'";
+    $table_code = $this->getHTMLTable($table_label, $this->_name, $db_query);
+    if($this->_record_count > 0) {
+      $message_alerte = str_replace("__COUNT__", $this->_record_count, $error_label);
+    }
+    $html_code = "<p><div class='$error_class'>$message_alerte</div></p>\n";
+    $html_code .= "<script>
+$('#$div_label_to_update').html(\"$message_alerte\");
+document.getElementById('$div_label_to_update').className='$error_class';
+</script>\n";
+    return $html_code.$table_code;
+  }
   function updateRecord(&$record) {
     // Test présence champ nécessaire aux tests à réaliser
     foreach(array("date_dernier_tiv", "date_derniere_epreuve") as $elt) {
