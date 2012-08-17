@@ -3,7 +3,7 @@ class inspecteur_tivElement extends TIVElement {
   function inspecteur_tivElement($db_con = false) {
     parent::__construct($db_con);
     $this->_update_label = "Mettre à jour l&#145;inspecteur TIV";
-    $this->_elements = array("id" => "id", "nom" => "Prénom Nom", "numero_tiv" => "Numéro d'inspecteur TIV",
+    $this->_elements = array("id" => "Réf.", "nom" => "Prénom Nom", "numero_tiv" => "Numéro d'inspecteur TIV",
                              "adresse_tiv" => "Adresse du TIV", "telephone_tiv" => "Téléphone de l'inspecteur", "actif" => "Actif ?",);
   }
   function getExtraInformation($id) {

@@ -40,7 +40,7 @@ class detendeurElement extends TIVElement {
   function detendeurElement($db_con = false) {
     parent::__construct($db_con);
     $this->_update_label = "Mettre à jour le détendeur";
-    $this->_elements = array("id" => "id", "modele" => "Modèle", "id_1ier_etage" => "n° 1ier étage",
+    $this->_elements = array("id" => "Réf.", "modele" => "Modèle", "id_1ier_etage" => "n° 1ier étage",
                              "id_2e_etage" => "n° 2ieme étage", "id_octopus" => "n° octopus", "date" => "Date",);
   }
   static function getFormsRules() {

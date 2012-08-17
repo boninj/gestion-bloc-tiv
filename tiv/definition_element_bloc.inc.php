@@ -10,7 +10,7 @@ class blocElement extends TIVElement {
     $this->_update_label = "Mettre à jour le bloc";
     $this->_current_time = time();
     $this->_elements = array(
-      "id" => "id", "id_club" => "n° club", "nom_proprietaire" => "Nom propriétaire", "constructeur" => "Constructeur",
+      "id" => "Réf.", "id_club" => "n° club", "nom_proprietaire" => "Nom propriétaire", "constructeur" => "Constructeur",
       "marque" => "Marque", "numero" => "Numéro constructeur", "capacite" => "Capacité",
       "date_derniere_epreuve" => "Date dernière épreuve", "date_dernier_tiv" => "Date dernière inspection TIV", "pression_service" => "Pression de service",
     );
