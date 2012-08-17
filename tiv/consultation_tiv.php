@@ -46,15 +46,9 @@ print "Il est prévu d'inspecter $total blocs au total dont $reepreuve réépreu
 
 print "<h2>Liste des inspections prévues pour le $date_tiv</h2>\n";
 
-$db_query = "SELECT inspection_tiv.id, bloc.id, bloc.constructeur, bloc.marque, bloc.capacite, ".
-            "inspecteur_tiv.nom, bloc.date_derniere_epreuve, bloc.date_dernier_tiv,decision,remarque ".
-            "FROM inspection_tiv, bloc, inspecteur_tiv ".
-            "WHERE inspection_tiv.date = '$date_tiv' AND id_bloc = bloc.id AND id_inspecteur_tiv = inspecteur_tiv.id ".
-            "ORDER BY inspecteur_tiv.nom";
-
 $element = "inspection_tiv";
 $inspection_tiv = new inspection_tivElement($db_con, $date_tiv);
-print $inspection_tiv->getHTMLTable("liste-inspection-tiv", $element, $db_query);
+print $inspection_tiv->getHTMLTable("liste-inspection-tiv", $element);
 
 // Inspection de la séance de TIV afin de savoir s'il faut mettre à jour nos blocs.
 $db_query = "SELECT count(id_bloc) FROM inspection_tiv,bloc ".

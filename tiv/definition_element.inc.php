@@ -72,12 +72,15 @@ class TIVElement {
   function updateRecord(&$record) {
     return false;
   }
+  function getDBQuery() {
+    return "SELECT ".join(",", $this->getElements())." FROM ".$this->_name;
+  }
   function getHTMLTable($id, $label, $db_query = false, $read_only = false) {
     $table = $this->getJSOptions($id, $label);
     $table .= "<table cellpadding='0' cellspacing='0' border='0' class='display' id='$id'>\n";
     $table .= "  <thead>".$this->getHTMLHeaderTable($read_only)."</thead>\n";
     $table .= "  <tbody>\n";
-    if(!$db_query) $db_query = "SELECT ".join(",", $this->getElements())." FROM ".$this->_name;
+    if(!$db_query) $db_query = $this->getDBQuery();
     $db_result =  $this->_db_con->query($db_query);
     $this->_record_count = 0;
     while($line = $db_result->fetch_array()) {
