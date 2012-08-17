@@ -178,7 +178,7 @@ class PdfTIV extends FPDF {
     $this->addInspecteurFileBlocsInformationsTableHeader();
     $to_retrieve = array("constructeur" => 27, "marque" => 37, "numero" => 27, "date_premiere_epreuve" => 24,
                          "date_derniere_epreuve" => 24, "date" => 24, "etat_exterieur" => 17, "etat_interieur" => 19,
-                         "etat_filetage" => 17, "decision" => 27);
+                         "etat_filetage" => 17, "decision" => 27, "remarque" => 27);
     $db_query = "SELECT ".implode(",", array_keys($to_retrieve))." ".
                 "FROM inspection_tiv, bloc ".
                 "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = $id_inspecteur AND bloc.id = id_bloc";
@@ -190,7 +190,7 @@ class PdfTIV extends FPDF {
       foreach(array_keys($to_retrieve) as $elt) {
         $this->Cell($to_retrieve[$elt], 10, utf8_decode($result[$elt]), 1, 0, 'C');
       }
-      $this->Cell(27, 10, "", 1, 1);
+      $this->Ln();
       if($page_line_count++ >= $max_line_count) {
         $page_line_count = 0;
         $max_line_count = 14;
