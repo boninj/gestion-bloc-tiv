@@ -31,7 +31,8 @@ class TIVElement {
   function setDBCon($db_con) {
     $this->_db_con = $db_con;
   }
-  function getElements() { return $this->_elements; }
+  function getElements() { return array_keys($this->_elements); }
+  function getHeaderElements() { return array_values($this->_elements); }
   static function getFormsRules() { }
   static function getForms() { }
   static function constructTextInput($label, $size, $value) {
@@ -120,7 +121,7 @@ class TIVElement {
   }
   function getHTMLHeaderTable($read_only = false) {
     $header = "    <tr>\n      <th>";
-    $header .= join("</th><th>", $this->getElements());
+    $header .= join("</th><th>", $this->getHeaderElements());
     if(!$read_only) $header .= "</th><th>Opérations";
     $header .= "</th>\n    </tr>\n";
     return $header;

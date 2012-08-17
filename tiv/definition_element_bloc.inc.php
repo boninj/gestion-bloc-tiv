@@ -10,8 +10,9 @@ class blocElement extends TIVElement {
     $this->_update_label = "Mettre à jour le bloc";
     $this->_current_time = time();
     $this->_elements = array(
-      "id", "id_club", "nom_proprietaire", "constructeur", "marque", "numero", "capacite",
-      "date_derniere_epreuve", "date_dernier_tiv", "pression_service",
+      "id" => "id", "id_club" => "n° club", "nom_proprietaire" => "Nom propriétaire", "constructeur" => "Constructeur",
+      "marque" => "Marque", "numero" => "Numéro constructeur", "capacite" => "Capacité",
+      "date_derniere_epreuve" => "Date dernière épreuve", "date_dernier_tiv" => "Date dernière inspection TIV", "pression_service" => "Pression de service",
     );
     $this->_epreuve_month_count = 60;
     $this->_epreuve_month_count_warn = 55;
@@ -24,12 +25,15 @@ class blocElement extends TIVElement {
   function getTIVWarnMonthCount() {
     return $this->_tiv_month_count - $this->_tiv_month_count_warn;
   }
-  function constructResume($table_label, $time, $column, $div_label_to_update, $error_label, $error_class) {
-    $db_query = "SELECT ".join(",", $this->_elements)." FROM bloc ".
+  function constructResume($table_label, $time, $column, $div_label_to_update, $error_label, $error_class, $label_ok) {
+    $db_query = "SELECT ".join(",", $this->getElements())." FROM bloc ".
                 "WHERE $column < '".date("Y-M-D", $time)."'";
     $table_code = $this->getHTMLTable($table_label, $this->_name, $db_query);
+    $message_alerte = $label_ok;
     if($this->_record_count > 0) {
       $message_alerte = str_replace("__COUNT__", $this->_record_count, $error_label);
+    } else {
+      $error_class = 'ok';
     }
     $html_code = "<p><div class='$error_class'>$message_alerte</div></p>\n";
     $html_code .= "<script>
