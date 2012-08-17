@@ -31,20 +31,22 @@ class inspection_tivElement extends TIVElement {
     return $extra_info;
   }
   function getExtraOperation($id) {
-    $db_query = "SELECT date_dernier_tiv FROM bloc,inspection_tiv WHERE inspection_tiv.id = $id AND id_bloc = bloc.id AND date_dernier_tiv < '".$this->_date."'";
+    $db_query = "SELECT date_dernier_tiv ".
+                "FROM bloc,inspection_tiv WHERE inspection_tiv.id = $id AND id_bloc = bloc.id AND date_dernier_tiv < inspection_tiv.date";
     $db_result = $this->_db_con->query($db_query);
     if(!$db_result->fetch_array()) {
       return "<div class='ok'>Pas d'opération possible. La date de cette fiche TIV est inférieur/égale à la dernière date TIV du bloc.</div>";
     }
-    $db_query = "SELECT id_bloc,decision FROM inspection_tiv WHERE id = $id AND decision = 'OK'";
+    $db_query = "SELECT id_bloc,decision,date FROM inspection_tiv WHERE id = $id AND decision = 'OK'";
     $db_result = $this->_db_con->query($db_query);
     $result = $db_result->fetch_array();
     if(!$result) {
       return "<div class='warning'>Pas d'opération supplémentaire possible. Veuillez changer la décision à 'OK' afin de pouvoir mettre à jour le bloc.</div>";
     }
     $id_bloc = $result[0];
+    $date_tiv = $result[2];
     $form  = "<form name='update_bloc' id='update_bloc' action='update_bloc_tiv.php' method='POST'>\n";
-    $form .= "<input type='hidden' name='date_tiv' value='".$this->_date."' />\n";
+    $form .= "<input type='hidden' name='date_tiv' value='$date_tiv' />\n";
     $form .= "<input type='hidden' name='blocs_to_update[]' value='$id_bloc' />\n";
     $form .= "<input type='submit' name='lancer' value='Lancer la mise à jour du bloc avec le contenu de cette fiche TIV'>\n";
     $form .= "</form>\n";
