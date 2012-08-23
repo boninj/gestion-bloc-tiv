@@ -7,6 +7,7 @@ class blocElement extends TIVElement {
   var $_tiv_month_count_warn;
   function blocElement($db_con = false) {
     parent::__construct($db_con);
+    $this->_show_delete_form = true;
     $this->_update_label = "Mettre à jour le bloc";
     $this->_current_time = time();
     $this->_elements = array(

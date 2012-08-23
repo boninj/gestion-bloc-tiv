@@ -5,10 +5,7 @@ include_once("connect_db.inc.php");
 $id = $_POST["id"];
 $element = $_POST["element"];
 
-$class_element = $element."Element";
-$to_retrieve = "\$edit_class = new $class_element();";
-eval($to_retrieve);
-
+$edit_class = get_element_handler($element, $db_con);
 $forms_definition = $edit_class->getForms();
 
 $to_set = array();

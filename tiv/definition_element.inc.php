@@ -16,6 +16,9 @@ class TIVElement {
   var $_record_count;
   var $_tr_class;
   var $_elements;
+  var $_delete_label;
+  var $_delete_message;
+  var $_show_delete_form;
   function TIVElement($db_con = false) {
     // Init chaîne de texte
     $this->_name = str_replace("Element", "", get_class($this));
@@ -27,6 +30,9 @@ class TIVElement {
     $this->_tr_class = array("odd", "even");
     $this->_db_con = $db_con;
     $this->_elements = array();
+    $this->_delete_label = "Supprimer cet élément";
+    $this->_delete_message = "Lancer la suppression ?";
+    $this->_show_delete_form = false;
   }
   function setDBCon($db_con) {
     $this->_db_con = $db_con;
@@ -203,6 +209,10 @@ class TIVElement {
     $form .= "  </tbody>\n";
     $form .= "</table>\n";
     $form .= "<input type='submit' name='lancer' value='".$this->getUpdateLabel()."'>\n";
+    if($this->_show_delete_form) {
+      $form .= "<input type='submit' name='delete' onclick='return(confirm(\"".$this->_delete_message."\"));' ".
+               "value='".$this->_delete_label."'>\n";
+    }
     $form .= "</form>\n";
     return $form;
   }

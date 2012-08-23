@@ -15,23 +15,21 @@ if($extra_info = $edit_class->getExtraInformation($id)) {
   print "<h2>Informations supplémentaires</h2>\n";
   print $extra_info;
 }
-print "<h2>Édition d'un l'élément</h2>\n";
-?>
-<script type="text/javascript">
-  $.validator.messages.required = "Champ obligatoire";
+print "<h2>Édition d'un l'élément</h2>
+<script type='text/javascript'>
+  $.validator.messages.required = 'Champ obligatoire';
   $(document).ready(function(){
-    $("#edit_form").validate({
-<?php print $edit_class->getFormsRules(); ?>,
+    $('#edit_form').validate({
+".$edit_class->getFormsRules().",
       submitHandler: function(form) {
-        $.post('process_element.php', $("#edit_form").serialize(), function(data) {
+        $.post('process_element.php', $('#edit_form').serialize(), function(data) {
           $('#results').html(data);
-          setTimeout("window.location.reload(true)", 1000);
+          setTimeout('window.location.reload(true)', 1000);
         });
       }
     });
   });
-</script>
-<?php
+</script>\n";
 print "<fieldset><legend>".$edit_class->getLegend($id)."</legend>\n";
 print "<p id=\"results\"></p>\n";
 print $edit_class->constructEditForm($id, "edit_form");
