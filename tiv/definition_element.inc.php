@@ -223,7 +223,7 @@ class TIVElement {
     $form .= "</table>\n";
     $form .= "<input type='submit' name='lancer' value='".$this->getUpdateLabel()."'>\n";
     if($this->_show_delete_form) {
-      $form .= "<input type='submit' name='delete' onclick='return(confirm(\"".$this->_delete_message."\"));' ".
+      $form .= "<input type='submit' style='background: red;' name='delete' onclick='return(confirm(\"".$this->_delete_message."\"));' ".
                "value='".$this->_delete_label."'>\n";
     }
     $form .= "</form>\n";

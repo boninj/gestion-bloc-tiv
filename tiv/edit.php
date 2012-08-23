@@ -17,15 +17,24 @@ if($extra_info = $edit_class->getExtraInformation($id)) {
 }
 print "<h2>Édition d'un l'élément</h2>
 <script type='text/javascript'>
+  var button_action;
   $.validator.messages.required = 'Champ obligatoire';
   $(document).ready(function(){
     $('#edit_form').validate({
 ".$edit_class->getFormsRules().",
+      $(':submit').click(function () { button_action = this.name; });
       submitHandler: function(form) {
-        $.post('process_element.php', $('#edit_form').serialize(), function(data) {
-          $('#results').html(data);
-          setTimeout('window.location.href = \"edit.php?element=$element&id=$id\"', 1000);
-        });
+        if(button_action == 'delete') {
+          $.post('delete.php', $('#edit_form').serialize(), function(data) {
+            $('#results').html(data);
+            setTimeout('window.location.href = \"./#$element\"', 1000);
+          });
+        } else {
+          $.post('process_element.php', $('#edit_form').serialize(), function(data) {
+            $('#results').html(data);
+            setTimeout('window.location.href = \"edit.php?element=$element&id=$id\"', 1000);
+          });
+        }
       }
     });
   });

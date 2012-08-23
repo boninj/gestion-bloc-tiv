@@ -7,6 +7,11 @@ $element = $_POST["element"];
 
 $edit_class = get_element_handler($element, $db_con);
 
+if(array_key_exists("delete", $_POST)) {
+  include("delete.php");
+  exit();
+}
+
 if($edit_class->updateDBRecord($id, $_POST)) {
   print "<div class='ok'>Mise à jour OK</div>";
 } else {
