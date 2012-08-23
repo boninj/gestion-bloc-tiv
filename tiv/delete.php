@@ -16,7 +16,12 @@ if(!$db_con->query("DELETE FROM $element WHERE id = '$id'")) {
   print "Suppression réussi de l'élément $element";
 }
 
-?><p><a href='./#<?php print $element;?>'>Retour à la liste des <?php print $element;?>s</a></p>
-<?php
+print "<script>
+setTimeout('window.location.href = \"./#$element\"', 2000);
+</script>\n";
+
+print "<p>Vous allez être redirigé automatiquement dans 2 secondes. Si ce n'est pas le cas, ".
+      "cliquer sur le lien suivant : <a href='./#$element'>Retour à la liste des ".$element."s</a></p>\n";
+
 include_once('foot.inc.php');
 ?>
