@@ -16,6 +16,8 @@ class TIVElement {
   var $_record_count;
   var $_tr_class;
   var $_elements;
+  var $_forms;
+  var $_forms_rules;
   var $_delete_label;
   var $_delete_message;
   var $_show_delete_form;
@@ -30,6 +32,8 @@ class TIVElement {
     $this->_tr_class = array("odd", "even");
     $this->_db_con = $db_con;
     $this->_elements = array();
+    $this->_forms = array();
+    $this->_forms_rules = "";
     $this->_delete_label = "Supprimer cet élément";
     $this->_delete_message = "Lancer la suppression ?";
     $this->_show_delete_form = false;
@@ -39,8 +43,8 @@ class TIVElement {
   }
   function getElements() { return array_keys($this->_elements); }
   function getHeaderElements() { return array_values($this->_elements); }
-  static function getFormsRules() { }
-  static function getForms() { }
+  function getFormsRules() { return $this->_forms_rules; }
+  function getForms() { return $this->_forms; }
   static function constructTextInput($label, $size, $value) {
     $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"$size\" value=\"$value\"/>\n";
     return $form_input;
@@ -80,6 +84,16 @@ class TIVElement {
   }
   function getDBQuery() {
     return "SELECT ".join(",", $this->getElements())." FROM ".$this->_name;
+  }
+  function updateDBRecord($id, $value) {
+    $forms_definition = $edit_class->getForms();
+
+    $to_set = array();
+    foreach(array_keys($forms_definition) as $field) {
+      $to_set[]= "$field = '".$db_con->escape_string($_POST[$field])."'";
+    }
+
+    $result = $db_con->query("UPDATE $element SET ".implode(",", $to_set)." WHERE id = '$id'");
   }
   function getHTMLTable($id, $label, $db_query = false, $read_only = false) {
     $table = $this->getJSOptions($id, $label);
