@@ -85,15 +85,14 @@ class TIVElement {
   function getDBQuery() {
     return "SELECT ".join(",", $this->getElements())." FROM ".$this->_name;
   }
-  function updateDBRecord($id, $value) {
-    $forms_definition = $edit_class->getForms();
-
+  function updateDBRecord($id, &$values) {
     $to_set = array();
-    foreach(array_keys($forms_definition) as $field) {
-      $to_set[]= "$field = '".$db_con->escape_string($_POST[$field])."'";
+    foreach(array_keys($this->_forms) as $field) {
+      $to_set[]= "$field = '".$this->_db_con->escape_string($values[$field])."'";
     }
 
-    $result = $db_con->query("UPDATE $element SET ".implode(",", $to_set)." WHERE id = '$id'");
+    $result = $this->_db_con->query("UPDATE ".$this->_name." SET ".implode(",", $to_set)." WHERE id = '$id'");
+    return $result;
   }
   function getHTMLTable($id, $label, $db_query = false, $read_only = false) {
     $table = $this->getJSOptions($id, $label);

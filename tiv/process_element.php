@@ -6,15 +6,8 @@ $id = $_POST["id"];
 $element = $_POST["element"];
 
 $edit_class = get_element_handler($element, $db_con);
-$forms_definition = $edit_class->getForms();
 
-$to_set = array();
-foreach(array_keys($forms_definition) as $field) {
-  $to_set[]= "$field = '".$db_con->escape_string($_POST[$field])."'";
-}
-
-$result = $db_con->query("UPDATE $element SET ".implode(",", $to_set)." WHERE id = '$id'");
-if($result) {
+if($edit_class->updateDBRecord($id, $_POST)) {
   print "<div class='ok'>Mise à jour OK</div>";
 } else {
   print "<div class='error'>Problème lors de la mise à jour</div>";
