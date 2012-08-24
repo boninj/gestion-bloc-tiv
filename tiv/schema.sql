@@ -36,6 +36,8 @@ CREATE TABLE `bloc` (
   `date_dernier_tiv` date NOT NULL,
   `pression_epreuve` int(5) NOT NULL,
   `pression_service` int(5) NOT NULL,
+  `gaz` varchar(16) NOT NULL,
+  `etat` varchar(16) NOT NULL,
   PRIMARY KEY (`id`,`numero`)
 ) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -101,7 +103,7 @@ CREATE TABLE `inspection_tiv` (
   PRIMARY KEY (`id`),
   KEY `id_bloc` (`id_bloc`),
   KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,4 +130,4 @@ CREATE TABLE `stab` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-16 17:18:21
+-- Dump completed on 2012-08-24 11:08:28
