@@ -86,13 +86,23 @@ class TIVElement {
     return "SELECT ".join(",", $this->getElements())." FROM ".$this->_name;
   }
   function updateDBRecord($id, &$values) {
-    $to_set = array();
-    foreach(array_keys($this->_forms) as $field) {
-      $to_set[]= "$field = '".$this->_db_con->escape_string($values[$field])."'";
+    $db_query = "SELECT ".implode(",", array_keys($this->_forms))." FROM ".$this->_name." WHERE id=$id";
+    $db_result = $this->_db_con->query($db_query);
+    if(!$result = $db_result->fetch_array()) {
+      return false;
     }
 
-    $result = $this->_db_con->query("UPDATE ".$this->_name." SET ".implode(",", $to_set)." WHERE id = '$id'");
-    return $result;
+    $to_set = array();
+    foreach(array_keys($this->_forms) as $field) {
+      if(strcmp($values[$field], $result[$field]) != 0) {
+        $to_set[]= "$field = '".$this->_db_con->escape_string($values[$field])."'";
+      }
+    }
+    if(count($to_set) > 0) {
+      $result = $this->_db_con->query("UPDATE ".$this->_name." SET ".implode(",", $to_set)." WHERE id = '$id'");
+      return 1;
+    }
+    return 2;
   }
   function getHTMLTable($id, $label, $db_query = false, $read_only = false) {
     $table = $this->getJSOptions($id, $label);
@@ -221,12 +231,16 @@ class TIVElement {
     }
     $form .= "  </tbody>\n";
     $form .= "</table>\n";
-    $form .= "<input type='submit' name='lancer' value='".$this->getUpdateLabel()."'>\n";
+    $form .= "<span style='height:0; width:0; overflow: hidden;'>\n";
+    $form .= "  <button type='submit' value='default action'/>\n";
+    $form .= "</span>\n";
+
     if($this->_show_delete_form) {
       $form .= "<input type='hidden' name='embedded' value='1' />\n"; // Utilisé pour détecter une suppression depuis le formulaire
       $form .= "<input type='submit' style='background: red;' name='delete' onclick='return(confirm(\"".$this->_delete_message."\"));' ".
-               "value='".$this->_delete_label."'>\n";
+               "value='".$this->_delete_label."' />\n";
     }
+    $form .= "<input type='submit' name='lancer' value='".$this->getUpdateLabel()."' />\n";
     $form .= "</form>\n";
     return $form;
   }
