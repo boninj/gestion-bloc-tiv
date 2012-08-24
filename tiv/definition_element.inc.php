@@ -115,7 +115,12 @@ class TIVElement {
     return true;
   }
   function getAdditionalControl() {
-    return "";
+    if($this->_read_only) return "";
+    return '<form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
+<input type="hidden" value="'.$this->_name.'" />
+<input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="Création d\'un(e) '.$this->_name.'"/></p>
+</form>
+';
   }
   function getHTMLTable($id, $label, $db_query = false) {
     $table = $this->getJSOptions($id, $label);

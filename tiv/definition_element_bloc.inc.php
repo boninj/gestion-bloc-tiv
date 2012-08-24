@@ -112,11 +112,12 @@ document.getElementById('$div_label_to_update').className='$error_class';
     return $html_code.$table_code;
   }
   function getAdditionalControl() {
+    $additional_element = parent::getAdditionalControl();
     if(!array_key_exists("force_bloc_display", $_GET)) 
-      return "<p><a href='affichage_element.php?element=bloc&force_bloc_display=1'>".
+      return "<p>$additional_element<a href='affichage_element.php?element=bloc&force_bloc_display=1'>".
              "Forcer l'affichage de tous les blocs (y compris rebuté)</a></p>\n";
     else
-      return "<p><a href='./#bloc'>Revenir à l'accueil</a></p>\n";
+      return "<p>$additional_element<a href='./#bloc'>Revenir à l'accueil</a></p>\n";
   }
   function isDisplayed(&$record) {
     return ($record["etat"] == "OK");
