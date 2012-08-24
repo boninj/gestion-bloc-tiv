@@ -18,6 +18,7 @@ class TIVElement {
   var $_elements;
   var $_forms;
   var $_forms_rules;
+  var $_edit_label;
   var $_delete_label;
   var $_delete_message;
   var $_show_delete_form;
@@ -34,6 +35,7 @@ class TIVElement {
     $this->_elements = array();
     $this->_forms = array();
     $this->_forms_rules = "";
+    $this->_edit_label = "Édition d'un élément (".$this->_name.")";
     $this->_delete_label = "Supprimer cet élément";
     $this->_delete_message = "Lancer la suppression ?";
     $this->_show_delete_form = false;
@@ -190,6 +192,9 @@ class TIVElement {
   }
   function getUrlTitle() {
     return $this->_url_title_label;
+  }
+  function getEditLabel() {
+    return $this->_edit_label;
   }
   function getLegend($id) {
     return str_replace("__ID__", $id, $this->_legend_label);

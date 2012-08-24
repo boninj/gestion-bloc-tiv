@@ -15,7 +15,7 @@ if($extra_info = $edit_class->getExtraInformation($id)) {
   print "<h2>Informations supplémentaires</h2>\n";
   print $extra_info;
 }
-print "<h2>Édition d'un l'élément</h2>
+print "<h2>".$edit_class->getEditLabel()."</h2>
 <script type='text/javascript'>
   var retour;
   $.validator.messages.required = 'Champ obligatoire';
