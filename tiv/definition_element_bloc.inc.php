@@ -111,6 +111,13 @@ document.getElementById('$div_label_to_update').className='$error_class';
 </script>\n";
     return $html_code.$table_code;
   }
+  function getAdditionalControl() {
+    if(!array_key_exists("force_bloc_display", $_GET)) 
+      return "<p><a href='affichage_element.php?element=bloc&force_bloc_display=1'>".
+             "Forcer l'affichage de tous les blocs (y compris rebuté)</a></p>\n";
+    else
+      return "<p><a href='./#bloc'>Revenir à l'accueil</a></p>\n";
+  }
   function isDisplayed(&$record) {
     return ($record["etat"] == "OK");
   }

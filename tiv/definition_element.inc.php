@@ -114,8 +114,12 @@ class TIVElement {
   function isDisplayed(&$record) {
     return true;
   }
+  function getAdditionalControl() {
+    return "";
+  }
   function getHTMLTable($id, $label, $db_query = false) {
     $table = $this->getJSOptions($id, $label);
+    $table .= $this->getAdditionalControl($id);
     $table .= "<table cellpadding='0' cellspacing='0' border='0' class='display' id='$id'>\n";
     $table .= "  <thead>".$this->getHTMLHeaderTable()."</thead>\n";
     $table .= "  <tbody>\n";
