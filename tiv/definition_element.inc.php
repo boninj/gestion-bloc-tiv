@@ -22,6 +22,7 @@ class TIVElement {
   var $_delete_label;
   var $_delete_message;
   var $_show_delete_form;
+  var $_read_only;
   function TIVElement($db_con = false) {
     // Init chaîne de texte
     $this->_name = str_replace("Element", "", get_class($this));
@@ -39,6 +40,7 @@ class TIVElement {
     $this->_delete_label = "Supprimer cet élément";
     $this->_delete_message = "Lancer la suppression ?";
     $this->_show_delete_form = false;
+    $this->_read_only = false;
   }
   function setDBCon($db_con) {
     $this->_db_con = $db_con;
@@ -101,15 +103,16 @@ class TIVElement {
       }
     }
     if(count($to_set) > 0) {
+      add_journal_entry($this->_db_con, $id, $this->_name, "Lancement d'une mise à jour (".implode(",", $to_set).")");
       $result = $this->_db_con->query("UPDATE ".$this->_name." SET ".implode(",", $to_set)." WHERE id = '$id'");
       return 1;
     }
     return 2;
   }
-  function getHTMLTable($id, $label, $db_query = false, $read_only = false) {
+  function getHTMLTable($id, $label, $db_query = false) {
     $table = $this->getJSOptions($id, $label);
     $table .= "<table cellpadding='0' cellspacing='0' border='0' class='display' id='$id'>\n";
-    $table .= "  <thead>".$this->getHTMLHeaderTable($read_only)."</thead>\n";
+    $table .= "  <thead>".$this->getHTMLHeaderTable()."</thead>\n";
     $table .= "  <tbody>\n";
     if(!$db_query) $db_query = $this->getDBQuery();
     $db_result =  $this->_db_con->query($db_query);
@@ -119,11 +122,11 @@ class TIVElement {
       // Met à jour l'état de la ligne courante afin de rajouter des informations
       // et renvoie une classe d'affichage css en cas de modification
       // pour mettre en avant un bloc ayant passé sa date de TIV par exemple.
-      $table .= $this->getHTMLLineTable($line, $read_only, $current_class);
+      $table .= $this->getHTMLLineTable($line, $current_class);
     }
 
     $table .= "  </tbody>\n";
-    $table .= "  <tfoot>".$this->getHTMLHeaderTable($read_only)."</tfoot>\n";
+    $table .= "  <tfoot>".$this->getHTMLHeaderTable()."</tfoot>\n";
     $table .= "</table>\n";
     return $table;
   }
@@ -153,14 +156,14 @@ class TIVElement {
   } );
 </script>\n";
   }
-  function getHTMLHeaderTable($read_only = false) {
+  function getHTMLHeaderTable() {
     $header = "    <tr>\n      <th>";
     $header .= join("</th><th>", $this->getHeaderElements());
-    if(!$read_only) $header .= "</th><th>Opérations";
+    if(!$this->_read_only) $header .= "</th><th>Opérations";
     $header .= "</th>\n    </tr>\n";
     return $header;
   }
-  function getHTMLLineTable(&$record, $read_only, $default_class) {
+  function getHTMLLineTable(&$record, $default_class) {
     $current_class = $default_class;
     if($tmp = $this->updateRecord($record)) {
       $current_class = $tmp;
@@ -171,7 +174,7 @@ class TIVElement {
     foreach($this->getElements() as $elt) {
       $to_display []= $record[$elt];
     }
-    if(!$read_only) {
+    if(!$this->_read_only) {
       $to_display [] = $this->getEditUrl($id);
     }
     $line .= implode("</td><td>", $to_display);
@@ -256,5 +259,6 @@ include_once("definition_element_detendeur.inc.php");
 include_once("definition_element_stab.inc.php");
 include_once("definition_element_inspecteur_tiv.inc.php");
 include_once("definition_element_inspection_tiv.inc.php");
+include_once("definition_element_journal_tiv.inc.php");
 
 ?>

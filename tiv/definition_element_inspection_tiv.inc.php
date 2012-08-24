@@ -111,14 +111,14 @@ class inspection_tivElement extends TIVElement {
            "WHERE inspection_tiv.date = '".$this->_date."' AND id_bloc = bloc.id AND id_inspecteur_tiv = inspecteur_tiv.id ".
            "ORDER BY inspecteur_tiv.nom";
   }
-  function getHTMLHeaderTable($read_only = false) {
+  function getHTMLHeaderTable() {
     $header = "    <tr>\n      <th>";
     $header .= join("</th><th>", $this->_columns);
-    if(!$read_only) $header .= "</th><th>Opérations";
+    if(!$this->_read_only) $header .= "</th><th>Opérations";
     $header .= "</th>\n    </tr>\n";
     return $header;
   }
-  function getHTMLLineTable(&$record, $read_only, $default_class) {
+  function getHTMLLineTable(&$record, $default_class) {
     $current_class = $default_class;
     $line = "    <tr class=\"$current_class\">\n      <td>";
     $id = $record[0];
@@ -126,7 +126,7 @@ class inspection_tivElement extends TIVElement {
     for($i = 0; $i < count($this->_columns); $i++) {
       $to_display []= $record[$i];
     }
-    if(!$read_only) {
+    if(!$this->_read_only) {
       $to_display [] = $this->getEditUrl($id);
     }
     $line .= implode("</td><td>", $to_display);

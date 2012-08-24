@@ -42,6 +42,7 @@ print "<fieldset><legend>".$edit_class->getLegend($id)."</legend>\n";
 print "<p id=\"results\"></p>\n";
 print $edit_class->constructEditForm($id, "edit_form");
 print "</fieldset>\n";
+print get_journal_entry($db_con, $id, $element);
 
 if($extra_operation = $edit_class->getExtraOperation($id)) {
   print "<h2>Opérations supplémentaires</h2>\n";

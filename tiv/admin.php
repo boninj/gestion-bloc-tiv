@@ -9,6 +9,8 @@
 </select>
 <input type="submit" name="submit" onclick='return(confirm("Procéder à la création ?"));' value="Procéder à la création du nouvel élément"/></p>
 </form>
+<h2>Consultation du journal</h2>
+<p><a href='consultation_journal.php'>Consultation des événements du journal</a>.</p>
 <h2>Consultation d'un TIV</h2>
 <p>
 <form name="consultation_tiv" id="consultation_tiv" action="consultation_tiv.php" method="POST">

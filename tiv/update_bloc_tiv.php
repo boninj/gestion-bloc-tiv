@@ -1,14 +1,14 @@
 <?php
 $date_tiv = $_POST["date_tiv"];
 
-$title = "Mise à jour des blocs du club suite à l'inspection TIV du $date_tiv";
 require_once('definition_element.inc.php');
+require_once('connect_db.inc.php');
 
+$title = "Mise à jour des blocs du club suite à l'inspection TIV du $date_tiv";
 include_once('head.inc.php');
 
 $decision = array();
 print "<h2>Mise à jour de(s) bloc(s) suite à l'inspection TIV du $date_tiv</h2>\n";
-require_once('connect_db.inc.php');
 if(array_key_exists("blocs_to_update", $_POST)) {
   $blocs_to_update = $_POST["blocs_to_update"];
   if(!is_array($blocs_to_update)) $blocs_to_update = array($blocs_to_update);
@@ -36,9 +36,8 @@ foreach($blocs_to_update as $bloc_id) {
   $state = $decision[$bloc_id];
   if($state != "OK") {
     print "<div class='warning'>Passage à l'état $state</div>\n";
-    $db_query = "INSERT INTO journal_tiv VALUES (0, 'bloc', $bloc_id, 'Passage du bloc à $state')";
-    $db_con->query($db_query);
   }
+  add_journal_entry($db_con, $bloc_id, 'bloc', "Passage du bloc à l'état '$state' et date TIV au '$date_tiv'");
   $db_query = "UPDATE bloc SET date_dernier_tiv = '$date_tiv', etat = '$state' WHERE id = '$bloc_id'";
   if(!$db_con->query($db_query)) {
     print "<div class='error'>Erreur de mise à jour du bloc '$bloc_id'</div>\n";
