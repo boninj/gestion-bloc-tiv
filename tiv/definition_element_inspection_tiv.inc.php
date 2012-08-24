@@ -79,12 +79,14 @@ class inspection_tivElement extends TIVElement {
   }
   function getExtraOperation($id) {
     $db_query = "SELECT date_dernier_tiv ".
-                "FROM bloc,inspection_tiv WHERE inspection_tiv.id = $id AND id_bloc = bloc.id AND date_dernier_tiv < inspection_tiv.date";
+                "FROM bloc,inspection_tiv WHERE inspection_tiv.id = $id AND id_bloc = bloc.id ".
+                "AND decision IN ('OK', 'Rebuté') ".
+                "AND (date_dernier_tiv < inspection_tiv.date OR decision != bloc.etat)";
     $db_result = $this->_db_con->query($db_query);
     if(!$db_result->fetch_array()) {
       return "<div class='ok'>Pas d'opération possible. La date de cette fiche TIV est inférieur/égale à la dernière date TIV du bloc.</div>";
     }
-    $db_query = "SELECT id_bloc,decision,date FROM inspection_tiv WHERE id = $id AND decision = 'OK'";
+    $db_query = "SELECT id_bloc,decision,date FROM inspection_tiv WHERE id = $id";
     $db_result = $this->_db_con->query($db_query);
     $result = $db_result->fetch_array();
     if(!$result) {

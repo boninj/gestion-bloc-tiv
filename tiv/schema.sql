@@ -107,6 +107,22 @@ CREATE TABLE `inspection_tiv` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `journal_tiv`
+--
+
+DROP TABLE IF EXISTS `journal_tiv`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `journal_tiv` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `element` varchar(64) NOT NULL,
+  `id_element` int(16) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COMMENT='Journal de l''application';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `stab`
 --
 
@@ -130,4 +146,4 @@ CREATE TABLE `stab` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-24 11:08:28
+-- Dump completed on 2012-08-24 11:49:53

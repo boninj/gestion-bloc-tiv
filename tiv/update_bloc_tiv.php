@@ -6,24 +6,40 @@ require_once('definition_element.inc.php');
 
 include_once('head.inc.php');
 
+$decision = array();
 print "<h2>Mise à jour de(s) bloc(s) suite à l'inspection TIV du $date_tiv</h2>\n";
 require_once('connect_db.inc.php');
 if(array_key_exists("blocs_to_update", $_POST)) {
   $blocs_to_update = $_POST["blocs_to_update"];
   if(!is_array($blocs_to_update)) $blocs_to_update = array($blocs_to_update);
+  foreach($blocs_to_update as $bloc_id) {
+    $db_query = "SELECT decision FROM inspection_tiv,bloc WHERE inspection_tiv.date='$date_tiv' ".
+                "AND id_bloc=bloc.id AND inspection_tiv.id_bloc = $bloc_id";
+    $db_result = $db_con->query($db_query);
+    while($result = $db_result->fetch_array()) {
+      $decision[$bloc_id] = $result[0];
+    }
+  }
 } else {
   $blocs_to_update = array();
-  $db_query = "SELECT id_bloc FROM inspection_tiv,bloc ".
-              "WHERE date = '$date_tiv' AND decision = 'OK' AND date_dernier_tiv < '$date_tiv' AND id_bloc = bloc.id";
+  $db_query = "SELECT id_bloc,decision FROM inspection_tiv,bloc ".
+              "WHERE date = '$date_tiv' AND date_dernier_tiv < '$date_tiv' AND id_bloc = bloc.id";
 
   $db_result = $db_con->query($db_query);
   while($result = $db_result->fetch_array()) {
     $blocs_to_update []= $result[0];
+    $decision[$result[0]] = $result[1];
   }
 }
 
 foreach($blocs_to_update as $bloc_id) {
-  $db_query = "UPDATE bloc SET date_dernier_tiv = '$date_tiv' WHERE id = '$bloc_id'";
+  $state = $decision[$bloc_id];
+  if($state != "OK") {
+    print "<div class='warning'>Passage à l'état $state</div>\n";
+    $db_query = "INSERT INTO journal_tiv VALUES (0, 'bloc', $bloc_id, 'Passage du bloc à $state')";
+    $db_con->query($db_query);
+  }
+  $db_query = "UPDATE bloc SET date_dernier_tiv = '$date_tiv', etat = '$state' WHERE id = '$bloc_id'";
   if(!$db_con->query($db_query)) {
     print "<div class='error'>Erreur de mise à jour du bloc '$bloc_id'</div>\n";
   } else {
