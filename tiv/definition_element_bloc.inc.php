@@ -16,8 +16,8 @@ class blocElement extends TIVElement {
       "date_derniere_epreuve" => "Date dernière épreuve", "date_dernier_tiv" => "Date dernière inspection TIV",
       "pression_service" => "Pression de service", "gaz" => "Gaz", "etat" => "État",
     );
-    $bloc_capacite = array("6", "10", "12 long", "12 court", "15");
-    $bloc_pression = array("150", "176", "200", "232", "300");
+    $bloc_capacite = array("", "6", "10", "12 long", "12 court", "15");
+    $bloc_pression = array("", "150", "176", "200", "232", "300");
     $bloc_gaz = array("", "air", "nitrox");
     $bloc_etat = array("", "OK", "Rebuté");
     $this->_forms = array(
