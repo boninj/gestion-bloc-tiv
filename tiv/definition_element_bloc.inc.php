@@ -9,6 +9,7 @@ class blocElement extends TIVElement {
     parent::__construct($db_con);
     $this->_show_delete_form = true;
     $this->_update_label = "Mettre à jour le bloc";
+    $this->_force_display = array_key_exists("force_bloc_display", $_GET) || array_key_exists("force_bloc_display", $_POST);
     $this->_current_time = time();
     $this->_elements = array(
       "id" => "Réf.", "id_club" => "n° club", "nom_proprietaire" => "Nom propriétaire", "constructeur" => "Constructeur",
@@ -109,6 +110,9 @@ $('#$div_label_to_update').html(\"$message_alerte\");
 document.getElementById('$div_label_to_update').className='$error_class';
 </script>\n";
     return $html_code.$table_code;
+  }
+  function isDisplayed(&$record) {
+    return ($record["etat"] == "OK");
   }
   function updateRecord(&$record) {
     // Test présence champ nécessaire aux tests à réaliser

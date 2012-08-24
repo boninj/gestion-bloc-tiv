@@ -23,6 +23,7 @@ class TIVElement {
   var $_delete_message;
   var $_show_delete_form;
   var $_read_only;
+  var $_force_display;
   function TIVElement($db_con = false) {
     // Init chaîne de texte
     $this->_name = str_replace("Element", "", get_class($this));
@@ -41,6 +42,7 @@ class TIVElement {
     $this->_delete_message = "Lancer la suppression ?";
     $this->_show_delete_form = false;
     $this->_read_only = false;
+    $this->_force_display = false;
   }
   function setDBCon($db_con) {
     $this->_db_con = $db_con;
@@ -109,6 +111,9 @@ class TIVElement {
     }
     return 2;
   }
+  function isDisplayed(&$record) {
+    return true;
+  }
   function getHTMLTable($id, $label, $db_query = false) {
     $table = $this->getJSOptions($id, $label);
     $table .= "<table cellpadding='0' cellspacing='0' border='0' class='display' id='$id'>\n";
@@ -118,6 +123,7 @@ class TIVElement {
     $db_result =  $this->_db_con->query($db_query);
     $this->_record_count = 0;
     while($line = $db_result->fetch_array()) {
+      if(!$this->isDisplayed($line) && !$this->_force_display) continue;
       $current_class = $this->_tr_class[$this->_record_count++ % count($this->_tr_class)];
       // Met à jour l'état de la ligne courante afin de rajouter des informations
       // et renvoie une classe d'affichage css en cas de modification
