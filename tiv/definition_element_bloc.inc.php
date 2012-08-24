@@ -18,8 +18,8 @@ class blocElement extends TIVElement {
     );
     $bloc_capacite = array("6", "10", "12 long", "12 court", "15");
     $bloc_pression = array("150", "176", "200", "232", "300");
-    $bloc_gaz = array("air", "nitrox");
-    $bloc_etat = array("OK", "HS");
+    $bloc_gaz = array("", "air", "nitrox");
+    $bloc_etat = array("", "OK", "Rebuté");
     $this->_forms = array(
       "id_club"               => array("required", "number", "Référence du bloc au sein du club"),
       "nom_proprietaire"      => array("required", false,    "Nom du propriétaire du bloc"),
@@ -74,6 +74,12 @@ class blocElement extends TIVElement {
     pression_service: {
         required: true,
         number: true
+    },
+    gaz: {
+        required: true,
+    },
+    etat: {
+        required: true,
     },
   }';
     $this->_epreuve_month_count = 60;
