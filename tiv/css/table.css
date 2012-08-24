@@ -328,6 +328,11 @@ tr.even {
         background-color: white;
 }
 
+tr.critical-etat{
+        background-color: #444444;
+        color: #FFFFFF;
+}
+
 tr.critical-epreuve {
         background-color: #FFCC00;
 }
@@ -384,6 +389,17 @@ tr.critical-epreuve td.sorting_3 {
 	background-color: #F0CCA0;
 }
 
+tr.critical-etat td.sorting_1 {
+        background-color: #333333;
+}
+
+tr.critical-etat td.sorting_2 {
+        background-color: #222222;
+}
+
+tr.critical-etat td.sorting_3 {
+        background-color: #111111;
+}
 
 /*
  * Row highlighting example

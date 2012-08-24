@@ -112,8 +112,12 @@ document.getElementById('$div_label_to_update').className='$error_class';
   }
   function updateRecord(&$record) {
     // Test présence champ nécessaire aux tests à réaliser
-    foreach(array("date_dernier_tiv", "date_derniere_epreuve") as $elt) {
+    foreach(array("date_dernier_tiv", "date_derniere_epreuve", "etat") as $elt) {
       if(!array_key_exists($elt, $record)) { return false; }
+    }
+    if($record["etat"] != "OK") {
+      $record["etat"] = "<div class='error'>".$record["etat"]."</label>";
+      return "critical-etat";
     }
     // Calcul sur le temps prochaine épreuve
     $date_derniere_epreuve = strtotime($record["date_derniere_epreuve"]);
