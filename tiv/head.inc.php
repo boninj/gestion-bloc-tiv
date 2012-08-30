@@ -16,10 +16,12 @@
   </head>
   <body>
 <?php
-if(!file_exists("connect_db.inc.php")) {
-  print "<div class='error'>L'application n'est pas correctement installé (il manque le fichier connect_db.inc.php).</div>";
-  print "<div class='error'>Merci de suivre les instructions du fichier README avant de continuer.</div>";
-  include_once("foot.inc.php");
-  exit();
+foreach(array("connect_db.inc.php", "configuration.inc.php") as $file) {
+  if(!file_exists($file)) {
+    print "<div class='error'>L'application n'est pas correctement installé (il manque le fichier $file).</div>";
+    print "<div class='error'>Merci de suivre les instructions du fichier README avant de continuer.</div>";
+    include_once("foot.inc.php");
+    exit();
+  }
 }
 ?>
