@@ -15,3 +15,11 @@
     <script type="text/javascript" charset="utf-8" src="js/jquery.validate.js"></script>
   </head>
   <body>
+<?php
+if(!file_exists("connect_db.inc.php")) {
+  print "<div class='error'>L'application n'est pas correctement installé (il manque le fichier connect_db.inc.php).</div>";
+  print "<div class='error'>Merci de suivre les instructions du fichier README avant de continuer.</div>";
+  include_once("foot.inc.php");
+  exit();
+}
+?>
