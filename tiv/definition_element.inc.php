@@ -122,9 +122,10 @@ class TIVElement {
 </form>
 ';
   }
-  function getHTMLTable($id, $label, $db_query = false) {
+  function getHTMLTable($id, $label, $db_query = false, $show_additional_control = true) {
     $table = $this->getJSOptions($id, $label);
-    $table .= $this->getAdditionalControl($id);
+    if($show_additional_control)
+      $table .= $this->getAdditionalControl($id);
     $table .= "<table cellpadding='0' cellspacing='0' border='0' class='display' id='$id'>\n";
     $table .= "  <thead>".$this->getHTMLHeaderTable()."</thead>\n";
     $table .= "  <tbody>\n";
