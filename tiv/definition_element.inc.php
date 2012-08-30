@@ -18,6 +18,7 @@ class TIVElement {
   var $_elements;
   var $_forms;
   var $_forms_rules;
+  var $_creation_label;
   var $_edit_label;
   var $_delete_label;
   var $_delete_message;
@@ -37,6 +38,7 @@ class TIVElement {
     $this->_elements = array();
     $this->_forms = array();
     $this->_forms_rules = "";
+    $this->_creation_label = "Création d'un(e) ".$this->_name;
     $this->_edit_label = "Édition d'un élément (".$this->_name.")";
     $this->_delete_label = "Supprimer cet élément";
     $this->_delete_message = "Lancer la suppression ?";
@@ -118,7 +120,7 @@ class TIVElement {
     if($this->_read_only) return "";
     return '<form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
 <input type="hidden" value="'.$this->_name.'" />
-<input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="Création d\'un(e) '.$this->_name.'"/></p>
+<input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="'.$this->_creation_label.'"/></p>
 </form>
 ';
   }

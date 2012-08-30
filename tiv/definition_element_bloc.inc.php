@@ -8,6 +8,7 @@ class blocElement extends TIVElement {
   function blocElement($db_con = false) {
     parent::__construct($db_con);
     $this->_show_delete_form = true;
+    $this->_creation_label = "Création d'un ".$this->_name;
     $this->_update_label = "Mettre à jour le bloc";
     $this->_force_display = array_key_exists("force_bloc_display", $_GET) || array_key_exists("force_bloc_display", $_POST);
     $this->_current_time = time();
