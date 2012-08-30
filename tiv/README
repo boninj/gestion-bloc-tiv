@@ -1,15 +1,15 @@
-L'application de TIV a pour but de rÃ©pertorier les blocs (ainsi que quelques petits matÃ©riels annexes comme les stabs ou les dÃ©tendeurs) d'un club de plongÃ©e et de proposer d'aider le responsable du matÃ©riel dans le suivi de son matÃ©riel (date de TIV/prÃ©paration des TIVs mais Ã©galement date des prochaines rÃ©Ã©preuves etc.).
+L'application de TIV a pour but de répertorier les blocs (ainsi que quelques petits matériels annexes comme les stabs ou les détendeurs) d'un club de plongée et de proposer d'aider le responsable du matériel dans le suivi de son matériel (date de TIV/préparation des TIVs mais également date des prochaines réépreuves etc.).
 
-L'application a Ã©tÃ© dÃ©veloppÃ© sur un serveur Apache PHP avec une base MySQL.
+L'application a été développé sur un serveur Apache PHP avec une base MySQL.
 
-La crÃ©ation de la base se fait Ã  l'aide du fichier schema.sql et la dÃ©claration de la connexion se fait en modifiant le fichier connect_db.inc.php (un fichier template connect_db.inc.php.template d'exemple est prÃ©sent dans l'application).
+La création de la base se fait à l'aide du fichier schema.sql et la déclaration de la connexion se fait en modifiant le fichier connect_db.inc.php (un fichier template connect_db.inc.php.template d'exemple est présent dans l'application).
 
-Il faut Ã©galement renseigner le fichier configuration.inc.php afin de rajouter les informations concernant votre club de plongÃ©e.
+Il faut également renseigner le fichier configuration.inc.php afin de rajouter les informations concernant votre club de plongée.
 
-Il vous faudra Ã©galement la version 1.7 de FPDF (elle est tÃ©lÃ©chargeable Ã  l'adresse suivante : http://www.fpdf.org/). Il faudra ensuite la dÃ©compresser dans le sous-rÃ©pertoire fpdf17 Ã  la racine du rÃ©pertoire de l'application.
+Il vous faudra également la version 1.7 de FPDF (elle est téléchargeable à l'adresse suivante : http://www.fpdf.org/). Il faudra ensuite la décompresser dans le sous-répertoire fpdf17 à la racine du répertoire de l'application.
 
 Enfin, il faut placer le logo de votre club dans le fichier logo_club.png.
 
 A noter que si jamais un de ces fichiers devait manquer, l'application vous donnera une notification sur le fichier manquant.
 
-Cette application est soumise Ã  la licence GPL. Enfin, Ã  souligner, le logiciel est fourni "en l'Ã©tat" sans garantie d'aucune sorte, expresse ou implice. En dehors de Ã§a bon TIV !
+Cette application est soumise à la licence GPL. Enfin, à souligner, le logiciel est fourni "en l'état" sans garantie d'aucune sorte, expresse ou implice. En dehors de ça bon TIV !
