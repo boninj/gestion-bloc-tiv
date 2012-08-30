@@ -6,6 +6,8 @@ La création de la base se fait à l'aide du fichier schema.sql et la déclarati
 
 Il faut également renseigner le fichier configuration.inc.php afin de rajouter les informations concernant votre club de plongée.
 
-A noter que si jamais un de ces fichiers devait manquer, l'application vous donnera une indication sur l'absence du fichier.
+Il vous faudra également la version 1.7 de FPDF (elle est téléchargeable à l'adresse suivante : http://www.fpdf.org/). Il faudra ensuite la décompresser dans le sous-répertoire fpdf17 à la racine du répertoire de l'application.
+
+A noter que si jamais un de ces fichiers devait manquer, l'application vous donnera une notification sur le fichier manquant.
 
 Cette application est soumise à la licence GPL. Enfin, à souligner, le logiciel est fourni "en l'état" sans garantie d'aucune sorte, expresse ou implice. En dehors de ça bon TIV !
