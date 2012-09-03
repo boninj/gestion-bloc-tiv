@@ -119,7 +119,7 @@ class TIVElement {
   function getAdditionalControl() {
     if($this->_read_only) return "";
     return '<form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
-<input type="hidden" value="'.$this->_name.'" />
+<input type="hidden" name="element" value="'.$this->_name.'" />
 <input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="'.$this->_creation_label.'"/></p>
 </form>
 ';
@@ -276,6 +276,7 @@ include_once("definition_element_bloc.inc.php");
 include_once("definition_element_detendeur.inc.php");
 include_once("definition_element_stab.inc.php");
 include_once("definition_element_inspecteur_tiv.inc.php");
+include_once("definition_element_personne.inc.php");
 include_once("definition_element_inspection_tiv.inc.php");
 include_once("definition_element_journal_tiv.inc.php");
 

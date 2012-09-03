@@ -4,6 +4,8 @@ include_once("connect_db.inc.php");
 $db_result =  $db_con->query("SELECT max(id) + 1 FROM $element;");
 $tmp = $db_result->fetch_array(MYSQLI_NUM);
 $id = $tmp[0];
+if(!$id) { $id = 1; }
+
 if(!$db_con->query("INSERT INTO $element(id) VALUES($id)")) {
   $title = "Erreur d'insertion d'un élément $element - club Aqua Sénart";
   include_once('head.inc.php');
