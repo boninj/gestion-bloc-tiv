@@ -30,9 +30,8 @@ print "<h2>".$edit_class->getEditLabel()."</h2>
             $('#results').html(data);
             setTimeout('window.location.href = \"affichage_element.php?element=$element\";', 1000);
           });
-        } else {
-          return false;
         }
+        return false;
       } else {
         $('#edit_form').validate({
     ".$edit_class->getFormsRules().",
