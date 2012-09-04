@@ -86,10 +86,14 @@ class blocElement extends TIVElement {
         required: true,
     },
   }';
-    $this->_epreuve_month_count = 60;
-    $this->_epreuve_month_count_warn = 55;
-    $this->_tiv_month_count = 12;
-    $this->_tiv_month_count_warn = 11;
+    global $epreuve_month_count;
+    global $epreuve_month_count_warn;
+    global $tiv_month_count;
+    global $tiv_month_count_warn;
+    $this->_epreuve_month_count = $epreuve_month_count;
+    $this->_epreuve_month_count_warn = $epreuve_month_count_warn;
+    $this->_tiv_month_count = $tiv_month_count;
+    $this->_tiv_month_count_warn = $tiv_month_count_warn;
   }
   function getEpreuveWarnMonthCount() {
     return $this->_epreuve_month_count - $this->_epreuve_month_count_warn;
