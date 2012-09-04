@@ -97,7 +97,7 @@ class blocElement extends TIVElement {
   }
   function constructResume($table_label, $time, $column, $div_label_to_update, $error_label, $error_class, $label_ok) {
     $db_query = "SELECT ".join(",", $this->getElements())." FROM bloc ".
-                "WHERE $column < '".date("Y-M-D", $time)."'";
+                "WHERE $column < '".date("Y-m-d", $time)."'";
     $table_code = $this->getHTMLTable($table_label, $this->_name, $db_query, false);
     $message_alerte = $label_ok;
     if($this->_record_count > 0) {
