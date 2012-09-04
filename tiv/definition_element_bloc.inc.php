@@ -120,7 +120,7 @@ document.getElementById('$div_label_to_update').className='$error_class';
       return "<p>$additional_element<a href='affichage_element.php?element=bloc&force_bloc_display=1'>".
              "Forcer l'affichage de tous les blocs (y compris rebuté)</a></p>\n";
     else
-      return "<p>$additional_element<a href='./#bloc'>Revenir à l'accueil</a></p>\n";
+      return "<p>$additional_element</p>\n";
   }
   function isDisplayed(&$record) {
     return ($record["etat"] == "OK");
