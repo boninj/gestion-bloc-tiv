@@ -150,7 +150,7 @@ class TIVElement {
     if($this->_read_only) return "";
     return '<form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
 <input type="hidden" name="element" value="'.$this->_name.'" />
-<input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="'.$this->_creation_label.'"/></p>
+<input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="'.$this->_creation_label.'"/>
 </form>
 ';
   }

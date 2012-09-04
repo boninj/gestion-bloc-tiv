@@ -121,7 +121,7 @@ document.getElementById('$div_label_to_update').className='$error_class';
   function getAdditionalControl() {
     $additional_element = parent::getAdditionalControl();
     if(!array_key_exists("force_bloc_display", $_GET)) 
-      return "<p>$additional_element<a href='affichage_element.php?element=bloc&force_bloc_display=1'>".
+      return "<p>$additional_element</p>\n<p><a href='affichage_element.php?element=bloc&force_bloc_display=1'>".
              "Forcer l'affichage de tous les blocs (y compris rebuté)</a></p>\n";
     else
       return "<p>$additional_element</p>\n";
