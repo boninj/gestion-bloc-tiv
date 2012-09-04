@@ -11,6 +11,8 @@ include_once('connect_db.inc.php');
 
 $edit_class = get_element_handler($element, $db_con);
 
+print $edit_class->getNavigationUrl();
+
 if($extra_info = $edit_class->getExtraInformation($id)) {
   print "<h2>Informations supplémentaires</h2>\n";
   print $extra_info;
@@ -22,7 +24,7 @@ print "<h2>".$edit_class->getEditLabel()."</h2>
   $(document).ready(function(){
     $(':submit').click(function () {
       if(this.name == 'delete') {
-        retour = './#$element';
+        retour = 'affichage_element.php?element=$element';
       } else {
         retour = 'edit.php?element=$element&id=$id';
       }
@@ -49,6 +51,6 @@ if($extra_operation = $edit_class->getExtraOperation($id)) {
   print $extra_operation;
 }
 
-print "<p><a href='".$edit_class->getBackUrl()."'>".$edit_class->getUrlTitle()."</a></p>\n";
+print $edit_class->getNavigationUrl();
 include_once('foot.inc.php');
 ?>

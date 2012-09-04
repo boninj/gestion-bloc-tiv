@@ -16,7 +16,7 @@ if($element === "inspection_tiv") {
   $element_class->setDate($date_tiv);
 }
 ?>
-<p><a href='./'>Retour à l'accueil</a></p>
+<p>Navigation : <a href='./'>Accueil</a></p>
 <?php
 print $element_class->getHTMLTable("liste_$element", $element);
 ?>
