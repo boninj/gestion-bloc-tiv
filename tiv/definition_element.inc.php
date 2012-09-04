@@ -114,6 +114,15 @@ class TIVElement {
     }
     return false;
   }
+  function deleteDBRecord($id) {
+    $db_result =  $this->_db_con->query("DELETE FROM ".$this->_name." WHERE id = '$id'");
+
+    if($db_result) {
+      add_journal_entry($this->_db_con, $id, $this->_name, "Suppression");
+      return $db_result;
+    }
+    return false;
+  }
   function updateDBRecord($id, &$values) {
     $db_query = "SELECT ".implode(",", array_keys($this->_forms))." FROM ".$this->_name." WHERE id=$id";
     $db_result = $this->_db_con->query($db_query);
@@ -274,6 +283,7 @@ class TIVElement {
   }
   function constructEditForm($id, $form_name, $action = "") {
     $this->_values = $this->retrieveValues($id);
+    if(!$this->_values) return false;
     $form  = "<form name='$form_name' id='$form_name' action='$action' method='POST'>\n";
     $form .= "<input type='hidden' name='id' value='$id' />\n";
     $form .= "<input type='hidden' name='element' value='".$this->_name."' />\n";

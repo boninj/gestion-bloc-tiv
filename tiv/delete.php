@@ -13,8 +13,11 @@ if(!$embedded) {
   include_once('head.inc.php');
 }
 
+include_once('definition_element.inc.php');
 include_once("connect_db.inc.php");
-if(!$db_con->query("DELETE FROM $element WHERE id = '$id'")) {
+$edit_class = get_element_handler($element, $db_con);
+
+if(!$edit_class->deleteDBRecord($id)) {
   print "<div class='error'>Erreur de suppression de l'élément $element dans la base de données.</div>\n";
 } else {
   print "<div class='ok'>Suppression réussi de l'élément $element</div>\n";

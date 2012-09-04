@@ -28,7 +28,7 @@ print "<h2>".$edit_class->getEditLabel()."</h2>
         if(confirm(\"".$edit_class->_delete_message."\")) {
           $.post('delete.php', $('#edit_form').serialize(), function(data) {
             $('#results').html(data);
-            setTimeout('window.location.href = \"affichage_element.php?element=$element\";', 2000);
+            setTimeout('window.location.href = \"affichage_element.php?element=$element\";', 1000);
           });
         } else {
           return false;
@@ -49,7 +49,14 @@ print "<h2>".$edit_class->getEditLabel()."</h2>
 </script>\n";
 print "<fieldset><legend>".$edit_class->getLegend($id)."</legend>\n";
 print "<p id=\"results\"></p>\n";
-print $edit_class->constructEditForm($id, "edit_form");
+$form_source = $edit_class->constructEditForm($id, "edit_form");
+if($form_source) {
+  print $form_source;
+} else {
+  print "<script type='text/javascript'>
+window.location.href='affichage_element.php?element=$element';
+</script>\n";
+}
 print "</fieldset>\n";
 print get_journal_entry($db_con, $id, $element);
 
