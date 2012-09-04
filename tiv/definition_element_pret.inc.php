@@ -48,6 +48,20 @@ class pretElement extends TIVElement {
     },
   }';
   }
+  function updateRecord(&$record) {
+    $date_prevu = strtotime($record["fin_prevu"]);
+    if($record["etat"] == "Rentré") {
+      $record["etat"] = "<div class='ok'>".$record["etat"]."</div>";
+      return;
+    }
+    if($date_prevu < time()) {
+      $record["fin_prevu"] = "<div class='warning'>".$record["fin_prevu"]."</div>";
+      $record["etat"] = "<div class='warning'>".$record["etat"]."</div>";
+    } else {
+      $record["fin_prevu"] = "<div class='ok'>".$record["fin_prevu"]."</div>";
+      $record["etat"] = "<div class='warning'>".$record["etat"]."</div>";
+    }
+  }
   function getDBQuery() {
     return "SELECT pret.id,nom as id_personne,debut_pret,fin_prevu,fin_reel,etat FROM pret,personne WHERE personne.id = id_personne";
   }
