@@ -25,13 +25,19 @@ class TIVElement {
   var $_show_delete_form;
   var $_read_only;
   var $_force_display;
+  var $_parent_url;
+  var $_parent_url_label;
+  var $_url_title_label;
+  var $_legend_label;
   function TIVElement($db_con = false) {
     // Init chaîne de texte
     $this->_name = str_replace("Element", "", get_class($this));
-    $this->_update_label    = "Mettre à jour le/la ".$this->_name;
-    $this->_url_title_label = "liste des ".$this->_name."s";
-    $this->_legend_label    = "Édition du ".$this->_name." __ID__";
-    $this->_back_url        = "affichage_element.php?element=".$this->_name;
+    $this->_update_label     = "Mettre à jour le/la ".$this->_name;
+    $this->_url_title_label  = "liste des ".$this->_name."s";
+    $this->_legend_label     = "Édition du ".$this->_name." __ID__";
+    $this->_back_url         = "affichage_element.php?element=".$this->_name;
+    $this->_parent_url       = "./";
+    $this->_parent_url_label = "Accueil";
     $this->_record_count = 0;
     $this->_tr_class = array("odd", "even");
     $this->_db_con = $db_con;
@@ -223,8 +229,12 @@ class TIVElement {
     $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
     return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
   }
+  function getParentUrl() {
+    return "Navigation : <a href='./'>Accueil</a> > ".
+           "<a href='".$this->_parent_url."'>".$this->_parent_url_label."</a>";
+  }
   function getNavigationUrl() {
-    return "<p>Navigation : <a href='./'>Accueil</a> <a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a></p>\n";
+    return "<p>".$this->getParentUrl()." > <a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a></p>\n";
   }
   function getBackUrl() {
     return $this->_back_url;

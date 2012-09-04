@@ -9,9 +9,15 @@ if(array_key_exists("date_tiv", $_GET)) {
 } else {
   $date_tiv = $_POST['date_tiv'];
 }
+
+$element = "inspection_tiv";
+$inspection_tiv = new inspection_tivElement($db_con, $date_tiv);
+
+print "<p>".$inspection_tiv->getParentUrl()."</p>";
+
 ?>
+<h2>Date TIV</h2>
 <form name="consultation_tiv" id="consultation_tiv" action="consultation_tiv.php" method="POST">
-Changer de date de TIV :
 <select id="date-tiv-consultation" name="date_tiv" onchange="submit()" >
   <option></option>
 <?php
@@ -46,8 +52,6 @@ print "Il est prévu d'inspecter $total blocs au total dont $reepreuve réépreu
 
 print "<h2>Liste des inspections prévues pour le $date_tiv</h2>\n";
 
-$element = "inspection_tiv";
-$inspection_tiv = new inspection_tivElement($db_con, $date_tiv);
 print $inspection_tiv->getHTMLTable("liste-inspection-tiv", $element);
 
 // Inspection de la séance de TIV afin de savoir s'il faut mettre à jour nos blocs.
@@ -68,6 +72,6 @@ if($bloc_to_update > 0) {
   print "<h2>Cette inspection n'a pas de bloc à l'état OK ou ne permet pas de mettre à jour les dates d'inspection des blocs</h2>\n";
 }
 
-print "<p><a href='index.php#admin'>Revenir au menu administration</a></p>\n";
+print "<p>".$inspection_tiv->getParentUrl()."</p>";
 include_once('foot.inc.php');
 ?>

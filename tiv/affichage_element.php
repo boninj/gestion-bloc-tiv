@@ -15,9 +15,11 @@ include_once('head.inc.php');
 if($element === "inspection_tiv") {
   $element_class->setDate($date_tiv);
 }
-?>
-<p>Navigation : <a href='./'>Accueil</a></p>
-<?php
+
+print "<p>".$element_class->getParentUrl()."</p>";
+
 print $element_class->getHTMLTable("liste_$element", $element);
+
+print "<p>".$element_class->getParentUrl()."</p>";
+
 ?>
-<p><a href='./'>Retour à l'accueil</a></p>

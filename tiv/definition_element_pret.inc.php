@@ -5,6 +5,8 @@ class pretElement extends TIVElement {
   var $_stabs;
   function pretElement($db_con = false) {
     parent::__construct($db_con);
+    $this->_parent_url       = "./#personne";
+    $this->_parent_url_label = "Plongeurs/inspecteurs TIV";
     $this->_creation_label = "Création d'un nouveau prêt";
     $this->_update_label = "Mettre à jour le prêt";
     $this->_elements = array("id" => "Réf.", "id_personne" => "Nom de l'emprunteur", "debut_pret" => "Date de début du prêt",
