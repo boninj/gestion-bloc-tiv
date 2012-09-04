@@ -26,20 +26,20 @@ print "<h2>".$edit_class->getEditLabel()."</h2>
     $(':submit').click(function () {
       if(this.name == 'delete') {
         if(confirm(\"".$edit_class->_delete_message."\")) {
-          retour = 'affichage_element.php?element=$element';
           $.post('delete.php', $('#edit_form').serialize(), function(data) {
             $('#results').html(data);
-            setTimeout('window.location.href = retour;', 2000);
+            setTimeout('window.location.href = \"affichage_element.php?element=$element\";', 2000);
           });
+        } else {
+          return false;
         }
       } else {
-        retour = 'edit.php?element=$element&id=$id';
         $('#edit_form').validate({
     ".$edit_class->getFormsRules().",
           submitHandler: function(form) {
             $.post('process_element.php', $('#edit_form').serialize(), function(data) {
               $('#results').html(data);
-              setTimeout('window.location.href = retour;', 1000);
+              setTimeout('window.location.href = \"edit.php?element=$element&id=$id\";', 1000);
             });
           }
         });
