@@ -4,6 +4,7 @@ if(array_key_exists("element", $_GET)) {
   $element = $_GET['element'];
   $id = $_GET['id'];
 }
+if(!isset($show_additional_information)) $show_additional_information = 1;
 $title = "Edition d'un $element - club Aqua Sénart";
 include_once('head.inc.php');
 include_once('definition_element.inc.php');
@@ -13,7 +14,7 @@ $edit_class = get_element_handler($element, $db_con);
 
 print $edit_class->getNavigationUrl();
 
-if($extra_info = $edit_class->getExtraInformation($id)) {
+if($show_additional_information && $extra_info = $edit_class->getExtraInformation($id)) {
   print "<h2>Informations supplémentaires</h2>\n";
   print $extra_info;
 }
@@ -24,17 +25,23 @@ print "<h2>".$edit_class->getEditLabel()."</h2>
   $(document).ready(function(){
     $(':submit').click(function () {
       if(this.name == 'delete') {
-        retour = 'affichage_element.php?element=$element';
+        if(confirm(\"".$edit_class->_delete_message."\")) {
+          retour = 'affichage_element.php?element=$element';
+          $.post('delete.php', $('#edit_form').serialize(), function(data) {
+            $('#results').html(data);
+            setTimeout('window.location.href = retour;', 2000);
+          });
+        }
       } else {
         retour = 'edit.php?element=$element&id=$id';
-      }
-    });
-    $('#edit_form').validate({
-".$edit_class->getFormsRules().",
-      submitHandler: function(form) {
-        $.post('process_element.php', $('#edit_form').serialize(), function(data) {
-          $('#results').html(data);
-          setTimeout('window.location.href = retour', 1000);
+        $('#edit_form').validate({
+    ".$edit_class->getFormsRules().",
+          submitHandler: function(form) {
+            $.post('process_element.php', $('#edit_form').serialize(), function(data) {
+              $('#results').html(data);
+              setTimeout('window.location.href = retour;', 1000);
+            });
+          }
         });
       }
     });

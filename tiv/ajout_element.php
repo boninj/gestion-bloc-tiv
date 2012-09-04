@@ -14,5 +14,6 @@ if(!$id) {
   exit(1);
 }
 
+$show_additional_information = false;
 include_once("edit.php");
 ?>

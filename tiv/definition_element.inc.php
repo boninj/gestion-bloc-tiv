@@ -291,7 +291,7 @@ class TIVElement {
 
     if($this->_show_delete_form) {
       $form .= "<input type='hidden' name='embedded' value='1' />\n"; // Utilisé pour détecter une suppression depuis le formulaire
-      $form .= "<input type='submit' style='background: red;' name='delete' onclick='return(confirm(\"".$this->_delete_message."\"));' ".
+      $form .= "<input type='submit' style='background: red;' name='delete' ".
                "value='".$this->_delete_label."' />\n";
     }
     $form .= "<input type='submit' name='lancer' value='".$this->getUpdateLabel()."' />\n";
