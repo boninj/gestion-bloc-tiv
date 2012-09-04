@@ -1,12 +1,12 @@
 <?php
-$element = $_POST["element"];
+include_once("definition_element.inc.php");
 include_once("connect_db.inc.php");
-$db_result =  $db_con->query("SELECT max(id) + 1 FROM $element;");
-$tmp = $db_result->fetch_array(MYSQLI_NUM);
-$id = $tmp[0];
-if(!$id) { $id = 1; }
+$element = $_POST["element"];
 
-if(!$db_con->query("INSERT INTO $element(id) VALUES($id)")) {
+$edit_class = get_element_handler($element, $db_con);
+$id = $edit_class->createDBRecord();
+
+if(!$id) {
   $title = "Erreur d'insertion d'un élément $element - club Aqua Sénart";
   include_once('head.inc.php');
   print "Erreur d'insertion du nouvel élément dans la base de données";

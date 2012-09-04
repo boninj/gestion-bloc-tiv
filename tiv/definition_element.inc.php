@@ -93,6 +93,21 @@ class TIVElement {
   function getDBQuery() {
     return "SELECT ".join(",", $this->getElements())." FROM ".$this->_name;
   }
+  function getDBCreateQuery($id) {
+    return "INSERT INTO ".$this->_name."(id) VALUES($id)";
+  }
+  function createDBRecord() {
+    $db_result =  $this->_db_con->query("SELECT max(id) + 1 FROM ".$this->_name);
+    $tmp = $db_result->fetch_array();
+    $id = $tmp[0];
+    if(!$id) $id = 1; // Si table vide assignation id à 1
+
+    if($this->_db_con->query($this->getDBCreateQuery($id))) {
+      add_journal_entry($this->_db_con, $id, $this->_name, "Création");
+      return $id;
+    }
+    return false;
+  }
   function updateDBRecord($id, &$values) {
     $db_query = "SELECT ".implode(",", array_keys($this->_forms))." FROM ".$this->_name." WHERE id=$id";
     $db_result = $this->_db_con->query($db_query);
@@ -277,6 +292,7 @@ include_once("definition_element_detendeur.inc.php");
 include_once("definition_element_stab.inc.php");
 include_once("definition_element_inspecteur_tiv.inc.php");
 include_once("definition_element_personne.inc.php");
+include_once("definition_element_pret.inc.php");
 include_once("definition_element_inspection_tiv.inc.php");
 include_once("definition_element_journal_tiv.inc.php");
 

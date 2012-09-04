@@ -7,7 +7,7 @@ class personneElement extends TIVElement {
     $this->_elements = array("id" => "Réf.", "nom" => "Prénom Nom", "adresse" => "Adresse de la personne",
                              "telephone" => "Téléphone de la personne",);
     $this->_forms = array(
-      "nom"       => array("required", "text",      "Nom/Prénom de la personne"),
+      "nom"       => array("required", "text", "Nom/Prénom de la personne"),
       "adresse"   => array("required", "text", "Adresse de la personne"),
       "telephone" => array("required", "text", "Téléphone de la personne"),
     );
