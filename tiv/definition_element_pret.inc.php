@@ -48,6 +48,9 @@ class pretElement extends TIVElement {
     },
   }';
   }
+  function getDBQuery() {
+    return "SELECT pret.id,nom as id_personne,debut_pret,fin_prevu,fin_reel,etat FROM pret,personne WHERE personne.id = id_personne";
+  }
   function getDBCreateQuery($id) {
     return "INSERT INTO ".$this->_name."(id,debut_pret,fin_prevu) VALUES($id,SYSDATE(), DATE_ADD(SYSDATE(), INTERVAL 31 DAY))";
   }
