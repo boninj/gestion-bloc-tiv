@@ -20,10 +20,10 @@ if(!$db_con->query("DELETE FROM $element WHERE id = '$id'")) {
   print "<div class='ok'>Suppression réussi de l'élément $element</div>\n";
   if(!$embedded) {
     print "<script>
-setTimeout('window.location.href = \"./#$element\"', 1000);
+setTimeout('window.location.href = \"affichage_element.php?element=$element\"', 1000);
 </script>
 <p>Vous allez être redirigé automatiquement dans une seconde. Si ce n'est pas le cas, 
-cliquer sur le lien suivant : <a href='./#$element'>Retour à la liste des ".$element."s</a></p>\n";
+cliquer sur le lien suivant : <a href='affichage_element.php?element=$element'>Retour à la liste des ".$element."s</a></p>\n";
   }
 }
 
