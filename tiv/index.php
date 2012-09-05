@@ -1,7 +1,7 @@
 <?php
+include_once('configuration.inc.php');
 $title = "Application de gestion du matériel - club $nom_club";
 include_once('head.inc.php');
-include_once('configuration.inc.php');
 ?>
 <script>
   $(function() {

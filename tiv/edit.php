@@ -1,4 +1,5 @@
 <?php
+include_once('configuration.inc.php');
 # Si parametre _GET present, on est peut-être utilisé par ajout_element.php
 if(array_key_exists("element", $_GET)) {
   $element = $_GET['element'];
