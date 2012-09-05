@@ -22,4 +22,5 @@ print $element_class->getHTMLTable("liste_$element", $element);
 
 print "<p>".$element_class->getParentUrl()."</p>";
 
+include_once("foot.inc.php");
 ?>
