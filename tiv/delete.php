@@ -9,7 +9,7 @@ if(array_key_exists("element", $_GET)) {
 $embedded = array_key_exists("embedded", $_POST) || array_key_exists("embedded", $_GET);
 
 if(!$embedded) {
-  $title = "Suppression $element - club Aqua Sénart";
+  $title = "Suppression $element - club $nom_club";
   include_once('head.inc.php');
 }
 

@@ -1,6 +1,6 @@
-<h2>Bienvenue sur le site de gestion du matériel du club Aqua Sénart</h2>
+<h2>Bienvenue sur le site de gestion du matériel du club <?php print $nom_club; ?></h2>
 <p>
-Vous êtes à la racine du site permettant de gérer le matériel du club Aqua Sénart.
+Vous êtes à la racine du site permettant de gérer le matériel du club <?php print $nom_club; ?>.
 </p>
 <ul>
 <li>L'onglet bloc/détendeur/stabs vous donnera un recensement simple du matériel du club.</li>

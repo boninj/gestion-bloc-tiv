@@ -5,7 +5,7 @@ if(array_key_exists("element", $_GET)) {
   $id = $_GET['id'];
 }
 if(!isset($show_additional_information)) $show_additional_information = 1;
-$title = "Edition d'un $element - club Aqua Sénart";
+$title = "Edition d'un $element - club $nom_club";
 include_once('head.inc.php');
 include_once('definition_element.inc.php');
 include_once('connect_db.inc.php');

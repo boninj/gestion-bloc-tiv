@@ -3,6 +3,7 @@ $nom_club     = "Nom du club";
 $numero_club  = "XX.XX.XXXX";
 $adresse_club = "Adresse du club\nCode postal Ville";
 $logo_club    = "logo_club.png";
+$email_club   = "email@club.com";
 
 $epreuve_month_count = 60;
 $epreuve_month_count_warn = 55;

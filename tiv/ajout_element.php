@@ -7,7 +7,7 @@ $edit_class = get_element_handler($element, $db_con);
 $id = $edit_class->createDBRecord();
 
 if(!$id) {
-  $title = "Erreur d'insertion d'un élément $element - club Aqua Sénart";
+  $title = "Erreur d'insertion d'un élément $element - club $nom_club";
   include_once('head.inc.php');
   print "Erreur d'insertion du nouvel élément dans la base de données";
   include_once('foot.inc.php');
