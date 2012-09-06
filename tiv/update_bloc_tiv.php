@@ -23,7 +23,7 @@ if(array_key_exists("blocs_to_update", $_POST)) {
 } else {
   $blocs_to_update = array();
   $db_query = "SELECT id_bloc,decision FROM inspection_tiv,bloc ".
-              "WHERE date = '$date_tiv' AND date_dernier_tiv < '$date_tiv' AND id_bloc = bloc.id";
+              "WHERE date = '$date_tiv' AND date_dernier_tiv < '$date_tiv' AND id_bloc = bloc.id AND decision != ''";
 
   $db_result = $db_con->query($db_query);
   while($result = $db_result->fetch_array()) {
