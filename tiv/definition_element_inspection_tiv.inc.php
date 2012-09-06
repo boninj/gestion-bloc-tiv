@@ -4,6 +4,7 @@ class inspection_tivElement extends TIVElement {
   var $_columns;
   function inspection_tivElement($db_con = false, $date = false) {
     parent::__construct($db_con);
+    $this->_show_create_form = false;
     $this->_parent_url       = "./#admin";
     $this->_parent_url_label = "Administration";
     $this->_update_label = "Mettre à jour les informations sur l&#145;inspection TIV";

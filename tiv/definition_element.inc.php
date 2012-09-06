@@ -24,6 +24,7 @@ class TIVElement {
   var $_delete_message;
   var $_show_delete_form;
   var $_read_only;
+  var $_show_create_form;
   var $_force_display;
   var $_parent_url;
   var $_parent_url_label;
@@ -50,6 +51,7 @@ class TIVElement {
     $this->_delete_message = "Lancer la suppression ?";
     $this->_show_delete_form = false;
     $this->_read_only = false;
+    $this->_show_create_form = true;
     $this->_force_display = false;
   }
   function setDBCon($db_con) {
@@ -147,7 +149,7 @@ class TIVElement {
     return true;
   }
   function getAdditionalControl() {
-    if($this->_read_only) return "";
+    if($this->_read_only || !$this->_show_create_form) return "";
     return '<form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
 <input type="hidden" name="element" value="'.$this->_name.'" />
 <input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="'.$this->_creation_label.'"/>
