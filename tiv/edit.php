@@ -39,7 +39,7 @@ print "<h2>".$edit_class->getEditLabel()."</h2>
           submitHandler: function(form) {
             $.post('process_element.php', $('#edit_form').serialize(), function(data) {
               $('#results').html(data);
-              setTimeout('window.location.href = \"edit.php?element=$element&id=$id\";', 1000);
+              setTimeout('window.location.href = \"edit.php?".$edit_class->getURLReference($id)."\";', 1000);
             });
           }
         });

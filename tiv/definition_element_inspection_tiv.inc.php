@@ -72,6 +72,9 @@ class inspection_tivElement extends TIVElement {
     $this->_url_title_label = "Retour à la liste des fiches d'inspections TIV du ".$this->_date;
     $this->_back_url        = "consultation_tiv.php?date_tiv=".$this->_date;
   }
+  function getURLReference($id) {
+    return parent::getURLReference($id)."&date=".$this->_date;
+  }
   function getExtraInformation($id) {
     $db_result = $this->_db_con->query("SELECT id_bloc,id_inspecteur_tiv FROM inspection_tiv WHERE id = $id");
     $result = $db_result->fetch_array();

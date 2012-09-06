@@ -235,8 +235,11 @@ class TIVElement {
   }
   function getExtraOperation($id) {
   }
+  function getURLReference($id) {
+    return "id=$id&element=".$this->_name;
+  }
   function getEditUrl($id) {
-    $element_to_manage = "id=$id&element=".$this->_name;
+    $element_to_manage = $this->getURLReference($id);
     $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
     return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
   }
