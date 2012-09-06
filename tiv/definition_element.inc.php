@@ -262,7 +262,7 @@ class TIVElement {
   function getLegend($id) {
     return str_replace("__ID__", $id, $this->_legend_label);
   }
-  function getElementLabel($label) {
+  function getElementLabel($label, $value) {
     $forms_definition = $this::getForms();
     return $forms_definition[$label][2];
   }
@@ -296,7 +296,7 @@ class TIVElement {
     $form .= "  <tbody>\n";
     foreach(array_keys($this->getForms()) as $elt) {
       $value = $this->_values[$elt];
-      $form .= "<tr><td>".$this->getElementLabel($elt)."</td><td>".$this->getFormInput($elt, $value)."</td></tr>\n";
+      $form .= "<tr><td>".$this->getElementLabel($elt, $value)."</td><td>".$this->getFormInput($elt, $value)."</td></tr>\n";
     }
     $form .= "  </tbody>\n";
     $form .= "</table>\n";

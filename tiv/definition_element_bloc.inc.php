@@ -210,6 +210,17 @@ $(function() {
 </form>";
     return $form;
   }
+  function getElementLabel($label, $value) {
+    $text = parent::getElementLabel($label);
+    if($label == "date_derniere_epreuve") {
+      $next_epreuve = strtotime("+".$this->_epreuve_month_count." months", strtotime($value));
+      $text .= "<br/>prochaine épreuve : <div class='warning'>".date('Y-m-d', $next_epreuve).'</div>';
+    } else if($label == "date_dernier_tiv") {
+      $next_epreuve = strtotime("+".$this->_tiv_month_count." months", strtotime($value));
+      $text .= "<br/>prochain TIV : <div class='warning'>".date('Y-m-d', $next_epreuve).'</div>';
+    }
+    return $text;
+  }
   function getExtraInformation($id) {
     // Recherche d'info sur les dates d'epreuves et dernière inspection
     $db_result = $this->_db_con->query("SELECT date_derniere_epreuve,date_dernier_tiv FROM bloc WHERE id = $id");
