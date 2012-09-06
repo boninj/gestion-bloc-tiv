@@ -1,4 +1,5 @@
 <?php
+include_once('configuration.inc.php');
 if(array_key_exists("element", $_GET)) {
   $element = $_GET['element'];
   $id = $_GET['id'];
