@@ -1,18 +1,23 @@
 <h2>Déclaration d'un nouvel élément dans la base</h2>
+<p><img src='images/configure.png' style="float: left; margin: 0 15px 0 0;" />
 <form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
-<p>Type d'élément à déclarer :
+Type d'élément à déclarer :
 <select id="element" name="element">
 <option value='bloc'>Bloc</option>
 <option value='stab'>Gillet Stabilisateur</option>
 <option value='detendeur'>Détendeur</option>
 <option value='inspecteur_tiv'>Inspecteur TIV</option>
 </select>
-<input type="submit" name="submit" onclick='return(confirm("Procéder à la création ?"));' value="Procéder à la création du nouvel élément"/></p>
+<input type="submit" name="submit" onclick='return(confirm("Procéder à la création ?"));' value="Procéder à la création du nouvel élément"/>
 </form>
+</p>
 <h2>Consultation du journal</h2>
-<p><a href='affichage_element.php?element=journal_tiv'>Consultation des événements du journal</a>.</p>
+<div><img src='images/journal.png' style="float: left; margin: 0 15px 0 0;" />
+Consultation des événements du <a href='affichage_element.php?element=journal_tiv'>journal</a>.
+</div>
 <h2>Consultation d'un TIV</h2>
 <p>
+<img src='images/consultation-tiv.png' style="float: left; margin: 0 15px 0 0;" />
 <form name="consultation_tiv" id="consultation_tiv" action="consultation_tiv.php" method="POST">
 Choisissez votre TIV :
 <select id="date-tiv-consultation" name="date_tiv" onselect="submit()" >
@@ -51,7 +56,8 @@ while($result = $db_result->fetch_array()) {
     });
   });
 </script>
-<p>A noter que la préparation d'un TIV consiste à pré-affecter les blocs aux différentes personnes qui feront plus tard le TIV.</p>
+<p><img src='images/creation-seance-tiv.png' style="float: left; margin: 0 15px 0 0;" />
+A noter que la préparation d'un TIV consiste à pré-affecter les blocs aux différentes personnes qui feront plus tard le TIV.</p>
 <form name="preparation_tiv" id="preparation_tiv" action="preparation_tiv.php" method="POST">
 <script>
 $(function() {
