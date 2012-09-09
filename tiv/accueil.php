@@ -1,3 +1,4 @@
+<img src='<?php print $logo_club; ?>' style="float: left; margin: 0 15px 0 0;" />
 <h2>Bienvenue sur le site de gestion du matériel du club <?php print $nom_club; ?></h2>
 <p>
 Vous êtes à la racine du site permettant de gérer le matériel du club <?php print $nom_club; ?>.
