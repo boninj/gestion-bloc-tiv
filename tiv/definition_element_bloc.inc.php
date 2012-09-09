@@ -11,7 +11,7 @@ class blocElement extends TIVElement {
     $this->_creation_label = "Création d'un ".$this->_name;
     $this->_update_label = "Mettre à jour le bloc";
     $this->_parent_url       = "./#materiel";
-    $this->_parent_url_label = "Matériel";
+    $this->_parent_url_label = "<img src='images/materiel.png' /> Matériel";
     $this->_force_display = array_key_exists("force_bloc_display", $_GET) || array_key_exists("force_bloc_display", $_POST);
     $this->_current_time = time();
     $this->_elements = array(

@@ -3,7 +3,7 @@ class personneElement extends TIVElement {
   function personneElement($db_con = false) {
     parent::__construct($db_con);
     $this->_parent_url       = "./#personne";
-    $this->_parent_url_label = "Plongeurs/inspecteurs TIV";
+    $this->_parent_url_label = "<img src='images/personne.png' /> Plongeurs/inspecteurs TIV";
     $this->_creation_label = "Création d'une nouvelle personne";
     $this->_update_label = "Mettre à jour la personne";
     $this->_elements = array("id" => "Réf.", "nom" => "Prénom Nom", "adresse" => "Adresse de la personne",

@@ -38,7 +38,7 @@ class TIVElement {
     $this->_legend_label     = "Édition du ".$this->_name." __ID__";
     $this->_back_url         = "affichage_element.php?element=".$this->_name;
     $this->_parent_url       = "./";
-    $this->_parent_url_label = "Accueil";
+    $this->_parent_url_label = "<img src='images/accueil.png' /> Accueil";
     $this->_record_count = 0;
     $this->_tr_class = array("odd", "even");
     $this->_db_con = $db_con;
@@ -244,7 +244,7 @@ class TIVElement {
     return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
   }
   function getParentUrl() {
-    return "Navigation : <a href='./'>Accueil</a> > ".
+    return "Navigation : <a href='./'><img src='images/accueil.png' /> Accueil</a> > ".
            "<a href='".$this->_parent_url."'>".$this->_parent_url_label."</a>";
   }
   function getNavigationUrl() {
