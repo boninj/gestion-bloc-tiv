@@ -39,7 +39,7 @@ CREATE TABLE `bloc` (
   `gaz` varchar(16) NOT NULL,
   `etat` varchar(16) NOT NULL,
   PRIMARY KEY (`id`,`numero`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -55,7 +55,8 @@ CREATE TABLE `detendeur` (
   `id_1ier_etage` varchar(64) NOT NULL,
   `id_2e_etage` varchar(64) NOT NULL,
   `id_octopus` varchar(64) NOT NULL,
-  `date` date NOT NULL,
+  `date_achat` date NOT NULL,
+  `observation` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des detendeurs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -103,7 +104,7 @@ CREATE TABLE `inspection_tiv` (
   PRIMARY KEY (`id`),
   KEY `id_bloc` (`id_bloc`),
   KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +121,44 @@ CREATE TABLE `journal_tiv` (
   `id_element` int(16) NOT NULL,
   `message` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COMMENT='Journal de l''application';
+) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=latin1 COMMENT='Journal de l''application';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `personne`
+--
+
+DROP TABLE IF EXISTS `personne`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `personne` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL,
+  `adresse` varchar(255) NOT NULL,
+  `telephone` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COMMENT='Personne du club';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pret`
+--
+
+DROP TABLE IF EXISTS `pret`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pret` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `id_personne` int(16) NOT NULL,
+  `id_detendeur` int(16) NOT NULL,
+  `id_stab` int(16) NOT NULL,
+  `id_bloc` int(16) NOT NULL,
+  `debut_pret` date NOT NULL,
+  `fin_prevu` date NOT NULL,
+  `fin_reel` date NOT NULL,
+  `etat` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='Liste des prêts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,6 +172,8 @@ CREATE TABLE `stab` (
   `id` int(15) NOT NULL,
   `modele` varchar(128) NOT NULL,
   `taille` varchar(32) NOT NULL,
+  `date_achat` date NOT NULL,
+  `observation` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des stabs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -147,4 +187,4 @@ CREATE TABLE `stab` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-24 14:28:25
+-- Dump completed on 2012-09-09  9:39:27
