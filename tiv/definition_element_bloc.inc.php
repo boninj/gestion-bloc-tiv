@@ -211,7 +211,7 @@ $(function() {
     return $form;
   }
   function getElementLabel($label, $value) {
-    $text = parent::getElementLabel($label);
+    $text = parent::getElementLabel($label, $value);
     if($label == "date_derniere_epreuve") {
       $next_epreuve = strtotime("+".$this->_epreuve_month_count." months", strtotime($value));
       $text .= "<br/>prochaine épreuve : <div class='warning'>".date('Y-m-d', $next_epreuve).'</div>';
