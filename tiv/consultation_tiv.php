@@ -32,9 +32,11 @@ while($result = $db_result->fetch_array()) {
 </p>
 <?php
 print "<h2>Impression des fiches TIVs</h2>\n";
-print "<p><a href='impression_fiche_tiv.php?date=$date_tiv&show_resume=1&show_inspecteur=1&show_all_bloc=1' ".
-      "title='Récupérer les fiches TIV de cette séance au format PDF'>".
-      "<img src='images/pdf.png' /> Récupérer le PDF</a></p>\n";
+$pdf_url = "impression_fiche_tiv.php?date=$date_tiv&show_resume=1&show_inspecteur=1&show_all_bloc=1";
+print "<p><a href='$pdf_url' title='Récupérer les fiches TIV de cette séance au format PDF'>".
+      "<img src='images/impression.png' /> Imprimer les fiches TIV (PDF)</a> ".
+      "<a href='$pdf_url&save_as' title='Sauvegarder le PDF des fiches TIV'>".
+      "<img src='images/pdf.png' /> Sauvegarder le fichier PDF en local</a></p>\n";
 
 print "<h2>Informations relatives à l'inspection TIV du $date_tiv</h2>\n";
 

@@ -18,6 +18,9 @@ if(array_key_exists("show_all_bloc", $_GET))
 if(array_key_exists("id_bloc", $_GET))
   $pdf->addBlocFile($_GET["id_bloc"]);
 
-$pdf->Output();
-
+if(array_key_exists("save_as", $_GET)) {
+  $pdf->Output("Séance_TIV_du_$date_tiv.pdf", "D");
+} else {
+  $pdf->Output();
+}
 ?>
