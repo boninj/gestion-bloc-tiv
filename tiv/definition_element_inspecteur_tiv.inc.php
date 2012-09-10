@@ -46,8 +46,10 @@ class inspecteur_tivElement extends TIVElement {
       $extra_info []= "<td>".$result[1]."</td>".
                       "<td>bloc n° ".$result[2]."</a></td>".
                       "<td>".$result[3]."</a></td>".
-                      "<td><a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>Fiche TIV n° ".$result[0]."</a>".
-                      "/<a href='impression_fiche_tiv.php?id_bloc=".$result[4]."&date=".$result[1]."'>fiche PDF</a></td>";
+                      "<td><a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>".
+                      "<img src='images/edit.png' style='vertical-align:middle;' /> Fiche TIV n° ".$result[0]."</a>".
+                      "/<a href='impression_fiche_tiv.php?id_bloc=".$result[4]."&date=".$result[1]."'>".
+                      "<img src='images/pdf.png' style='vertical-align:middle;' /> fiche PDF</a></td>";
       $count++;
     }
     if($count > 0) {

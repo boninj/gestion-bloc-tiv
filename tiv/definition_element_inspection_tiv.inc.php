@@ -78,10 +78,12 @@ class inspection_tivElement extends TIVElement {
   function getExtraInformation($id) {
     $db_result = $this->_db_con->query("SELECT id_bloc,id_inspecteur_tiv FROM inspection_tiv WHERE id = $id");
     $result = $db_result->fetch_array();
-    $extra_info = "<p>Navigation rapide : <a href='edit.php?id=".$result[0]."&element=bloc'>fiche du bloc</a> - ".
-                  "<a href='edit.php?id=".$result[1]."&element=inspecteur_tiv'>fiche de l'inspecteur TIV</a> - ".
+    $extra_info = "<p>Navigation rapide : <a href='edit.php?id=".$result[0]."&element=bloc'>".
+                  "<img src='images/edit.png' style='vertical-align:middle;' /> fiche du bloc</a> - ".
+                  "<a href='edit.php?id=".$result[1]."&element=inspecteur_tiv'>".
+                  "<img src='images/personne.png' style='vertical-align:middle;' /> fiche de l'inspecteur TIV</a> - ".
                   "<a href='impression_fiche_tiv.php?id_bloc=".$result[0]."&date=".$this->_date."'>".
-                  "fiche au format PDF</a>";
+                  "<img src='images/pdf.png' style='vertical-align:middle;' /> fiche au format PDF</a>";
     return $extra_info;
   }
   function getExtraOperation($id) {
