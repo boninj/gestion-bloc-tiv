@@ -233,26 +233,33 @@ $(function() {
     $next_epreuve_minus_one = strtotime("+".$this->_epreuve_month_count_warn." months", $derniere_epreuve);
     $next_tiv = strtotime("+".$this->_tiv_month_count." months", $dernier_tiv);
     $next_tiv_minus_one = strtotime("+".$this->_tiv_month_count_warn." months", $dernier_tiv);
-    $message_expiration  = "<div>Date prochaine réépreuve : <strong>".date("d/m/Y", $next_epreuve)."</strong> - ".
+    $message_expiration  = "<div><img src='images/security-high.png' style='vertical-align:bottom;' />".
+                           "Date prochaine réépreuve : <strong>".date("d/m/Y", $next_epreuve)."</strong> - ".
                            "Date prochain TIV : <strong>".date("d/m/Y", $next_tiv)."</strong></div>\n";
     if($next_epreuve < $this->_current_time) {
-      $message_expiration = "<div class='error'>ATTENTION !!! CE BLOC A DÉPASSÉ SA DATE DE RÉÉPREUVE (le ".date("d/m/Y", $next_epreuve).") !!!</div>\n";
+      $message_expiration = "<div class='error'><img src='images/security-low.png' style='vertical-align:bottom;' />".
+                            "ATTENTION !!! CE BLOC A DÉPASSÉ SA DATE DE RÉÉPREUVE (le ".date("d/m/Y", $next_epreuve).") !!!</div>\n";
     } else if($next_epreuve_minus_one < $this->_current_time) {
-      $message_expiration = "<div class='warning'>Attention, ce bloc va bientôt dépasser sa date de réépreuve ".
+      $message_expiration = "<div class='warning'><img src='images/security-medium.png' style='vertical-align:bottom;' />".
+                            "Attention, ce bloc va bientôt dépasser sa date de réépreuve ".
                             "(dans moins de ".$this->getEpreuveWarnMonthCount()." mois, le ".date("d/m/Y", $next_epreuve).")</div>\n";
     }
     if($next_tiv < $this->_current_time) {
-      $message_expiration .= "<div class='error'>Attention !!! ce bloc a dépassé sa date de TIV (le ".date("d/m/Y", $next_tiv).")</div>\n";
+      $message_expiration = "<div class='error'><img src='images/security-low.png' style='vertical-align:bottom;' />".
+                            "Attention !!! ce bloc a dépassé sa date de TIV (le ".date("d/m/Y", $next_tiv).")</div>\n";
     } else if($next_tiv_minus_one < $this->_current_time) {
-      $message_expiration .= "<div class='warning'>Attention, ce bloc va bientôt dépasser sa date de TIV ".
-                             "(dans moins de ".$this->getTIVWarnMonthCount()." mois, le ".date("d/m/Y", $next_tiv).")</div>\n";
+      $message_expiration = "<div class='warning'><img src='images/security-medium.png' style='vertical-align:bottom;' />".
+                            "Attention, ce bloc va bientôt dépasser sa date de TIV ".
+                            "(dans moins de ".$this->getTIVWarnMonthCount()." mois, le ".date("d/m/Y", $next_tiv).")</div>\n";
     }
     // Récupération d'information sur les fiches TIV du bloc
     $db_result = $this->_db_con->query("SELECT id,date FROM inspection_tiv WHERE id_bloc = $id ORDER BY date DESC");
     $extra_info = array();
     while($result = $db_result->fetch_array()) {
-      $extra_info []= "<a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."'>Inspection TIV du ".$result[1]."</a> ".
-                      "<a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."'>(fiche PDF)</a>";
+      $extra_info []= "<a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."' ".
+                      "title='Éditer la fiche TIV'>Inspection TIV du ".$result[1]."</a> ".
+                      "<a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."' title='Accéder à la fiche au format PDF'>".
+                      "(<img src='images/pdf.png' style='vertical-align:middle;' /> fiche PDF)</a>";
     }
     // Composition des messages
     $message = "";
