@@ -241,7 +241,9 @@ class TIVElement {
   function getEditUrl($id) {
     $element_to_manage = $this->getURLReference($id);
     $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
-    return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
+    return "<a href='edit.php?$element_to_manage' title=\"Éditer cet élément\"><img src='images/edit.png' style='vertical-align:middle;' /> Edit</a> / ".
+           "<a style='color: #F33;' onclick='$delete_confirmation' title='Supprimer cet élément (confirmation nécessaire)' href='delete.php?$element_to_manage'>".
+           "<img src='images/delete.png' style='vertical-align:middle;' /> Suppr.</a>";
   }
   function getParentUrl() {
     return "Navigation : <a href='./'><img src='images/accueil.png' /> Accueil</a> > ".
