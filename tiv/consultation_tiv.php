@@ -17,6 +17,7 @@ print "<p>".$inspection_tiv->getParentUrl()."</p>";
 
 ?>
 <h2>Date TIV</h2>
+<p><img src='images/change-date.png' style="float: left; margin: 0 15px 0 0;" />
 <form name="consultation_tiv" id="consultation_tiv" action="consultation_tiv.php" method="POST">
 <select id="date-tiv-consultation" name="date_tiv" onchange="submit()" >
   <option></option>
@@ -28,9 +29,12 @@ while($result = $db_result->fetch_array()) {
 ?>
 </select>
 </form>
+</p>
 <?php
 print "<h2>Impression des fiches TIVs</h2>\n";
-print "<p><a href='impression_fiche_tiv.php?date=$date_tiv&show_resume=1&show_inspecteur=1&show_all_bloc=1'>Récupérer le PDF</a></p>\n";
+print "<p><a href='impression_fiche_tiv.php?date=$date_tiv&show_resume=1&show_inspecteur=1&show_all_bloc=1' ".
+      "title='Récupérer les fiches TIV de cette séance au format PDF'>".
+      "<img src='images/pdf.png' /> Récupérer le PDF</a></p>\n";
 
 print "<h2>Informations relatives à l'inspection TIV du $date_tiv</h2>\n";
 
