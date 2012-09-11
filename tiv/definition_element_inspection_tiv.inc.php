@@ -69,7 +69,7 @@ class inspection_tivElement extends TIVElement {
       }
     }
     $this->_date = $date;
-    $this->_url_title_label = "Retour à la liste des fiches d'inspections TIV du ".$this->_date;
+    $this->_url_title_label = "<img src='images/liste.png'/> Retour à la liste des fiches d'inspections TIV du ".$this->_date;
     $this->_back_url        = "consultation_tiv.php?date_tiv=".$this->_date;
   }
   function getURLReference($id) {

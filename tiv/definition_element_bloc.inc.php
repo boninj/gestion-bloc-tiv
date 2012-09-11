@@ -268,7 +268,8 @@ $(function() {
     $extra_info = array();
     while($result = $db_result->fetch_array()) {
       $extra_info []= "<a href='edit.php?id=".$result[0]."&element=inspection_tiv&date=".$result[1]."' ".
-                      "title='Éditer la fiche TIV'>Inspection TIV du ".$result[1]."</a> ".
+                      "title='Éditer la fiche TIV'><img src='images/admin.png' style='vertical-align:middle;' />".
+                      "Inspection TIV du ".$result[1]."</a> ".
                       "<a href='impression_fiche_tiv.php?id_bloc=$id&date=".$result[1]."' title='Accéder à la fiche au format PDF'>".
                       "(<img src='images/pdf.png' style='vertical-align:middle;' /> fiche PDF)</a>";
     }
