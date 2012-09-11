@@ -204,18 +204,22 @@ $(function() {
       $next_date = date("Y-m-d", $next_epreuve);
       if($next_epreuve < $this->_current_time) {
         $status = "critical";
+        $comment = "DATE DE RÉ-ÉPREUVE DÉPASSÉE !!! ";
       } else if($next_epreuve_warn < $this->_current_time) {
+        $comment = "Attention !!! Date de ré-épreuve bientôt dépassé ! ";
         $status = "warning";
       }
     } else if($label == "date_dernier_tiv") {
-      $comment = "Prochaine inspection_tiv : ";
+      $comment = "Prochaine inspection TIV : ";
       $status = "ok";
       $next_tiv      = strtotime("+".$this->_tiv_month_count." months",      $time_value);
       $next_tiv_warn = strtotime("+".$this->_tiv_month_count_warn." months", $time_value);
       $next_date = date("Y-m-d", $next_tiv);
       if($next_tiv < $this->_current_time) {
         $status = "critical";
+        $comment = "DATE DE TIV DÉPASSÉE !!! : ";
       } else if($next_tiv_warn < $this->_current_time) {
+        $comment = "Attention !!! Date de TIV bientôt dépassé ! ";
         $status = "warning";
       }
     }

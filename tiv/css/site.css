@@ -126,7 +126,6 @@ div.critical {
 div.warning {
     width: auto;
     font-weight: bold;
-    display: inline;
     color: #F73;
 }
 
