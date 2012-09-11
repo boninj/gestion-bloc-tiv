@@ -34,7 +34,7 @@ class TIVElement {
     // Init chaîne de texte
     $this->_name = str_replace("Element", "", get_class($this));
     $this->_update_label     = "Mettre à jour le/la ".$this->_name;
-    $this->_url_title_label  = "Liste des ".$this->_name."s";
+    $this->_url_title_label  = "<img src='images/liste.png' /> Liste des ".$this->_name."s";
     $this->_legend_label     = "Édition du ".$this->_name." __ID__";
     $this->_back_url         = "affichage_element.php?element=".$this->_name;
     $this->_parent_url       = "./";
