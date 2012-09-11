@@ -135,34 +135,15 @@ document.getElementById('$div_label_to_update').className='$error_class';
       if(!array_key_exists($elt, $record)) { return false; }
     }
     if($record["etat"] != "OK") {
-      $record["etat"] = "<div class='error'>".$record["etat"]."</label>";
+      $record["etat"] = "<div class='critical'>".$record["etat"]."</label>";
       return "critical-etat";
     }
-    // Calcul sur le temps prochaine épreuve
-    $date_derniere_epreuve = strtotime($record["date_derniere_epreuve"]);
-    $date_prochaine_epreuve = strtotime("+".$this->_epreuve_month_count." months", $date_derniere_epreuve);
-    if($date_prochaine_epreuve < $this->_current_time) {
-      $record["date_derniere_epreuve"] = "<div class='error'>".$record["date_derniere_epreuve"]."</label>";
-      return "critical-epreuve";
-    }
-    // Calcul alerte sur le temps prochaine épreuve
-    $date_prochaine_epreuve_warn = strtotime("+".$this->_epreuve_month_count_warn." months", $date_derniere_epreuve);
-    if($date_prochaine_epreuve_warn < $this->_current_time) {
-      $record["date_derniere_epreuve"] = "<div class='warning'>".$record["date_derniere_epreuve"]."</label>";
-      return "warning-epreuve";
-    }
-    // Calcul sur le temps prochain TIV
-    $date_dernier_tiv = strtotime($record["date_dernier_tiv"]);
-    $date_prochain_tiv = strtotime("+".$this->_tiv_month_count." months", $date_dernier_tiv);
-    if($date_prochain_tiv < $this->_current_time) {
-      $record["date_dernier_tiv"] = "<div class='error'>".$record["date_dernier_tiv"]."</label>";
-      return "critical-tiv";
-    }
-    // Calcul alerte sur le temps prochain TIV
-    $date_prochain_tiv_warn = strtotime("+".$this->_tiv_month_count_warn." month", $date_dernier_tiv);
-    if($date_prochain_tiv_warn < $this->_current_time) {
-      $record["date_dernier_tiv"] = "<div class='warning'>".$record["date_dernier_tiv"]."</label>";
-      return "warning-tiv";
+    foreach(array("date_derniere_epreuve", "date_dernier_tiv") as $field) {
+      if($tmp = $this->getDateDivClass($field, $record[$field], $comment, $next_date)) {
+        $record[$field] = "<div class='$tmp'>".$record[$field]."</label>";
+        if($tmp != "ok")
+          return $tmp."-epreuve";
+      }
     }
   }
   function getTIVForm($id) {
@@ -210,14 +191,40 @@ $(function() {
 </form>";
     return $form;
   }
+  function getDateDivClass($label, $value, &$comment, &$next_date) {
+    $status = false;
+    $time_value = strtotime($value);
+    $comment = false;
+    $next_date = false;
+    if($label == "date_derniere_epreuve") {
+      $status = "ok";
+      $comment = "Prochaine ré-épreuve : ";
+      $next_epreuve      = strtotime("+".$this->_epreuve_month_count." months",      $time_value);
+      $next_epreuve_warn = strtotime("+".$this->_epreuve_month_count_warn." months", $time_value);
+      $next_date = date("Y-m-d", $next_epreuve);
+      if($next_epreuve < $this->_current_time) {
+        $status = "critical";
+      } else if($next_epreuve_warn < $this->_current_time) {
+        $status = "warning";
+      }
+    } else if($label == "date_dernier_tiv") {
+      $comment = "Prochaine inspection_tiv : ";
+      $status = "ok";
+      $next_tiv      = strtotime("+".$this->_tiv_month_count." months",      $time_value);
+      $next_tiv_warn = strtotime("+".$this->_tiv_month_count_warn." months", $time_value);
+      $next_date = date("Y-m-d", $next_tiv);
+      if($next_tiv < $this->_current_time) {
+        $status = "critical";
+      } else if($next_tiv_warn < $this->_current_time) {
+        $status = "warning";
+      }
+    }
+    return $status;
+  }
   function getElementLabel($label, $value) {
     $text = parent::getElementLabel($label, $value);
-    if($label == "date_derniere_epreuve") {
-      $next_epreuve = strtotime("+".$this->_epreuve_month_count." months", strtotime($value));
-      $text .= "<br/>prochaine épreuve : <div class='warning'>".date('Y-m-d', $next_epreuve).'</div>';
-    } else if($label == "date_dernier_tiv") {
-      $next_epreuve = strtotime("+".$this->_tiv_month_count." months", strtotime($value));
-      $text .= "<br/>prochain TIV : <div class='warning'>".date('Y-m-d', $next_epreuve).'</div>';
+    if($tmp = $this->getDateDivClass($label, $value, $comment, $next_date)) {
+      $text .= "<div class='$tmp'>$comment$next_date</div>";
     }
     return $text;
   }

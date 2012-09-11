@@ -118,6 +118,11 @@ div.error {
     color: #F11;
 }
 
+div.critical {
+    font-weight: bold;
+    color: #F11;
+}
+
 div.warning {
     width: auto;
     font-weight: bold;
