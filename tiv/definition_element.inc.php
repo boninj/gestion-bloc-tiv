@@ -266,11 +266,11 @@ class TIVElement {
     return str_replace("__ID__", $id, $this->_legend_label);
   }
   function getElementLabel($label, $value) {
-    $forms_definition = $this::getForms();
+    $forms_definition = $this->getForms();
     return $forms_definition[$label][2];
   }
   function getFormInput($label, $value) {
-    $forms_definition = $this::getForms();
+    $forms_definition = $this->getForms();
     $form_input = "";
     if(is_array($forms_definition[$label][1])) {
       $form_input = $this->constructSelectInput($label, $forms_definition[$label][1], $value);
@@ -285,7 +285,7 @@ class TIVElement {
     return $this->_update_label;
   }
   function retrieveValues($id) {
-    $db_query = "SELECT ".implode(",", array_keys($this::getForms()))." FROM ".$this->_name." WHERE id = $id";
+    $db_query = "SELECT ".implode(",", array_keys($this->getForms()))." FROM ".$this->_name." WHERE id = $id";
     $db_result =  $this->_db_con->query($db_query);
     return $db_result->fetch_array();
   }
