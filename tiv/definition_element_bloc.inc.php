@@ -234,8 +234,11 @@ $(function() {
   }
   function getExtraInformation($id) {
     // Recherche d'info sur les dates d'epreuves et dernière inspection
-    $db_result = $this->_db_con->query("SELECT date_derniere_epreuve,date_dernier_tiv FROM bloc WHERE id = $id");
+    $db_result = $this->_db_con->query("SELECT date_derniere_epreuve,date_dernier_tiv,etat FROM bloc WHERE id = $id");
     $result = $db_result->fetch_array();
+    if($result["etat"] != "OK") {
+      return "Bloc rebuté.";
+    }
     // Construction des timestamps pour calcul date
     $derniere_epreuve = strtotime($result[0]);
     $dernier_tiv = strtotime($result[1]);
