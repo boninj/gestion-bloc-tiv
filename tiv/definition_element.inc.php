@@ -250,8 +250,21 @@ class TIVElement {
     return "Navigation : <a href='./'><img src='images/accueil.png' /> Accueil</a> > ".
            "<a href='".$this->_parent_url."'>".$this->_parent_url_label."</a>";
   }
+  function getQuickNavigationFormInput() {
+    $input  = " > Navigation rapide<select name='id'>\n".
+              "<option></option>\n";
+    $db_result = $this->_db_con->query("SELECT id FROM ".$this->_name);
+    while($result = $db_result->fetch_array()) {
+      $input .= "<option value='".$result['id']."'>".$this->_name." ".$result['id']."</option>\n";
+    }
+    $input .= "</select></p>".
+              "</form>";
+    return $input;
+  }
   function getNavigationUrl() {
-    return "<p>".$this->getParentUrl()." > <a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a></p>\n";
+    $input_form = $this->getQuickNavigationFormInput();
+    return "<form action='edit.php' method='GET' style='display: inline!important;'>".
+           "<p>".$this->getParentUrl()." > <a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a> $input_form</p></form>\n";
   }
   function getBackUrl() {
     return $this->_back_url;
