@@ -251,19 +251,20 @@ class TIVElement {
            "<a href='".$this->_parent_url."'>".$this->_parent_url_label."</a>";
   }
   function getQuickNavigationFormInput() {
-    $input  = " > Navigation rapide<select name='id'>\n".
+    $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
               "<option></option>\n";
-    $db_result = $this->_db_con->query("SELECT id FROM ".$this->_name);
+    $db_result = $this->_db_con->query("SELECT id FROM ".$this->_name." ORDER BY id");
     while($result = $db_result->fetch_array()) {
-      $input .= "<option value='".$result['id']."'>".$this->_name." ".$result['id']."</option>\n";
+      $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
+      $input .= "<option value='".$result['id']."'$selected>".$this->_name." ".$result['id']."</option>\n";
     }
-    $input .= "</select></p>".
-              "</form>";
+    $input .= "</select></p>";
     return $input;
   }
   function getNavigationUrl() {
     $input_form = $this->getQuickNavigationFormInput();
     return "<form action='edit.php' method='GET' style='display: inline!important;'>".
+           "<input type='hidden' name='element' value='".$this->_name."'/>".
            "<p>".$this->getParentUrl()." > <a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a> $input_form</p></form>\n";
   }
   function getBackUrl() {

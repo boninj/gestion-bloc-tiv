@@ -101,6 +101,18 @@ class blocElement extends TIVElement {
     $this->_tiv_month_count = $tiv_month_count;
     $this->_tiv_month_count_warn = $tiv_month_count_warn;
   }
+  function getQuickNavigationFormInput() {
+    $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
+              "<option></option>\n";
+    $db_result = $this->_db_con->query("SELECT id,id_club FROM ".$this->_name);
+    while($result = $db_result->fetch_array()) {
+      $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
+      $input .= "<option value='".$result['id']."'$selected>".$this->_name." ".$result['id']." (n° club : ".$result['id_club'].")</option>\n";
+    }
+    $input .= "</select></p>".
+              "</form>";
+    return $input;
+  }
   function getEpreuveWarnMonthCount() {
     return $this->_epreuve_month_count - $this->_epreuve_month_count_warn;
   }

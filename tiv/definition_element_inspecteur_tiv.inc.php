@@ -35,6 +35,18 @@ class inspecteur_tivElement extends TIVElement {
     },
   }';
   }
+  function getQuickNavigationFormInput() {
+    $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
+              "<option></option>\n";
+    $db_result = $this->_db_con->query("SELECT id,nom FROM ".$this->_name);
+    while($result = $db_result->fetch_array()) {
+      $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
+      $input .= "<option value='".$result['id']."'$selected>".$result['nom']." (id inspecteur TIV n° ".$result['id'].")</option>\n";
+    }
+    $input .= "</select></p>".
+              "</form>";
+    return $input;
+  }
   function getExtraInformation($id) {
     $db_query = "SELECT inspection_tiv.id,date,id_club,decision,id_bloc ".
                 "FROM inspection_tiv,bloc ".
