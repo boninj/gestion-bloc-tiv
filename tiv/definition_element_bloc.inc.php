@@ -21,7 +21,8 @@ class blocElement extends TIVElement {
       "pression_service" => "Pression de service", "gaz" => "Gaz", "etat" => "État",
     );
     $bloc_capacite = array("", "6", "10", "12 long", "12 court", "15");
-    $bloc_pression = array("", "150", "176", "200", "232", "300");
+    $bloc_pression = array("", "200", "232", "300");
+    $bloc_pression_epreuve = array("", "300", "348", "450");
     $bloc_gaz = array("", "air", "nitrox");
     $bloc_etat = array("", "OK", "Rebuté");
     $this->_forms = array(
@@ -36,6 +37,7 @@ class blocElement extends TIVElement {
       "date_derniere_epreuve" => array("required", "date",   "Date de la dernière épreuve du bloc (tous les 5 ans)"),
       "date_dernier_tiv"      => array("required", "date",   "Date de la dernière inspection visuelle (tous les ans)"),
       "pression_service"      => array("required", $bloc_pression, "Pression de service du bloc (ex : 200 bars)"),
+      "pression_epreuve"      => array("required", $bloc_pression_epreuve, "Pression épreuve du bloc (ex : 300 bars)"),
       "gaz"                   => array("required", $bloc_gaz, "Type de gaz du bloc (air ou nitrox)"),
       "etat"                  => array("required", $bloc_etat, "État du bloc"),
     );
@@ -76,6 +78,10 @@ class blocElement extends TIVElement {
         date: true
     },
     pression_service: {
+        required: true,
+        number: true
+    },
+    pression_epreuve: {
         required: true,
         number: true
     },
