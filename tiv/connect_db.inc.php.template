@@ -8,4 +8,5 @@ if ($db_con->connect_errno) {
     exit();
 }
 
+$db_con->query("SET NAMES UTF8");
 ?>
