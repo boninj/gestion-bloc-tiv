@@ -6,23 +6,49 @@ class personneElement extends TIVElement {
     $this->_parent_url_label = "<img src='images/personne.png' /> Plongeurs/inspecteurs TIV";
     $this->_creation_label = "Création d'une nouvelle personne";
     $this->_update_label = "Mettre à jour la personne";
-    $this->_elements = array("id" => "Réf.", "nom" => "Prénom Nom", "adresse" => "Adresse de la personne",
-                             "telephone" => "Téléphone de la personne",);
+    $this->_elements = array("id" => "Réf.", "CONCAT(prenom,' ',nom)" => "Prénom Nom", "adresse" => "Adresse de la personne",
+                             "CONCAT(
+                                     CONCAT(IF(telephone_domicile,' domicile : ', ''), telephone_domicile,
+                                            IF(telephone_portable,' portable : ', ''), telephone_portable),
+                                     IF(telephone_bureau, ' bureau : ', ''), telephone_bureau)" =>
+                             "Téléphone domicile/portable/bureau",);
     $this->_forms = array(
-      "nom"       => array("required", "text", "Nom/Prénom de la personne"),
-      "adresse"   => array("required", "text", "Adresse de la personne"),
-      "telephone" => array("required", "text", "Téléphone de la personne"),
+      "groupe"                => array("required", "text", "Groupe"),
+      "licence"               => array("required", "text", "n° de licence"),
+      "prenom"                => array("required", "text", "Prénom"),
+      "nom"                   => array("required", "text", "Nom"),
+      "adresse"               => array("required", "text", "Adresse"),
+      "code_postal"           => array("required", "text", "Code postal"),
+      "ville"                 => array("required", "text", "Ville"),
+      "telephone_domicile"    => array("required", "text", "Téléphone domicile"),
+      "telephone_portable"    => array("required", "text", "Téléphone portable"),
+      "telephone_bureau"      => array("required", "text", "Téléphone bureau"),
+      "email"                 => array("required", "text", "Adresse mail"),
+      "date_naissance"        => array("required", "date", "Date de naissance"),
+      "lieu_naissance"        => array("required", "text", "Lieu de naissance"),
+      "niveau"                => array("required", "text", "Niveau plongeur"),
+      "date_obtention_niveau" => array("required", "date", "Date d'obtention du niveau"),
+      "nombre_plongee"        => array("required", "integer", "Nombre de plongée"),
+      "date_derniere_plongee" => array("required", "date", "Date dernière plongée"),
+      "type_assurance"        => array("required", "text", "Type d'assurance"),
     );
+    $this->_form_split_count = 6;
     $this->_forms_rules = '
   debug: false,
   rules: {
     nom: {
         required: true,
     },
+    prenom: {
+        required: true,
+    },
     adresse: {
         required: true,
     },
-    telephone: {
+    code_postal: {
+        required: true,
+    },
+    ville: {
         required: true,
     },
   }';
@@ -30,7 +56,7 @@ class personneElement extends TIVElement {
   function getQuickNavigationFormInput() {
     $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
               "<option></option>\n";
-    $db_result = $this->_db_con->query("SELECT id,nom FROM ".$this->_name);
+    $db_result = $this->_db_con->query("SELECT id,CONCAT(prenom,' ',nom) as nom FROM ".$this->_name);
     while($result = $db_result->fetch_array()) {
       $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
       $input .= "<option value='".$result['id']."'$selected>".$result['nom']." (id n° ".$result['id'].")</option>\n";

@@ -18,6 +18,7 @@ class TIVElement {
   var $_elements;
   var $_forms;
   var $_forms_rules;
+  var $_form_split_count;
   var $_creation_label;
   var $_edit_label;
   var $_delete_label;
@@ -39,6 +40,7 @@ class TIVElement {
     $this->_back_url         = "affichage_element.php?element=".$this->_name;
     $this->_parent_url       = "./";
     $this->_parent_url_label = "<img src='images/accueil.png' /> Accueil";
+    $this->_form_split_count = 0;
     $this->_record_count = 0;
     $this->_tr_class = array("odd", "even");
     $this->_db_con = $db_con;
@@ -311,10 +313,14 @@ class TIVElement {
     $form .= "<input type='hidden' name='element' value='".$this->_name."' />\n";
     $form .= "<table>\n";
     $form .= "  <tbody>\n";
+    $i = 0;
+    $columns = array();
     foreach(array_keys($this->getForms()) as $elt) {
       $value = $this->_values[$elt];
-      $form .= "<tr><td>".$this->getElementLabel($elt, $value)."</td><td>".$this->getFormInput($elt, $value)."</td></tr>\n";
+      $columns[$i++] .= "<td>".$this->getElementLabel($elt, $value)."</td><td>".$this->getFormInput($elt, $value)."</td>";
+      if($this->_form_split_count && $i > $this->_form_split_count) $i = 0;
     }
+    $form .= "<tr>".join("</tr>\n<tr>", $columns)."</tr>";
     $form .= "  </tbody>\n";
     $form .= "</table>\n";
     $form .= "<span style='height:0; width:0; overflow: hidden;'>\n";

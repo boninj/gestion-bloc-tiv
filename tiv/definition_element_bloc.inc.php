@@ -41,6 +41,7 @@ class blocElement extends TIVElement {
       "gaz"                   => array("required", $bloc_gaz, "Type de gaz du bloc (air ou nitrox)"),
       "etat"                  => array("required", $bloc_etat, "État du bloc"),
     );
+    $this->_form_split_count = 6;
     $this->_forms_rules = '
   debug: true,
   rules: {

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.28, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: tiv
+-- Host: localhost    Database: real_tiv
 -- ------------------------------------------------------
--- Server version	5.5.24-0ubuntu0.12.04.1
+-- Server version	5.5.28-0ubuntu0.12.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -39,7 +39,7 @@ CREATE TABLE `bloc` (
   `gaz` varchar(16) NOT NULL,
   `etat` varchar(16) NOT NULL,
   PRIMARY KEY (`id`,`numero`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `inspection_tiv` (
   PRIMARY KEY (`id`),
   KEY `id_bloc` (`id_bloc`),
   KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`)
-) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +121,7 @@ CREATE TABLE `journal_tiv` (
   `id_element` int(16) NOT NULL,
   `message` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=latin1 COMMENT='Journal de l''application';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Journal de l''application';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,11 +133,27 @@ DROP TABLE IF EXISTS `personne`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `personne` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
+  `groupe` varchar(32) NOT NULL,
+  `licence` varchar(32) NOT NULL,
   `nom` varchar(255) NOT NULL,
+  `prenom` varchar(255) NOT NULL,
   `adresse` varchar(255) NOT NULL,
-  `telephone` varchar(32) NOT NULL,
+  `code_postal` varchar(16) NOT NULL,
+  `ville` varchar(255) NOT NULL,
+  `telephone_domicile` varchar(32) NOT NULL,
+  `telephone_bureau` varchar(32) NOT NULL,
+  `telephone_portable` varchar(32) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `date_naissance` date NOT NULL,
+  `lieu_naissance` varchar(255) NOT NULL,
+  `niveau` varchar(32) NOT NULL,
+  `date_obtention_niveau` date NOT NULL,
+  `nombre_plongee` int(16) NOT NULL,
+  `date_derniere_plongee` date NOT NULL,
+  `type_assurance` varchar(32) NOT NULL,
+  `date_derniere_maj` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COMMENT='Personne du club';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Personne du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +174,7 @@ CREATE TABLE `pret` (
   `fin_reel` date NOT NULL,
   `etat` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='Liste des prêts';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des prêts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,4 +203,4 @@ CREATE TABLE `stab` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-09  9:39:27
+-- Dump completed on 2012-11-11 12:38:22
