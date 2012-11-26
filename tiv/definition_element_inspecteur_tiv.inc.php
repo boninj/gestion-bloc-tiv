@@ -9,7 +9,7 @@ class inspecteur_tivElement extends TIVElement {
     $this->_elements = array("id" => "Réf.", "nom" => "Prénom Nom", "numero_tiv" => "Numéro d'inspecteur TIV",
                              "adresse_tiv" => "Adresse du TIV", "telephone_tiv" => "Téléphone de l'inspecteur", "actif" => "Actif ?",);
     $this->_forms = array(
-      "nom"           => array("required", "text",      "Nom de l'inspecteur TIV"),
+      "nom"           => array("required", "text", "Nom de l'inspecteur TIV"),
       "numero_tiv"    => array("required", "text", "Numéro de TIV de l'inspecteur"),
       "adresse_tiv"   => array("required", "text", "Adresse du TIV"),
       "telephone_tiv" => array("required", "text", "Téléphone du TIV"),
@@ -38,7 +38,7 @@ class inspecteur_tivElement extends TIVElement {
   function getQuickNavigationFormInput() {
     $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
               "<option></option>\n";
-    $db_result = $this->_db_con->query("SELECT id,nom FROM ".$this->_name);
+    $db_result = $this->_db_con->query("SELECT id,nom FROM ".$this->_name." ORDER BY nom");
     while($result = $db_result->fetch_array()) {
       $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
       $input .= "<option value='".$result['id']."'$selected>".$result['nom']." (id inspecteur TIV n° ".$result['id'].")</option>\n";
