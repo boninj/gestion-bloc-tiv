@@ -326,6 +326,7 @@ class TIVElement {
     $columns = array();
     foreach($this->getFormsKey() as $elt) {
       $value = $this->_values[$elt];
+      if(!isset($columns[$i])) $columns[$i] = "";
       $columns[$i++] .= "<td>".$this->getElementLabel($elt, $value)."</td><td>".$this->getFormInput($elt, $value)."</td>";
       if($this->_form_split_count && $i > $this->_form_split_count) $i = 0;
     }
