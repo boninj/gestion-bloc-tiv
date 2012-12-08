@@ -63,6 +63,7 @@ class TIVElement {
   function getHeaderElements() { return array_values($this->_elements); }
   function getFormsRules() { return $this->_forms_rules; }
   function getForms() { return $this->_forms; }
+  function getFormsKey() { return array_keys($this->_forms); }
   static function constructTextInput($label, $size, $value) {
     $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"$size\" value=\"$value\"/>\n";
     return $form_input;
@@ -128,14 +129,14 @@ class TIVElement {
     return false;
   }
   function updateDBRecord($id, &$values) {
-    $db_query = "SELECT ".implode(",", array_keys($this->_forms))." FROM ".$this->_name." WHERE id=$id";
+    $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->_name." WHERE id=$id";
     $db_result = $this->_db_con->query($db_query);
     if(!$result = $db_result->fetch_array()) {
       return false;
     }
 
     $to_set = array();
-    foreach(array_keys($this->_forms) as $field) {
+    foreach($this->getFormsKey() as $field) {
       if(strcmp($values[$field], $result[$field]) != 0) {
         $to_set[]= "$field = '".$this->_db_con->escape_string($values[$field])."'";
       }
@@ -301,7 +302,7 @@ class TIVElement {
     return $this->_update_label;
   }
   function retrieveValues($id) {
-    $db_query = "SELECT ".implode(",", array_keys($this->getForms()))." FROM ".$this->_name." WHERE id = $id";
+    $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->_name." WHERE id = $id";
     $db_result =  $this->_db_con->query($db_query);
     return $db_result->fetch_array();
   }
@@ -315,7 +316,7 @@ class TIVElement {
     $form .= "  <tbody>\n";
     $i = 0;
     $columns = array();
-    foreach(array_keys($this->getForms()) as $elt) {
+    foreach($this->getFormsKey() as $elt) {
       $value = $this->_values[$elt];
       $columns[$i++] .= "<td>".$this->getElementLabel($elt, $value)."</td><td>".$this->getFormInput($elt, $value)."</td>";
       if($this->_form_split_count && $i > $this->_form_split_count) $i = 0;
