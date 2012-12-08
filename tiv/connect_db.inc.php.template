@@ -9,4 +9,5 @@ if ($db_con->connect_errno) {
 }
 
 $db_con->query("SET NAMES UTF8");
+$db_table_prefix = "";
 ?>

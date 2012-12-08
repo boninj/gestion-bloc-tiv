@@ -56,7 +56,7 @@ class personneElement extends TIVElement {
   function getQuickNavigationFormInput() {
     $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
               "<option></option>\n";
-    $db_result = $this->_db_con->query("SELECT id,CONCAT(prenom,' ',nom) as nom FROM ".$this->_name);
+    $db_result = $this->_db_con->query("SELECT id,CONCAT(prenom,' ',nom) as nom FROM ".$this->getTableName());
     while($result = $db_result->fetch_array()) {
       $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
       $input .= "<option value='".$result['id']."'$selected>".$result['nom']." (id n° ".$result['id'].")</option>\n";

@@ -56,6 +56,14 @@ class TIVElement {
     $this->_show_create_form = true;
     $this->_force_display = false;
   }
+  function getTableName() {
+    global $db_table_prefix;
+    if(isset($db_table_prefix)) {
+      return $db_table_prefix.$this->_name;
+    } else {
+      return $this->_name;
+    }
+  }
   function setDBCon($db_con) {
     $this->_db_con = $db_con;
   }
@@ -102,13 +110,13 @@ class TIVElement {
     return false;
   }
   function getDBQuery() {
-    return "SELECT ".join(",", $this->getElements())." FROM ".$this->_name;
+    return "SELECT ".join(",", $this->getElements())." FROM ".$this->getTableName();
   }
   function getDBCreateQuery($id) {
-    return "INSERT INTO ".$this->_name."(id) VALUES($id)";
+    return "INSERT INTO ".$this->getTableName()."(id) VALUES($id)";
   }
   function createDBRecord() {
-    $db_result =  $this->_db_con->query("SELECT max(id) + 1 FROM ".$this->_name);
+    $db_result =  $this->_db_con->query("SELECT max(id) + 1 FROM ".$this->getTableName());
     $tmp = $db_result->fetch_array();
     $id = $tmp[0];
     if(!$id) $id = 1; // Si table vide assignation id à 1
@@ -120,7 +128,7 @@ class TIVElement {
     return false;
   }
   function deleteDBRecord($id) {
-    $db_result =  $this->_db_con->query("DELETE FROM ".$this->_name." WHERE id = '$id'");
+    $db_result =  $this->_db_con->query("DELETE FROM ".$this->getTableName()." WHERE id = '$id'");
 
     if($db_result) {
       add_journal_entry($this->_db_con, $id, $this->_name, "Suppression");
@@ -129,7 +137,7 @@ class TIVElement {
     return false;
   }
   function updateDBRecord($id, &$values) {
-    $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->_name." WHERE id=$id";
+    $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->getTableName()." WHERE id=$id";
     $db_result = $this->_db_con->query($db_query);
     if(!$result = $db_result->fetch_array()) {
       return false;
@@ -143,7 +151,7 @@ class TIVElement {
     }
     if(count($to_set) > 0) {
       add_journal_entry($this->_db_con, $id, $this->_name, "Lancement d'une mise à jour (".implode(",", $to_set).")");
-      $result = $this->_db_con->query("UPDATE ".$this->_name." SET ".implode(",", $to_set)." WHERE id = '$id'");
+      $result = $this->_db_con->query("UPDATE ".$this->getTableName()." SET ".implode(",", $to_set)." WHERE id = '$id'");
       return 1;
     }
     return 2;
@@ -256,7 +264,7 @@ class TIVElement {
   function getQuickNavigationFormInput() {
     $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
               "<option></option>\n";
-    $db_result = $this->_db_con->query("SELECT id FROM ".$this->_name." ORDER BY id");
+    $db_result = $this->_db_con->query("SELECT id FROM ".$this->getTableName()." ORDER BY id");
     while($result = $db_result->fetch_array()) {
       $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
       $input .= "<option value='".$result['id']."'$selected>".$this->_name." ".$result['id']."</option>\n";
@@ -302,7 +310,7 @@ class TIVElement {
     return $this->_update_label;
   }
   function retrieveValues($id) {
-    $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->_name." WHERE id = $id";
+    $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->getTableName()." WHERE id = $id";
     $db_result =  $this->_db_con->query($db_query);
     return $db_result->fetch_array();
   }
