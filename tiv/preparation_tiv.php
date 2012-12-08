@@ -11,7 +11,7 @@ if(array_key_exists("id_bloc", $_POST)) {
 }
 
 $current_tiv = 0;
-$db_result = $db_con->query("SELECT id, date_derniere_epreuve FROM bloc WHERE $bloc_condition ORDER BY capacite,constructeur");
+$db_result = $db_con->query("SELECT id, date_derniere_epreuve FROM bloc WHERE $bloc_condition AND etat = 'OK' ORDER BY capacite,constructeur");
 while($bloc = $db_result->fetch_array()) {
   $tiv = $tivs[$current_tiv++%count($tivs)];
   $request = "INSERT INTO inspection_tiv (id, id_bloc, id_inspecteur_tiv, date) VALUES ".
