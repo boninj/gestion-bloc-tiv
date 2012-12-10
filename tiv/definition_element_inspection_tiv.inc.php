@@ -18,13 +18,13 @@ class inspection_tivElement extends TIVElement {
       "id_bloc"              => array("required", "text", "Numéro du bloc associé"),
       "id_inspecteur_tiv"    => array("required", "text", "Numéro de TIV de l'inspecteur"),
       "date"                 => array("required", "date", "Date de l'inspection TIV"),
-      "etat_exterieur"       => array("required", self::getPossibleStatus(), "État externe du bloc"),
+      "etat_exterieur"       => array("required", $this->getPossibleStatus(), "État externe du bloc"),
       "remarque_exterieur"   => array("required", false, "Remarque sur l'état externe du bloc"),
-      "etat_interieur"       => array("required", self::getPossibleStatus(true), "État interne du bloc"),
+      "etat_interieur"       => array("required", $this->getPossibleStatus(true), "État interne du bloc"),
       "remarque_interieur"   => array("required", false, "Remarque sur l'état interne du bloc"),
-      "etat_filetage"        => array("required", self::getPossibleStatus(), "État du filetage du bloc"),
+      "etat_filetage"        => array("required", $this->getPossibleStatus(), "État du filetage du bloc"),
       "remarque_filetage"    => array("required", false, "Remarque sur le filetage du bloc"),
-      "etat_robineterie"     => array("required", self::getPossibleStatus(), "État de la robineterie du bloc"),
+      "etat_robineterie"     => array("required", $this->getPossibleStatus(), "État de la robineterie du bloc"),
       "remarque_robineterie" => array("required", false, "Remarque sur la robineterie du bloc"),
       "decision"             => array("required", array("", "OK", "Rebuté"), "Le bloc est-il accepté ?"),
       "remarque"             => array("required", "text", "Commentaire sur l'inspection."),
@@ -150,7 +150,7 @@ class inspection_tivElement extends TIVElement {
       while($result = $db_result->fetch_array()) {
         $options[$result["id"]] = $result["nom"];
       }
-      return self::constructSelectInputLabels($label, $options, $value);
+      return $this->constructSelectInputLabels($label, $options, $value);
     } else if($label === "id_bloc") {
       $db_query = "SELECT id,id_club,constructeur,marque,capacite,numero FROM bloc";
       $db_result = $this->_db_con->query($db_query);
@@ -159,7 +159,7 @@ class inspection_tivElement extends TIVElement {
         $options[$result["id"]] = "n° ".$result["id_club"]. " (id=".$result["id"].") - ".
                                 $result["constructeur"]." (".$result["marque"].") - capacité (litres) : ".$result["capacite"]." - n° série : ".$result["numero"];
       }
-      return self::constructSelectInputLabels($label, $options, $value);
+      return $this->constructSelectInputLabels($label, $options, $value);
     }
     return parent::getFormInput($label, $value);
   }
@@ -168,7 +168,7 @@ class inspection_tivElement extends TIVElement {
     $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
     return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
   }
-  static function getPossibleStatus($grenaillage = false) {
+  function getPossibleStatus($grenaillage = false) {
     $etat_bloc = array("", "Bon", "A suivre", "Mauvais");
     if($grenaillage) $etat_bloc[] = "Grenaillage";
     return $etat_bloc;

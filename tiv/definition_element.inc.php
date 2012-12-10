@@ -98,25 +98,37 @@ class TIVElement {
   function getFormsRules() { return $this->_forms_rules; }
   function getForms() { return $this->_forms; }
   function getFormsKey() { return array_keys($this->_forms); }
-  static function constructTextInput($label, $size, $value) {
+  function constructTextInput($label, $size, $value) {
     $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"$size\" value=\"$value\"/>\n";
     return $form_input;
   }
-  static function constructSelectInputLabels($label, $labels, $value) {
+  function constructSelectInputLabels($label, $labels, $value) {
     $form_input = "<select id=\"$label\" name=\"$label\">\n";
     foreach(array_keys($labels) as $option) {
       $selected = ($option == $value ? " selected='selected'" : "");
       $form_input .= "<option value='$option'$selected>".$labels[$option]."</option>\n";
     }
     $form_input .= "</select>\n";
+    // Gestion de la dépendance entre élément du formulaire.
+    if($this->_form_dependency[$label]) {
+      $form_input .= "<script>\n$('#$label').change(function() {\n";
+      $link = array_keys($this->_form_dependency[$label])[0];
+      $linked_values = $this->_form_dependency[$label][$link];
+      foreach($linked_values as $key=>$value) {
+        $form_input .= "if($('#$label').val() == '$key') {\n";
+        $form_input .= "  $('#$link').val($value);\n";
+        $form_input .= "}\n";
+      }
+      $form_input .= "});\n</script>";
+    }
     return $form_input;
   }
-  static function constructSelectInput($label, $options, $value) {
+  function constructSelectInput($label, $options, $value) {
     $labels = array();
     foreach($options as $opt) { $labels[$opt] = $opt; }
-    return self::constructSelectInputLabels($label, $labels, $value);
+    return $this->constructSelectInputLabels($label, $labels, $value);
   }
-  static function constructDateInput($label, $value) {
+  function constructDateInput($label, $value) {
     $form_input = "
     <script>
     $(function() {
@@ -129,7 +141,7 @@ class TIVElement {
       $( \"#$label\" ).datepicker({ altFormat: 'yyyy-mm-dd' });
     });
     </script>\n";
-    $form_input .= self::constructTextInput($label, 10, $value);
+    $form_input .= $this->constructTextInput($label, 10, $value);
     return $form_input;
   }
   function updateRecord(&$record) {

@@ -76,7 +76,7 @@ class pretElement extends TIVElement {
       while($result = $db_result->fetch_array()) {
         $options[$result["id"]] = $result[1];
       }
-      return self::constructSelectInputLabels($label, $options, $value);
+      return $this->constructSelectInputLabels($label, $options, $value);
     }
     return parent::getFormInput($label, $value);
   }
