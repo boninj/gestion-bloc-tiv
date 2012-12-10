@@ -39,7 +39,7 @@ CREATE TABLE `bloc` (
   `gaz` varchar(16) NOT NULL,
   `etat` varchar(16) NOT NULL,
   PRIMARY KEY (`id`,`numero`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des blocs du club';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des blocs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -58,7 +58,7 @@ CREATE TABLE `detendeur` (
   `date_achat` date NOT NULL,
   `observation` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des detendeurs du club';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des detendeurs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +76,7 @@ CREATE TABLE `inspecteur_tiv` (
   `telephone_tiv` varchar(32) NOT NULL,
   `actif` varchar(3) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des inspecteurs TIV du club';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des inspecteurs TIV du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `inspection_tiv` (
   PRIMARY KEY (`id`),
   KEY `id_bloc` (`id_bloc`),
   KEY `id_inspecteur_tiv` (`id_inspecteur_tiv`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +121,7 @@ CREATE TABLE `journal_tiv` (
   `id_element` int(16) NOT NULL,
   `message` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Journal de l''application';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Journal de l''application';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,7 +153,7 @@ CREATE TABLE `personne` (
   `type_assurance` varchar(32) NOT NULL,
   `date_derniere_maj` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Personne du club';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Personne du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,7 +174,7 @@ CREATE TABLE `pret` (
   `fin_reel` date NOT NULL,
   `etat` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des prêts';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des prêts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -191,7 +191,7 @@ CREATE TABLE `stab` (
   `date_achat` date NOT NULL,
   `observation` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Liste des stabs du club';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des stabs du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

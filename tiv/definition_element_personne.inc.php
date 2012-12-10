@@ -6,12 +6,15 @@ class personneElement extends TIVElement {
     $this->_parent_url_label = "<img src='images/personne.png' /> Plongeurs/inspecteurs TIV";
     $this->_creation_label = "Création d'une nouvelle personne";
     $this->_update_label = "Mettre à jour la personne";
+    $this->_show_delete_form = true;
     $this->_elements = array("id" => "Réf.", "CONCAT(prenom,' ',nom)" => "Prénom Nom", "adresse" => "Adresse de la personne",
                              "CONCAT(
                                      CONCAT(IF(telephone_domicile,' domicile : ', ''), telephone_domicile,
                                             IF(telephone_portable,' portable : ', ''), telephone_portable),
                                      IF(telephone_bureau, ' bureau : ', ''), telephone_bureau)" =>
                              "Téléphone domicile/portable/bureau",);
+    $niveau = array("", "Débutant", "Niveau 1", "Niveau 2", "Niveau 2 Initiateur", "Niveau 3", "Niveau 4");
+    $assurance = array("", "1", "2", "3");
     $this->_forms = array(
       "groupe"                => array("required", "text", "Groupe"),
       "licence"               => array("required", "text", "n° de licence"),
@@ -26,11 +29,11 @@ class personneElement extends TIVElement {
       "email"                 => array("required", "text", "Adresse mail"),
       "date_naissance"        => array("required", "date", "Date de naissance"),
       "lieu_naissance"        => array("required", "text", "Lieu de naissance"),
-      "niveau"                => array("required", "text", "Niveau plongeur"),
+      "niveau"                => array("required", $niveau, "Niveau plongeur"),
       "date_obtention_niveau" => array("required", "date", "Date d'obtention du niveau"),
       "nombre_plongee"        => array("required", "integer", "Nombre de plongée"),
       "date_derniere_plongee" => array("required", "date", "Date dernière plongée"),
-      "type_assurance"        => array("required", "text", "Type d'assurance"),
+      "type_assurance"        => array("required", $assurance, "Type d'assurance"),
     );
     $this->_form_split_count = 6;
     $this->_forms_rules = '
