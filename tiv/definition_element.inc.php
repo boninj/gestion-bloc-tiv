@@ -9,28 +9,53 @@ function get_element_handler($element, &$db_con) {
 }
 
 class TIVElement {
+  // Nom de l'élément (correspond à une table)
   var $_name;
+  // tableau temporaire contenant les valeurs d'un élément en base
   var $_values;
+  // Connexion vers la base
   var $_db_con;
-  var $_update_label;
+  // Compteur du nombre d'enregistrement détectés
   var $_record_count;
+  // Tableau contenant la liste des classes a utiliser pour l'affichage des lignes d'un tableau
   var $_tr_class;
+  // Tableau associatif contenant un label pour les champs de la table associée au type
   var $_elements;
+  // Tableau associatif contenant des informations sur les champs de la table du type
   var $_forms;
+  // Chaîne javascript contenant des instructions de vérification pour un formulaire
   var $_forms_rules;
+  // Entier indiquant si on doit couper l'affichage des éléments sur plusieurs colonnes
   var $_form_split_count;
+  // Label du formulaire d'édition
+  var $_update_label;
+  // Label formulaire de création
   var $_creation_label;
+  // Label d'édition
   var $_edit_label;
+  // Label suppression
   var $_delete_label;
+  // Message affiché lors d'une suppression
   var $_delete_message;
+  // Affichage du bouton de suppression dans le formulaire
   var $_show_delete_form;
+  // Affichage en read only ?
   var $_read_only;
+  // Affichage du bouton de création au dessus de la liste ?
   var $_show_create_form;
+  // Forcer l'affichage de certains éléments caché par défaut ? (ex: blocs rebutés)
   var $_force_display;
+  // Url parente (gestion navigation)
   var $_parent_url;
+  // Label url parente
   var $_parent_url_label;
+  // Titre de la liste
   var $_url_title_label;
+  // Label d'affichage lors d'une édition
   var $_legend_label;
+  // Tableau indiquant les liens entre les élement du formulaire (pression épreuve et service par exemple)
+  var $_form_dependency;
+  // Constructeur principal
   function TIVElement($db_con = false) {
     // Init chaîne de texte
     $this->_name = str_replace("Element", "", get_class($this));
@@ -40,6 +65,7 @@ class TIVElement {
     $this->_back_url         = "affichage_element.php?element=".$this->_name;
     $this->_parent_url       = "./";
     $this->_parent_url_label = "<img src='images/accueil.png' /> Accueil";
+    $this->_form_dependency  = array();
     $this->_form_split_count = 0;
     $this->_record_count = 0;
     $this->_tr_class = array("odd", "even");
