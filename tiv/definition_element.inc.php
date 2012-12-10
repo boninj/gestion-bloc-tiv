@@ -112,8 +112,10 @@ class TIVElement {
     // Gestion de la dépendance entre élément du formulaire.
     if($this->_form_dependency[$label]) {
       $form_input .= "<script>\n$('#$label').change(function() {\n";
-      $link = array_keys($this->_form_dependency[$label])[0];
-      $linked_values = $this->_form_dependency[$label][$link];
+      $tmp = $this->_form_dependency[$label];
+      $dependency = array_keys($tmp);
+      $link = $dependency[0];
+      $linked_values = $tmp[$link];
       foreach($linked_values as $key=>$value) {
         $form_input .= "if($('#$label').val() == '$key') {\n";
         $form_input .= "  $('#$link').val($value);\n";
