@@ -109,10 +109,10 @@ class blocElement extends TIVElement {
   function getQuickNavigationFormInput() {
     $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
               "<option></option>\n";
-    $db_result = $this->_db_con->query("SELECT id,id_club FROM ".$this->getTableName());
+    $db_result = $this->_db_con->query("SELECT id,id_club FROM ".$this->getTableName()." WHERE etat = 'OK' ORDER BY id_club");
     while($result = $db_result->fetch_array()) {
       $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
-      $input .= "<option value='".$result['id']."'$selected>".$this->_name." ".$result['id']." (n° club : ".$result['id_club'].")</option>\n";
+      $input .= "<option value='".$result['id']."'$selected>n° bloc : ".$result['id_club']."</option>\n";
     }
     $input .= "</select></p>".
               "</form>";
