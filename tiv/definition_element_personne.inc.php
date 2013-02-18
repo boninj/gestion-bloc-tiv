@@ -56,6 +56,22 @@ class personneElement extends TIVElement {
     },
   }';
   }
+  function constructAdditionalFormElement($id) {
+    $db_query = "SELECT id,qualification,qualification,id_externe FROM qualification_personne WHERE id = $id";
+    $db_result = $this->_db_con->query($db_query);
+    $form = "<h3>Qualification(s) supplémentaire(s) du plongeur/plongeuse</h3>\n";
+    $qualification_count = 1;
+    $qualifications_label = array("", "Nitrox", "Nitrox confirmé", "BIO AFBS", "BIO IFBS",
+                                  "Bio 1", "Bio 2", "MFB1", "TIV", "RIFAP", "TIV");
+    while($result = $db_result->fetch_array()) {
+      $qualification = $this->constructSelectInput("qualification[".$result["id"]."]", $qualifications_label, $result["qualification"]);
+      $form .= "<p>Qualification $qualification_count : $qualification</p>\n";
+      $qualification_count++;
+    }
+    $new_qualification_select = $this->constructSelectInput("qualification[]", $qualifications_label, "-");
+    $form .= "<p>Ajout d'une nouvelle qualification : $new_qualification_select</p>\n";
+    return $form;
+  }
   function getQuickNavigationFormInput() {
     $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
               "<option></option>\n";

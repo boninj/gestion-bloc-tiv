@@ -110,7 +110,7 @@ class TIVElement {
     }
     $form_input .= "</select>\n";
     // Gestion de la dépendance entre élément du formulaire.
-    if($this->_form_dependency[$label]) {
+    if(array_key_exists($label, $this->_form_dependency)) {
       $form_input .= "<script>\n$('#$label').change(function() {\n";
       $tmp = $this->_form_dependency[$label];
       $dependency = array_keys($tmp);
@@ -354,6 +354,8 @@ class TIVElement {
     $db_result =  $this->_db_con->query($db_query);
     return $db_result->fetch_array();
   }
+  function constructAdditionalFormElement($id) {
+  }
   function constructEditForm($id, $form_name, $action = "") {
     $this->_values = $this->retrieveValues($id);
     if(!$this->_values) return false;
@@ -373,6 +375,7 @@ class TIVElement {
     $form .= "<tr>".join("</tr>\n<tr>", $columns)."</tr>";
     $form .= "  </tbody>\n";
     $form .= "</table>\n";
+    $form .= $this->constructAdditionalFormElement($id);
     $form .= "<span style='height:0; width:0; overflow: hidden;'>\n";
     $form .= "  <button type='submit' value='default action'/>\n";
     $form .= "</span>\n";

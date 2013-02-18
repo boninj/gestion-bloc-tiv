@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.28, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: real_tiv
 -- ------------------------------------------------------
--- Server version	5.5.28-0ubuntu0.12.04.2
+-- Server version	5.5.29-0ubuntu0.12.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -59,6 +59,23 @@ CREATE TABLE `detendeur` (
   `observation` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des detendeurs du club';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `document`
+--
+
+DROP TABLE IF EXISTS `document`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `document` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_element` int(11) NOT NULL,
+  `type_element` varchar(64) NOT NULL,
+  `commentaire` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,6 +195,22 @@ CREATE TABLE `pret` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `qualification_personne`
+--
+
+DROP TABLE IF EXISTS `qualification_personne`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qualification_personne` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `id_personne` int(16) NOT NULL,
+  `qualification` varchar(255) NOT NULL,
+  `id_externe` int(16) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `stab`
 --
 
@@ -203,4 +236,4 @@ CREATE TABLE `stab` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-11-11 12:38:22
+-- Dump completed on 2013-02-18 22:48:34
