@@ -45,21 +45,6 @@ class inspection_tivElement extends TIVElement {
         required: true,
         date: true,
     },
-    etat_exterieur: {
-        required: true,
-    },
-    etat_interieur: {
-        required: true,
-    },
-    etat_filetage: {
-        required: true,
-    },
-    etat_robineterie: {
-        required: true,
-    },
-    decision: {
-        required: true,
-    },
   }';
     if(!$date) {
       if(array_key_exists("date", $_GET)) {
