@@ -176,6 +176,9 @@ class TIVElement {
     }
     return false;
   }
+  function updateAdditionalDBRecord($id) {
+    return 2;
+  }
   function updateDBRecord($id, &$values) {
     $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->getTableName()." WHERE id=$id";
     $db_result = $this->_db_con->query($db_query);
@@ -183,6 +186,7 @@ class TIVElement {
       return false;
     }
 
+    $return_code = $this->updateAdditionalDBRecord($id);
     $to_set = array();
     foreach($this->getFormsKey() as $field) {
       if(strcmp($values[$field], $result[$field]) != 0) {
@@ -192,9 +196,9 @@ class TIVElement {
     if(count($to_set) > 0) {
       add_journal_entry($this->_db_con, $id, $this->_name, "Lancement d'une mise à jour (".implode(",", $to_set).")");
       $result = $this->_db_con->query("UPDATE ".$this->getTableName()." SET ".implode(",", $to_set)." WHERE id = '$id'");
-      return 1;
+      $return_code = 1;
     }
-    return 2;
+    return $return_code;
   }
   function isDisplayed(&$record) {
     return true;
