@@ -99,7 +99,7 @@ class TIVElement {
   function getForms() { return $this->_forms; }
   function getFormsKey() { return array_keys($this->_forms); }
   function constructTextInput($label, $size, $value) {
-    $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"$size\" value=\"$value\"/>\n";
+    $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"$size\" value=\"$value\" />\n";
     return $form_input;
   }
   function constructSelectInputLabels($label, $labels, $value) {
@@ -207,7 +207,7 @@ class TIVElement {
     if($this->_read_only || !$this->_show_create_form) return "";
     return '<form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
 <input type="hidden" name="element" value="'.$this->_name.'" />
-<input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="'.$this->_creation_label.'"/>
+<input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="'.$this->_creation_label.'" />
 </form>
 ';
   }
@@ -302,7 +302,7 @@ class TIVElement {
            "<img src='images/delete.png' style='vertical-align:middle;' /></a>";
   }
   function getParentUrl() {
-    return "Navigation : <a href='./'><img src='images/accueil.png' /> Accueil</a> > ".
+    return "Navigation : <a href='./'><img src='images/accueil.png' /> Accueil</a> > \n".
            "<a href='".$this->_parent_url."'>".$this->_parent_url_label."</a>";
   }
   function getQuickNavigationFormInput() {
@@ -318,9 +318,9 @@ class TIVElement {
   }
   function getNavigationUrl() {
     $input_form = $this->getQuickNavigationFormInput();
-    return "<form action='edit.php' method='GET' style='display: inline!important;'>".
-           "<input type='hidden' name='element' value='".$this->_name."'/>".
-           "<p>".$this->getParentUrl()." > <a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a> $input_form</p></form>\n";
+    return "<form action='edit.php' method='GET' style='display: inline!important;'>\n".
+           "<input type='hidden' name='element' value='".$this->_name."' />\n".
+           "<p>".$this->getParentUrl()." > \n<a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a>\n$input_for</p>\n</form>\n";
   }
   function getBackUrl() {
     return $this->_back_url;
@@ -381,7 +381,7 @@ class TIVElement {
     $form .= "</table>\n";
     $form .= $this->constructAdditionalFormElement($id);
     $form .= "<span style='height:0; width:0; overflow: hidden;'>\n";
-    $form .= "  <button type='submit' value='default action'/>\n";
+    $form .= "  <button type='submit' value='default action' />\n";
     $form .= "</span>\n";
 
     if($this->_show_delete_form) {
