@@ -14,7 +14,7 @@ class personneElement extends TIVElement {
                                      IF(telephone_bureau, ' bureau : ', ''), telephone_bureau)" =>
                              "Téléphone domicile/portable/bureau",);
     $qualifications_label = array("", "Nitrox", "Nitrox confirmé", "BIO AFBS", "BIO IFBS",
-                                         "Bio 1", "Bio 2", "MFB1", "TIV", "RIFAP", "TIV");
+                                  "Bio 1", "Bio 2", "MFB1", "TIV", "RIFAP");
     $niveau = array("", "Débutant", "Niveau 1", "Niveau 2", "Niveau 2 Initiateur", "Niveau 3", "Niveau 4");
     $assurance = array("", "1", "2", "3");
     $this->_forms = array(
