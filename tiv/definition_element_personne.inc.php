@@ -31,12 +31,12 @@ class personneElement extends TIVElement {
       "email"                 => array("required", "text", "Adresse mail"),
       "date_naissance"        => array("required", "date", "Date de naissance"),
       "lieu_naissance"        => array("required", "text", "Lieu de naissance"),
-      "niveau"                => array("required", $niveau, "Niveau plongeur"),
+      "niveau"                => array("required", "select", "Niveau plongeur", $niveau),
       "date_obtention_niveau" => array("required", "date", "Date d'obtention du niveau"),
       "nombre_plongee"        => array("required", "integer", "Nombre de plongée"),
       "date_derniere_plongee" => array("required", "date", "Date dernière plongée"),
-      "type_assurance"        => array("required", $assurance, "Type d'assurance"),
-      "qualifications"        => array("required", "tags", "Qualifications supplémentaires"),
+      "type_assurance"        => array("required", "select", "Type d'assurance", $assurance),
+      "qualifications"        => array("required", "tags", "Qualifications supplémentaires", $qualifications_label),
     );
     $this->_form_split_count = 6;
     $this->_forms_rules = '

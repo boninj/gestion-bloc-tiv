@@ -317,7 +317,7 @@ class TIVElement {
     $input_form = $this->getQuickNavigationFormInput();
     return "<form action='edit.php' method='GET' style='display: inline!important;'>\n".
            "<input type='hidden' name='element' value='".$this->_name."' />\n".
-           "<p>".$this->getParentUrl()." > \n<a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a>\n$input_for</p>\n</form>\n";
+           "<p>".$this->getParentUrl()." > \n<a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a>\n$input_form</p>\n</form>\n";
   }
   function getBackUrl() {
     return $this->_back_url;
@@ -340,11 +340,19 @@ class TIVElement {
     $form_input = "";
     if(is_array($forms_definition[$label][1])) {
       $form_input = $this->constructSelectInput($label, $forms_definition[$label][1], $value);
+    } elseif($forms_definition[$label][1] === "select") {
+      $form_input = $this->constructSelectInput($label, $forms_definition[$label][3], $value);
     } elseif($forms_definition[$label][1] === "date") {
       $form_input = $this->constructDateInput($label, $value);
     } elseif($forms_definition[$label][1] === "tags") {
-      $form_input = "\n<script>\$(function(){\$('#$label').tagsInput({'height': '18px','defaultText':'Qualif. supp.'});});</script>\n".
-                    $this->constructTextInput($label, $value, $value, "tags");
+      $tags = join(",", $forms_definition[$label][3]);
+      $form_input = "<script type=\"text/javascript\">\n".
+                    "\$(document).ready(function() { \$('#$label').magicSuggest({
+                data: '$tags',allowFreeEntries:false,maxDropHeightinteger:'100px',maxSuggestions:10
+            });
+         });
+     </script>".
+     "<input id=\"$label\" style=\"width:350px;\" type=\"text\" name='$label' value='$value' />\n";
     } else {
       $form_input = $this->constructTextInput($label, 30, $value);
     }
