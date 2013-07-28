@@ -343,7 +343,7 @@ class TIVElement {
     } elseif($forms_definition[$label][1] === "date") {
       $form_input = $this->constructDateInput($label, $value);
     } elseif($forms_definition[$label][1] === "tags") {
-      $form_input = "\n<script>\$(function(){\$('#$label').tagsInput();});</script>\n".
+      $form_input = "\n<script>\$(function(){\$('#$label').tagsInput({'height': '18px','defaultText':'Qualif. supp.'});});</script>\n".
                     $this->constructTextInput($label, $value, $value, "tags");
     } else {
       $form_input = $this->constructTextInput($label, 30, $value);
