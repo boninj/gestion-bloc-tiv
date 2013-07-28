@@ -65,7 +65,7 @@ class personneElement extends TIVElement {
                                   "Bio 1", "Bio 2", "MFB1", "TIV", "RIFAP", "TIV");
     while($result = $db_result->fetch_array()) {
       $form .= $result["qualification"]." ".
-               "<input type=\"submit\" name=\"suppression-".$result["id"]."\" value='x'/>\n";
+               "<input type=\"submit\" name=\"suppression[".$result["id"]."]\" value='x' />\n";
       $qualification_count++;
     }
     $new_qualification_select = $this->constructSelectInput("qualification", $qualifications_label, "-");
@@ -74,11 +74,19 @@ class personneElement extends TIVElement {
     return $form;
   }
   function updateAdditionalDBRecord($id) {
+    $suppression = $_POST["suppression"];
+    if(count($suppression) > 0) {
+      foreach($suppression as $key => $value) {
+        $db_query = "DELETE FROM qualification_personne WHERE id_personne = '$id' AND id = '$key'";
+        $db_result = $this->_db_con->query($db_query);
+        return 1;
+      }
+    }
     $qualification = $_POST["qualification"];
     if(strlen($qualification) == 0) {
       return 2;
     }
-    $db_query = "SELECT * FROM qualification_personne WHERE id_personne = '$i' AND qualification = '$qualification'";
+    $db_query = "SELECT * FROM qualification_personne WHERE id_personne = '$id' AND qualification = '$qualification'";
     $db_result = $this->_db_con->query($db_query);
     if($result = $db_result->fetch_array()) {
       return 2;
