@@ -169,6 +169,7 @@ CREATE TABLE `personne` (
   `date_derniere_plongee` date NOT NULL,
   `type_assurance` varchar(32) NOT NULL,
   `date_derniere_maj` date NOT NULL,
+  `qualifications` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Personne du club';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -192,22 +193,6 @@ CREATE TABLE `pret` (
   `etat` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des prêts';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `qualification_personne`
---
-
-DROP TABLE IF EXISTS `qualification_personne`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `qualification_personne` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
-  `id_personne` int(16) NOT NULL,
-  `qualification` varchar(255) NOT NULL,
-  `id_externe` int(16) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
