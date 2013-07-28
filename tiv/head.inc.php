@@ -8,11 +8,13 @@
       @import "css/table.css";
       @import "css/site.css";
       @import "css/smoothness/jquery-ui.css";
+      @import "css/jquery.tagsinput.css";
     </style>
     <script type="text/javascript" charset="utf-8" src="DataTables-1.9.2/media/js/jquery.js"></script>
     <script type="text/javascript" charset="utf-8" src="DataTables-1.9.2/media/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf-8" src="js/jquery-ui-1.8.21.custom.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="js/jquery.validate.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/jquery.tagsinput.min.js"></script>
   </head>
   <body>
 <?php

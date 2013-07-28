@@ -98,8 +98,9 @@ class TIVElement {
   function getFormsRules() { return $this->_forms_rules; }
   function getForms() { return $this->_forms; }
   function getFormsKey() { return array_keys($this->_forms); }
-  function constructTextInput($label, $size, $value) {
-    $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"$size\" value=\"$value\" />\n";
+  function constructTextInput($label, $size, $value, $class = false) {
+    $form_input = "<input type=\"text\" name=\"$label\" id=\"$label\" size=\"$size\" value=\"$value\"".
+                  ($class ? "class=\"$class\"": "")." />\n";
     return $form_input;
   }
   function constructSelectInputLabels($label, $labels, $value) {
@@ -176,9 +177,6 @@ class TIVElement {
     }
     return false;
   }
-  function updateAdditionalDBRecord($id) {
-    return 2;
-  }
   function updateDBRecord($id, &$values) {
     $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->getTableName()." WHERE id=$id";
     $db_result = $this->_db_con->query($db_query);
@@ -186,7 +184,6 @@ class TIVElement {
       return false;
     }
 
-    $return_code = $this->updateAdditionalDBRecord($id);
     $to_set = array();
     foreach($this->getFormsKey() as $field) {
       if(strcmp($values[$field], $result[$field]) != 0) {
@@ -196,9 +193,9 @@ class TIVElement {
     if(count($to_set) > 0) {
       add_journal_entry($this->_db_con, $id, $this->_name, "Lancement d'une mise à jour (".implode(",", $to_set).")");
       $result = $this->_db_con->query("UPDATE ".$this->getTableName()." SET ".implode(",", $to_set)." WHERE id = '$id'");
-      $return_code = 1;
+      return 1;
     }
-    return $return_code;
+    return 2;
   }
   function isDisplayed(&$record) {
     return true;
@@ -345,6 +342,9 @@ class TIVElement {
       $form_input = $this->constructSelectInput($label, $forms_definition[$label][1], $value);
     } elseif($forms_definition[$label][1] === "date") {
       $form_input = $this->constructDateInput($label, $value);
+    } elseif($forms_definition[$label][1] === "tags") {
+      $form_input = "\n<script>\$(function(){\$('#$label').tagsInput();});</script>\n".
+                    $this->constructTextInput($label, $value, $value, "tags");
     } else {
       $form_input = $this->constructTextInput($label, 30, $value);
     }
@@ -357,8 +357,6 @@ class TIVElement {
     $db_query = "SELECT ".implode(",", $this->getFormsKey())." FROM ".$this->getTableName()." WHERE id = $id";
     $db_result =  $this->_db_con->query($db_query);
     return $db_result->fetch_array();
-  }
-  function constructAdditionalFormElement($id) {
   }
   function constructEditForm($id, $form_name, $action = "") {
     $this->_values = $this->retrieveValues($id);
@@ -379,7 +377,6 @@ class TIVElement {
     $form .= "<tr>".join("</tr>\n<tr>", $columns)."</tr>";
     $form .= "  </tbody>\n";
     $form .= "</table>\n";
-    $form .= $this->constructAdditionalFormElement($id);
     $form .= "<span style='height:0; width:0; overflow: hidden;'>\n";
     $form .= "  <button type='submit' value='default action' />\n";
     $form .= "</span>\n";

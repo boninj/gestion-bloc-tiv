@@ -13,6 +13,8 @@ class personneElement extends TIVElement {
                                             IF(telephone_portable,' portable : ', ''), telephone_portable),
                                      IF(telephone_bureau, ' bureau : ', ''), telephone_bureau)" =>
                              "Téléphone domicile/portable/bureau",);
+    $qualifications_label = array("", "Nitrox", "Nitrox confirmé", "BIO AFBS", "BIO IFBS",
+                                         "Bio 1", "Bio 2", "MFB1", "TIV", "RIFAP", "TIV");
     $niveau = array("", "Débutant", "Niveau 1", "Niveau 2", "Niveau 2 Initiateur", "Niveau 3", "Niveau 4");
     $assurance = array("", "1", "2", "3");
     $this->_forms = array(
@@ -34,6 +36,7 @@ class personneElement extends TIVElement {
       "nombre_plongee"        => array("required", "integer", "Nombre de plongée"),
       "date_derniere_plongee" => array("required", "date", "Date dernière plongée"),
       "type_assurance"        => array("required", $assurance, "Type d'assurance"),
+      "qualifications"        => array("required", "tags", "Qualifications supplémentaires"),
     );
     $this->_form_split_count = 6;
     $this->_forms_rules = '
@@ -55,45 +58,6 @@ class personneElement extends TIVElement {
         required: true,
     },
   }';
-  }
-  function constructAdditionalFormElement($id) {
-    $db_query = "SELECT id,qualification,qualification,id_externe FROM qualification_personne WHERE id_personne = $id";
-    $db_result = $this->_db_con->query($db_query);
-    $form = "<h3>Qualification(s) supplémentaire(s) du plongeur/plongeuse</h3>\n<p>\n";
-    $qualification_count = 1;
-    $qualifications_label = array("", "Nitrox", "Nitrox confirmé", "BIO AFBS", "BIO IFBS",
-                                  "Bio 1", "Bio 2", "MFB1", "TIV", "RIFAP", "TIV");
-    while($result = $db_result->fetch_array()) {
-      $form .= $result["qualification"]." ".
-               "<input type=\"submit\" name=\"suppression[".$result["id"]."]\" value='x' />\n";
-      $qualification_count++;
-    }
-    $new_qualification_select = $this->constructSelectInput("qualification", $qualifications_label, "-");
-    $form .= "</p>\n<p>Ajout d'une nouvelle qualification :\n$new_qualification_select".
-             "<input type=\"submit\" name=\"ajout\" value='+'/></p>\n";
-    return $form;
-  }
-  function updateAdditionalDBRecord($id) {
-    $suppression = $_POST["suppression"];
-    if(count($suppression) > 0) {
-      foreach($suppression as $key => $value) {
-        $db_query = "DELETE FROM qualification_personne WHERE id_personne = '$id' AND id = '$key'";
-        $db_result = $this->_db_con->query($db_query);
-        return 1;
-      }
-    }
-    $qualification = $_POST["qualification"];
-    if(strlen($qualification) == 0) {
-      return 2;
-    }
-    $db_query = "SELECT * FROM qualification_personne WHERE id_personne = '$id' AND qualification = '$qualification'";
-    $db_result = $this->_db_con->query($db_query);
-    if($result = $db_result->fetch_array()) {
-      return 2;
-    }
-    $this->_db_con->query("INSERT INTO qualification_personne (id_personne,qualification,id_externe) ".
-                          "VALUES ('$id', '$qualification', '0')");
-    return 1;
   }
   function getQuickNavigationFormInput() {
     $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
