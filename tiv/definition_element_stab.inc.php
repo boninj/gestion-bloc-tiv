@@ -9,7 +9,7 @@ class stabElement extends TIVElement {
     $this->_update_label = "Mettre à jour la stab";
     $this->_elements =  array("id" => "Réf.", "modele" => "Modèle", "taille" => "Taille",
                               "date_achat" => "Date d'achat", "observation" => "Observations/Remarques");
-    $stab_taille = array("junior", "XS", "S", "M", "M/L", "L", "XL", "XXL");
+    $stab_taille = array("junior-XXS", "junior-XS", "XS", "S", "M", "M/L", "L", "XL", "XXL");
     $this->_forms = array(
       "modele"       => array("required", "number",      "Modèle de stab"),
       "taille"       => array("required", $stab_taille , "Taille de la stab"),
