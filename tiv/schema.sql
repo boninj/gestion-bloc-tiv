@@ -141,6 +141,19 @@ CREATE TABLE `journal_tiv` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Journal de l''application';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+-- 
+-- Structure de la table `palme`
+-- 
+
+CREATE TABLE `palme` (
+  `id` int(16) NOT NULL,
+  `modele` varchar(255) NOT NULL,
+  `taille` varchar(16) NOT NULL,
+  `date_achat` date NOT NULL,
+  `observation` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 --
 -- Table structure for table `personne`
 --
