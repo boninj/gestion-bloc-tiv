@@ -6,6 +6,7 @@ Type d'élément à déclarer :
 <option value='bloc'>Bloc</option>
 <option value='stab'>Gillet Stabilisateur</option>
 <option value='detendeur'>Détendeur</option>
+<option value='palme'>Palme</option>
 <option value='inspecteur_tiv'>Inspecteur TIV</option>
 </select>
 <input type="submit" name="submit" onclick='return(confirm("Procéder à la création ?"));' value="Procéder à la création du nouvel élément"/>
