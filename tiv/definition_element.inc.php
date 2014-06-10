@@ -205,6 +205,7 @@ class TIVElement {
     return '<form name="ajout_form" id="ajout_form" action="ajout_element.php" method="POST">
 <input type="hidden" name="element" value="'.$this->_name.'" />
 <input type="submit" name="submit" onclick=\'return(confirm("Procéder à la création ?"));\' value="'.$this->_creation_label.'" />
+<a href="extract_element.php?element='.$this->_name.'"><img src="images/extract.png" />Extract '.$this->_name.'</a>
 </form>
 ';
   }
