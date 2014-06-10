@@ -13,15 +13,6 @@ if(!isset($real_element)) $real_element = $element;
 $element_class = get_element_handler($real_element, $db_con);
 unset($real_element);
 
-/** Error reporting */
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
-date_default_timezone_set('Europe/Paris');
-
-if (PHP_SAPI == 'cli')
-        die('This example should only be run from a Web Browser');
-
 /** Include PHPExcel */
 if(!file_exists(dirname(__FILE__) . '/PHPExcel.php')) {
   $title = "Erreur d'installation : Absence de l'application PHPExcel.";
