@@ -17,12 +17,22 @@ unset($real_element);
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-date_default_timezone_set('Europe/London');
+date_default_timezone_set('Europe/Paris');
 
 if (PHP_SAPI == 'cli')
         die('This example should only be run from a Web Browser');
 
 /** Include PHPExcel */
+if(!file_exists(dirname(__FILE__) . '/PHPExcel.php')) {
+  $title = "Erreur d'installation : Absence de l'application PHPExcel.";
+  include_once('head.inc.php');
+  print "<div>Pas de generateur de fichier Excel present. ".
+        "Merci de le telecharger sur <a href='http://phpexcel.codeplex.com/'>http://phpexcel.codeplex.com/</a> et de rendre ".
+        "le fichier PHPExcel.php ainsi que le répertoire PHPExcel ".
+        "accessible dans le repertoire racine de l'application TIV.</div>";
+  include_once("foot.inc.php");
+  exit();
+}
 require_once dirname(__FILE__) . '/PHPExcel.php';
 
 
