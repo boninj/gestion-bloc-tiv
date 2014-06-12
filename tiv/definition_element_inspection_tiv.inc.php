@@ -148,11 +148,6 @@ class inspection_tivElement extends TIVElement {
     }
     return parent::getFormInput($label, $value);
   }
-  function getEditUrl($id) {
-    $element_to_manage = "id=$id&element=".$this->_name."&date=".$this->_date;
-    $delete_confirmation = "return(confirm(\"Suppression élément ".$this->_name." (id = $id) ?\"));";
-    return "<a href='edit.php?$element_to_manage'>Edit</a> / <a style='color: #F33;' onclick='$delete_confirmation' href='delete.php?$element_to_manage'>Suppr.</a>";
-  }
   function getPossibleStatus($grenaillage = false) {
     $etat_bloc = array("", "Bon", "A suivre", "Mauvais");
     if($grenaillage) $etat_bloc[] = "Grenaillage";
