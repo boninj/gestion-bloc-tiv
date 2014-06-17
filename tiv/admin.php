@@ -72,10 +72,9 @@ $(function() {
 });
 </script>
 <p>Date de préparation du TIV :<input type="text" name="date_tiv" id="admin-date-tiv-selector" size="10" value=""/>
-<input type="checkbox" name="preaffect" value="1" checked /> Pré-affecter ?
+<input type="checkbox" name="preaffect" value="1" checked /> Pré-affecter ? (cf choix des personnes ci-dessous)
 <input type="submit" name="lancer" value="Lancer la préparation" /></p>
-<p><a href="#" id="choix-tiv-toggle">Choisir les personnes faisant le TIV (cliquer pour étendre)</a></p>
-<div id="choix-tiv">
+<p>Choisir les personnes faisant le TIV (maintenir Ctrl appuyé pour faire un choix multiple) : </p>
 <select id="tivs" name="tivs[]" multiple='multiple'>
 <?php
 include_once("connect_db.inc.php");
@@ -85,5 +84,4 @@ while($result = $db_result->fetch_array()) {
 }
 ?>
 </select>
-</div>
 </form>
