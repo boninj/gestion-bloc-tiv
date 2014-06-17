@@ -99,11 +99,18 @@ class inspection_tivElement extends TIVElement {
     $this->_date = $date;
   }
   function getDBQuery() {
-    return "SELECT inspection_tiv.id, CONCAT('Réf :', bloc.id, ' / n° club : ', bloc.id_club), bloc.constructeur, bloc.marque, bloc.capacite, ".
-           "inspecteur_tiv.nom, bloc.date_derniere_epreuve, bloc.date_dernier_tiv,decision,remarque ".
-           "FROM inspection_tiv, bloc, inspecteur_tiv ".
-           "WHERE inspection_tiv.date = '".$this->_date."' AND id_bloc = bloc.id AND id_inspecteur_tiv = inspecteur_tiv.id ".
-           "ORDER BY inspecteur_tiv.nom";
+    return "
+SELECT
+  inspection_tiv.id, CONCAT('Réf :', bloc.id, ' / n° club : ', bloc.id_club), bloc.constructeur, bloc.marque,
+  bloc.capacite, inspecteur_tiv.nom, bloc.date_derniere_epreuve, bloc.date_dernier_tiv,decision,remarque 
+FROM
+  inspection_tiv
+INNER JOIN bloc           ON inspection_tiv.id_bloc = bloc.id
+LEFT  JOIN inspecteur_tiv ON inspection_tiv.id_inspecteur_tiv = inspecteur_tiv.id
+WHERE
+  inspection_tiv.date = '".$this->_date."'
+ORDER BY
+  inspecteur_tiv.nom";
   }
   function getHTMLHeaderTable() {
     $header = "    <tr>\n      <th>";

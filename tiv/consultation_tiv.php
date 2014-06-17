@@ -57,7 +57,6 @@ while($result = $db_result->fetch_array()) {
 print "Il est prévu d'inspecter $total blocs au total dont $reepreuve réépreuve(s) et ".$count_tiv." inspections TIV.";
 
 print "<h2>Liste des inspections prévues pour le $date_tiv</h2>\n";
-
 print $inspection_tiv->getHTMLTable("liste-inspection-tiv", $element);
 
 // Inspection de la séance de TIV afin de savoir s'il faut mettre à jour nos blocs.

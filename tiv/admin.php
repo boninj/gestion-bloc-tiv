@@ -72,8 +72,9 @@ $(function() {
 });
 </script>
 <p>Date de préparation du TIV :<input type="text" name="date_tiv" id="admin-date-tiv-selector" size="10" value=""/>
-<input type="submit" name="lancer" value="Procéder à la pré-affectation" /></p>
-<p><a href="#" id="choix-tiv-toggle">Choisir les personnes faisant le TIV</a></p>
+<input type="checkbox" name="preaffect" value="1" checked /> Pré-affecter ?
+<input type="submit" name="lancer" value="Lancer la préparation" /></p>
+<p><a href="#" id="choix-tiv-toggle">Choisir les personnes faisant le TIV (cliquer pour étendre)</a></p>
 <div id="choix-tiv">
 <select id="tivs" name="tivs[]" multiple='multiple'>
 <?php

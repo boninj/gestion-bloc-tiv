@@ -222,9 +222,9 @@ class PdfTIV extends FPDF {
     $bloc_condition = "1";
     if($id_bloc) $bloc_condition = "id_bloc = $id_bloc";
     $db_query = "SELECT inspection_tiv.id, id_bloc, inspecteur_tiv.numero_tiv, decision, inspecteur_tiv.nom ".
-                "FROM inspection_tiv, inspecteur_tiv ".
-                "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = inspecteur_tiv.id ".
-                "AND $bloc_condition ".
+                "FROM inspection_tiv ".
+                "LEFT JOIN inspecteur_tiv ON inspection_tiv.id_inspecteur_tiv = inspecteur_tiv.id ".
+                "WHERE inspection_tiv.date = '".$this->_date."' AND $bloc_condition ".
                 "ORDER BY inspecteur_tiv.nom DESC";
     $db_result = $this->_db_con->query($db_query);
     while($result = $db_result->fetch_array()) {
@@ -238,13 +238,13 @@ class PdfTIV extends FPDF {
       $this->SetFont('Times', 'B', 14);
       $this->Cell(45,10,utf8_decode("Vérificateur TIV n° "), 0, 0);
       $this->SetFont('Times',  '', 12);
-      $this->Cell($this->GetStringWidth($result[2]) + 2,8,$result[2], 1, 0);
+      $this->Cell(max($this->GetStringWidth($result[2]), 15) + 2,8, $result[2], 1, 0);
       $this->Cell(3);
       // Affichage numéro fiche tiv
       $this->SetFont('Times', 'B', 14);
       $this->Cell(30,10,utf8_decode("Fiche TIV n° "), 0, 0);
       $this->SetFont('Times',  '', 12);
-      $this->Cell($this->GetStringWidth($result[0]) + 2,8,$result[0], 1, 1);
+      $this->Cell(max($this->GetStringWidth($result[0]), 15) + 2,8, $result[0], 1, 1);
       foreach(array("exterieur", "interieur", "filetage", "robineterie") as $element)
         $this->addAspectInformation($result[0], $element);
       // Ligne de séparation
