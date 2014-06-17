@@ -25,7 +25,7 @@ Choisissez votre TIV :
   <option></option>
 <?php
 include_once("connect_db.inc.php");
-$db_result = $db_con->query("SELECT date, count(id_bloc) FROM inspection_tiv GROUP BY date");
+$db_result = $db_con->query("SELECT date, count(id_bloc) FROM inspection_tiv,bloc WHERE id_bloc=bloc.id GROUP BY date");
 while($result = $db_result->fetch_array()) {
   print "  <option value='".$result["date"]."'>".$result["date"]." (".$result[1]." blocs contrôlé(s))</option>\n";
 }
