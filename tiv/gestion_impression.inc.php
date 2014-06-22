@@ -262,7 +262,8 @@ class PdfTIV extends FPDF {
     }
   }
   function addBlocInformation($id_bloc) {
-    $db_query = "SELECT id, id_club, numero, capacite, date_premiere_epreuve, date_derniere_epreuve, pression_service, pression_epreuve ".
+    $db_query = "SELECT id, id_club, numero, capacite, date_premiere_epreuve, date_derniere_epreuve, ".
+                "pression_service, pression_epreuve, constructeur, marque ".
                 "FROM bloc ".
                 "WHERE id ='$id_bloc'";
     $db_result = $this->_db_con->query($db_query);
@@ -276,7 +277,14 @@ class PdfTIV extends FPDF {
     $this->Cell(50,10,utf8_decode("Numéro du constructeur"), 0, 0);
     $this->SetFont('Times',  '', 10);
     $this->Cell(25,8,$bloc["numero"], 1, 1);
-    $this->SetFont('Times',  '', 12);
+    $this->SetFont('Times', 'B', 12);
+    $this->Cell(35,8,"Constructeur :", 0, 0);
+    $this->SetFont('Times',  '', 10);
+    $this->Cell(40,8,$bloc["constructeur"], 0, 0);
+    $this->SetFont('Times', 'B', 12);
+    $this->Cell(25,8,"Marque :", 0, 0);
+    $this->SetFont('Times',  '', 10);
+    $this->Cell(25,8,$bloc["marque"], 0, 1);
     $this->Cell(25,8,utf8_decode("Capacité (litres) : ".$bloc["capacite"]." - Pression service : ".$bloc["pression_service"]." bars - ".
                                 "Pression épreuve : ".$bloc["pression_epreuve"]." bars"), 0, 1);
     $this->Cell(25,8,utf8_decode("Première épreuve : ".$bloc["date_premiere_epreuve"]), 0, 0);
