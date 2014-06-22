@@ -69,6 +69,20 @@ class inspection_tivElement extends TIVElement {
                   "<img src='images/personne.png' style='vertical-align:middle;' /> fiche de l'inspecteur TIV</a> - ".
                   "<a href='impression_fiche_tiv.php?id_bloc=".$result[0]."&date=".$this->_date."'>".
                   "<img src='images/pdf.png' style='vertical-align:middle;' /> fiche au format PDF</a>";
+    $extra_info .= "<script>
+function tiv_tout_a_ok() {
+  $('#etat_exterieur').val('Bon');
+  $('#etat_interieur').val('Bon');
+  $('#etat_filetage').val('Bon');
+  $('#etat_robineterie').val('Bon');
+  $('#decision').val('OK');
+}
+$('#switch_all_ok').live(\"click\", function() {
+  tiv_tout_a_ok();
+  return false;
+});
+</script>
+";
     return $extra_info;
   }
   function getExtraOperation($id) {
@@ -136,7 +150,7 @@ ORDER BY
   }
   function getFormInput($label, $value) {
     if($label === "id_inspecteur_tiv") {
-      $db_query = "SELECT id,nom FROM inspecteur_tiv";
+      $db_query = "SELECT id,nom FROM inspecteur_tiv ORDER BY nom";
       $db_result = $this->_db_con->query($db_query);
       $options = array("" => "");
       while($result = $db_result->fetch_array()) {
@@ -144,7 +158,7 @@ ORDER BY
       }
       return $this->constructSelectInputLabels($label, $options, $value);
     } else if($label === "id_bloc") {
-      $db_query = "SELECT id,id_club,constructeur,marque,capacite,numero FROM bloc";
+      $db_query = "SELECT id,id_club,constructeur,marque,capacite,numero FROM bloc ORDER BY id_club";
       $db_result = $this->_db_con->query($db_query);
       $options = array("" => "");
       while($result = $db_result->fetch_array()) {
@@ -152,6 +166,8 @@ ORDER BY
                                 $result["constructeur"]." (".$result["marque"].") - capacité (litres) : ".$result["capacite"]." - n° série : ".$result["numero"];
       }
       return $this->constructSelectInputLabels($label, $options, $value);
+    } else if(preg_match("/^etat_/", $label) || $label === "decision") {
+      return parent::getFormInput($label, $value)."<a id='switch_all_ok'>Passer tous les champs à OK</a>";
     }
     return parent::getFormInput($label, $value);
   }
