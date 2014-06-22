@@ -25,6 +25,8 @@ class blocElement extends TIVElement {
     $pression_definition = array("" => "", "200" => "300", "230" => "345", "232" => "348", "300" => "450");
     $bloc_pression         = array_keys  ($pression_definition);
     $bloc_pression_epreuve = array_values($pression_definition);
+    # Certains blocs à 232 ont des pressions de réépreuve à 372 ...
+    $bloc_pression_epreuve []= "372"; 
     $this->_form_dependency ["pression_service"] = array("pression_epreuve" => $pression_definition);
 
     $bloc_gaz = array("", "air", "nitrox");
