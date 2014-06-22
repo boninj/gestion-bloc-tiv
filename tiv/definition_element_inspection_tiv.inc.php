@@ -85,6 +85,13 @@ $('#switch_all_ok').live(\"click\", function() {
 ";
     return $extra_info;
   }
+  function getNavigationUrl() {
+    $input_form = $this->getQuickNavigationFormInput();
+    return "<form action='edit.php' method='GET' style='display: inline!important;'>\n".
+           "<input type='hidden' name='element' value='".$this->_name."' />\n".
+           "<input type='hidden' name='date' value='".$this->_date."' />\n".
+           "<p>".$this->getParentUrl()." > \n<a href='".$this->getBackUrl()."'>".$this->getUrlTitle()."</a>\n$input_form</p>\n</form>\n";
+  }
   function getExtraOperation($id) {
     $db_query = "SELECT date_dernier_tiv ".
                 "FROM bloc,inspection_tiv WHERE inspection_tiv.id = $id AND id_bloc = bloc.id ".
