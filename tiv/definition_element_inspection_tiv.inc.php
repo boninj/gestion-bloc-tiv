@@ -85,6 +85,17 @@ $('#switch_all_ok').live(\"click\", function() {
 ";
     return $extra_info;
   }
+  function getQuickNavigationFormInput() {
+    $input  = " > Navigation rapide<select name='id' onchange='this.form.submit()'>\n".
+              "<option></option>\n";
+    $db_result = $this->_db_con->query("SELECT id FROM ".$this->getTableName()." WHERE date = '".$this->_date."' ORDER BY id");
+    while($result = $db_result->fetch_array()) {
+      $selected = ($result['id'] == $_GET['id'] ? " selected" : "");
+      $input .= "<option value='".$result['id']."'$selected>".$this->_name." ".$result['id']."</option>\n";
+    }
+    $input .= "</select></p>";
+    return $input;
+  }
   function getNavigationUrl() {
     $input_form = $this->getQuickNavigationFormInput();
     return "<form action='edit.php' method='GET' style='display: inline!important;'>\n".
