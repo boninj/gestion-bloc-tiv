@@ -10,6 +10,7 @@ class PdfTIV extends FPDI {
   var $_tiv_template;
   var $_bloc_definition;
   var $_bloc_info_to_retrieve;
+  var $_bloc_header_width;
   function PdfTIV($date, $db_con) {
     // Import variable globale
     global $nom_club;
@@ -23,10 +24,10 @@ class PdfTIV extends FPDI {
     $this->_tiv_template = array();
     $this->_tiv_template["file"] = "template-pdf/entete-inspection-TIV-idf.pdf";
     $this->_tiv_template["pied"] = "template-pdf/pied-page-TIV-idf.pdf";
-    $this->_tiv_template["first_page_tiv_count"]   = 6;
+    $this->_tiv_template["first_page_tiv_count"]   =  6;
     $this->_tiv_template["max_tiv_count_per_page"] = 13;
-    $this->_tiv_template["interligne"]             = 7;
-    $this->_tiv_template["start_info_bloc"]        = array(5, 102);
+    $this->_tiv_template["interligne"]             =  7;
+    $this->_tiv_template["start_info_bloc"]        = array(5, 100.1);
     // Informations globales sur la seance TIV
     $this->_tiv_template["champ"]["nom_club"]        = array(187, 36.5, 98, $nom_club);
     $this->_tiv_template["champ"]["numero_club"]     = array(187, 43.5, 98, $numero_club);
@@ -39,12 +40,12 @@ class PdfTIV extends FPDI {
     $this->_tiv_template["result"]["telephone_tiv"]  = array(60,  71.5, 72);
     // Requetes specifiques
     $bloc_count_query = "SELECT COUNT(inspection_tiv.id_bloc) FROM inspection_tiv WHERE id_inspecteur_tiv = ID_INSPECTEUR AND decision = 'OK' AND date = '$date'";
-    $this->_tiv_template["query"]["bloc_count"]      = array(202, 81.5, 15, $bloc_count_query);
+    $this->_tiv_template["query"]["bloc_count"]      = array(202, 79, 15, $bloc_count_query);
     // Information a afficher dans le tableau recapitulatif
     $this->_bloc_definition = array(
       # Entete => taille, champ_base
       "Fabricant"             => array(27, "constructeur"),
-      "Marque"                => array(37, "marque"),
+      "Marque"                => array(27, "marque"),
       "Numéro de série Identification" => array(27, "numero"),
       "Date de 1ière requalification"  => array(24, "date_premiere_epreuve"),
       "Date dernière requalification"  => array(24, "date_derniere_epreuve"),
@@ -58,7 +59,7 @@ class PdfTIV extends FPDI {
         ),
       ),
       "Décision du TIV"       => array(22, "decision"),
-      "Commentaires"          => array(27, "remarque")
+      "Commentaires"          => array(35, "remarque")
     );
     parent::__construct();
     self::AliasNbPages();
@@ -181,9 +182,13 @@ class PdfTIV extends FPDI {
     $this->SetFont('Times', 'U', 10);
     $this->SetFillColor(255,255,255);
     $this->SetX($this->_tiv_template["start_info_bloc"][0]);
-    $y = $this->GetY();
-    $x = $this->GetX();
+    // Stockage emplacement cadre
+    $start_x = $x = $this->GetX();
+    $start_y = $y = $this->GetY();
+    $this->_bloc_header_width = 0;
+    // Remplissage structure utilise pour l'affichage
     $this->_bloc_info_to_retrieve = array();
+    // Lancement de l'affichage de l'entete
     foreach($this->_bloc_definition as $key => $value) {
       $interligne = $this->_tiv_template["interligne"] * 2;
       // Reduction taille hauteur si trop large ou si sous categorie
@@ -208,9 +213,16 @@ class PdfTIV extends FPDI {
         // Preparation structure renvoyant les champs a afficher pour chaque bloc
         $this->_bloc_info_to_retrieve[$value[1]] = $value[0];
       }
+      // Stockage pour affichage du cadre et repositionnement de la prochaine cellule
       $x += $value[0];
+      $this->_bloc_header_width += $value[0];
       $this->SetXY($x, $y);
     }
+    // Ajout d'un cadre
+    $this->SetLineWidth(1);
+    $this->Rect($start_x, $start_y, $this->_bloc_header_width, $interligne);
+    $this->SetLineWidth(0.2);
+    // Changement ligne
     $this->Ln();
   }
   function addInspecteurFileBlocsInformations($id_inspecteur) {
@@ -225,12 +237,15 @@ class PdfTIV extends FPDI {
     $page_line_count = 1;
     // Nombre de ligne pour la premiere page
     $max_line_count  = $this->_tiv_template["first_page_tiv_count"];
+    // Lancement affichage
     while($result = $db_result->fetch_array()) {
       $this->SetX($this->_tiv_template["start_info_bloc"][0]);
       foreach(array_keys($to_retrieve) as $elt) {
         $this->Cell($to_retrieve[$elt], 10, utf8_decode($result[$elt]), 1, 0, 'C');
       }
+      // Changement de ligne
       $this->Ln();
+      // Gestion regroupement des lignes
       if($page_line_count++ >= $max_line_count) {
         $page_line_count = 0;
         $max_line_count = $this->_tiv_template["max_tiv_count_per_page"];
