@@ -16,6 +16,7 @@ class PdfTIV extends FPDI {
     global $nom_club;
     global $adresse_club;
     global $numero_club;
+    global $GET;
     // Init classe
     $this->_debug = 0;
     $this->_date = $date;
@@ -26,6 +27,7 @@ class PdfTIV extends FPDI {
     $this->_tiv_template["pied"] = "template-pdf/pied-page-TIV-idf.pdf";
     $this->_tiv_template["first_page_tiv_count"]   =  6;
     $this->_tiv_template["always_show_tiv_info"]   = false;
+    if(array_key_exists("always_show_tiv_info", $_GET)) $this->_tiv_template["always_show_tiv_info"] = true;
     $this->_tiv_template["max_tiv_count_per_page"] = 13;
     $this->_tiv_template["interligne"]             =  7;
     $this->_tiv_template["interligne_bloc"]        =  10;
@@ -268,6 +270,7 @@ class PdfTIV extends FPDI {
         // Rajout de l'entete si on l'affiche tout le temps
         if($this->_tiv_template["always_show_tiv_info"]) {
           $this->addInspectionHeader($bloc_result);
+          $this->addInspecteurFileBlocsInformationsTableHeader();
         } else {
           $max_line_count = $this->_tiv_template["max_tiv_count_per_page"];
           $this->AddPage('L');
