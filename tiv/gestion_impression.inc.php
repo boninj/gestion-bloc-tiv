@@ -44,9 +44,9 @@ class PdfTIV extends FPDI {
     // Information a afficher dans le tableau recapitulatif
     $this->_bloc_definition = array(
       # Entete => taille, champ_base
-      "Fabricant"             => array(27, "constructeur"),
-      "Marque"                => array(27, "marque"),
-      "Numéro de série Identification" => array(27, "numero"),
+      "Fabricant"             => array(24, "constructeur"),
+      "Marque"                => array(32, "marque"),
+      "Numéro série Identification" => array(24, "numero"),
       "Date de 1ière requalification"  => array(24, "date_premiere_epreuve"),
       "Date dernière requalification"  => array(24, "date_derniere_epreuve"),
       "Date visite précédente"         => array(24, "date"),
@@ -59,7 +59,7 @@ class PdfTIV extends FPDI {
         ),
       ),
       "Décision du TIV"       => array(22, "decision"),
-      "Commentaires"          => array(35, "remarque")
+      "Commentaires"          => array(36, "remarque")
     );
     parent::__construct();
     self::AliasNbPages();
