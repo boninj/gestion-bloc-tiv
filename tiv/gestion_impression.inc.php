@@ -27,6 +27,7 @@ class PdfTIV extends FPDI {
     $this->_tiv_template["first_page_tiv_count"]   =  6;
     $this->_tiv_template["max_tiv_count_per_page"] = 13;
     $this->_tiv_template["interligne"]             =  7;
+    $this->_tiv_template["interligne_bloc"]        =  10;
     $this->_tiv_template["start_info_bloc"]        = array(5, 100.1);
     // Informations globales sur la seance TIV
     $this->_tiv_template["champ"]["nom_club"]        = array(187, 36.5, 98, $nom_club);
@@ -49,17 +50,17 @@ class PdfTIV extends FPDI {
       "Numéro série Identification" => array(24, "numero"),
       "Date de 1ière requalification"  => array(24, "date_premiere_epreuve"),
       "Date dernière requalification"  => array(24, "date_derniere_epreuve"),
-      "Date visite précédente"         => array(24, "date"),
+      "Date visite précédente"         => array(22, "date"),
       "Critères notables lors de la visite" => array(
-        70, array(
-          "Extérieur" => array(17, "etat_exterieur"),
-          "Intérieur" => array(19, "etat_interieur"),
-          "Filetage"  => array(17, "etat_filetage"),
-          "Robinet"   => array(17, "etat_robineterie"),
+        64, array(
+          "Extérieur" => array(16, "etat_exterieur"),
+          "Intérieur" => array(16, "etat_interieur"),
+          "Filetage"  => array(16, "etat_filetage"),
+          "Robinet"   => array(16, "etat_robineterie"),
         ),
       ),
-      "Décision du TIV"       => array(22, "decision"),
-      "Commentaires"          => array(36, "remarque")
+      "Décision du TIV"       => array(24, "decision"),
+      "Commentaires"          => array(42, "remarque")
     );
     parent::__construct();
     self::AliasNbPages();
@@ -196,7 +197,7 @@ class PdfTIV extends FPDI {
         $interligne = $this->_tiv_template["interligne"];
       }
       $this->MultiCell($value[0], $interligne, utf8_decode($key), 1, 'C');
-      // Cas d'une sous categorie => on rappelle avec le sous tableau
+      // Cas d'une sous categorie => on parcourt le sous tableau
       if(is_array($value[1])) {
         $x_sub = $x;
         $y_sub = $this->GetY();
@@ -227,6 +228,8 @@ class PdfTIV extends FPDI {
   }
   function addInspecteurFileBlocsInformations($id_inspecteur) {
     $this->addInspecteurFileBlocsInformationsTableHeader();
+    $interligne = $this->_tiv_template["interligne_bloc"];
+    $start_y = $this->GetY();
     $this->SetFont('Times', '', 10);
     $to_retrieve = $this->_bloc_info_to_retrieve;
     $db_query = "SELECT ".implode(",", array_keys($to_retrieve))." ".
@@ -237,23 +240,36 @@ class PdfTIV extends FPDI {
     $page_line_count = 1;
     // Nombre de ligne pour la premiere page
     $max_line_count  = $this->_tiv_template["first_page_tiv_count"];
+    $height = 0;
     // Lancement affichage
     while($result = $db_result->fetch_array()) {
       $this->SetX($this->_tiv_template["start_info_bloc"][0]);
+      $height += $interligne;
       foreach(array_keys($to_retrieve) as $elt) {
-        $this->Cell($to_retrieve[$elt], 10, utf8_decode($result[$elt]), 1, 0, 'C');
+        $this->Cell($to_retrieve[$elt], $interligne, utf8_decode($result[$elt]), 1, 0, 'C');
       }
       // Changement de ligne
       $this->Ln();
       // Gestion regroupement des lignes
       if($page_line_count++ >= $max_line_count) {
+        // Ajout du cadre courant
+        $this->SetLineWidth(1);
+        $this->Rect($this->_tiv_template["start_info_bloc"][0], $start_y, $this->_bloc_header_width, $height);
+        $this->SetLineWidth(0.2);
+        // Reinit variable affichage
+        $height = 0;
         $page_line_count = 0;
         $max_line_count = $this->_tiv_template["max_tiv_count_per_page"];
         $this->AddPage('L');
         $this->addInspecteurFileBlocsInformationsTableHeader();
+        $start_y = $this->GetY();
         $this->SetFont('Times', '', 10);
       }
     }
+    // Ajout d'un cadre
+    $this->SetLineWidth(1);
+    $this->Rect($this->_tiv_template["start_info_bloc"][0], $start_y, $this->_bloc_header_width, $height);
+    $this->SetLineWidth(0.2);
   }
   function addBlocAlert($id_bloc) {
     $this->SetFont('Times', 'B', 14);
