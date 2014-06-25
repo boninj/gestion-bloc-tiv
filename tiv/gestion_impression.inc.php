@@ -2,17 +2,65 @@
 require_once("definition_element.inc.php");
 require_once("connect_db.inc.php");
 require_once('fpdf17/fpdf.php');
+require_once('fpdi/fpdi.php');
 
-class PdfTIV extends FPDF {
+class PdfTIV extends FPDI {
   var $_date;
   var $_db_con;
+  var $_tiv_template;
+  var $_bloc_definition;
+  var $_bloc_info_to_retrieve;
   function PdfTIV($date, $db_con) {
+    // Import variable globale
+    global $nom_club;
+    global $adresse_club;
+    global $numero_club;
+    // Init classe
+    $this->_debug = 0;
     $this->_date = $date;
     $this->_db_con = $db_con;
+    // Information template fiche TIV
+    $this->_tiv_template = array();
+    $this->_tiv_template["file"] = "template-pdf/entete-inspection-TIV-idf.pdf";
+    $this->_tiv_template["interligne"] = 7;
+    $this->_tiv_template["start_info_bloc"] = array(5, 102);
+    // Informations globales sur la seance TIV
+    $this->_tiv_template["champ"]["nom_club"]        = array(187, 36.5, 98, $nom_club);
+    $this->_tiv_template["champ"]["numero_club"]     = array(187, 43.5, 98, $numero_club);
+    $this->_tiv_template["champ"]["adresse_club"]    = array(187, 50.5, 98, $adresse_club);
+    $this->_tiv_template["champ"]["date"]            = array(90,  43.5, 42, $date);
+    // Information relative à l'inspecteur TIV
+    $this->_tiv_template["result"]["numero_tiv"]     = array(100, 36.5, 32); # x, y, largeur
+    $this->_tiv_template["result"]["nom"]            = array(60,  50.5, 72);
+    $this->_tiv_template["result"]["adresse_tiv"]    = array(60,  57.5, 72);
+    $this->_tiv_template["result"]["telephone_tiv"]  = array(60,  71.5, 72);
+    // Requetes specifiques
+    $bloc_count_query = "SELECT COUNT(inspection_tiv.id_bloc) FROM inspection_tiv WHERE id_inspecteur_tiv = ID_INSPECTEUR AND decision = 'OK' AND date = '$date'";
+    $this->_tiv_template["query"]["bloc_count"]      = array(202, 81.5, 15, $bloc_count_query);
+    // Information a afficher dans le tableau recapitulatif
+    $this->_bloc_definition = array(
+      # Entete => taille, champ_base
+      "Fabricant"             => array(27, "constructeur"),
+      "Marque"                => array(37, "marque"),
+      "Numéro de série Identification" => array(27, "numero"),
+      "Date de 1ière requalification"  => array(24, "date_premiere_epreuve"),
+      "Date dernière requalification"  => array(24, "date_derniere_epreuve"),
+      "Date visite précédente"         => array(24, "date"),
+      "Critères notables lors de la visite" => array(
+        70, array(
+          "Extérieur" => array(17, "etat_exterieur"),
+          "Intérieur" => array(19, "etat_interieur"),
+          "Filetage"  => array(17, "etat_filetage"),
+          "Robinet"   => array(17, "etat_robineterie"),
+        ),
+      ),
+      "Décision du TIV"       => array(22, "decision"),
+      "Commentaires"          => array(27, "remarque")
+    );
     parent::__construct();
     self::AliasNbPages();
   }
-  function Header() {
+  function ClubHeader() {
     global $logo_club;
     global $nom_club;
     $this->Image($logo_club, 10, 6, 10);
@@ -21,14 +69,16 @@ class PdfTIV extends FPDF {
     $this->Cell(0, 8, utf8_decode('Fiche TIV du '.$this->_date." - club $nom_club"), 'B', 0, 'C');
     $this->Ln(11);
   }
-  function Footer() {
+  function ClubFooter() {
     global $nom_club;
     $this->SetY(-15);
     $this->SetFont('Arial','I',8);
     $this->Cell(0,10,utf8_decode('Inspection TIV du '.$this->_date." - Club $nom_club - Page ".$this->PageNo().'/{nb}'),0,0,'C');
   }
   function addInspecteurResume() {
+    return;
     $this->AddPage();
+    $this->ClubHeader();
     $this->SetFont('Times','B',16);
 
     $this->Cell(0, 10, utf8_decode("Informations relatives aux inspecteurs TIV du ".$this->_date.""),0,1);
@@ -84,109 +134,94 @@ class PdfTIV extends FPDF {
     $this->addInspectionResume();
   }
   function addInspecteurFile() {
-    global $nom_club;
-    global $adresse_club;
-    global $numero_club;
     $db_query = "SELECT DISTINCT id_inspecteur_tiv, inspecteur_tiv.nom, numero_tiv, adresse_tiv, telephone_tiv, id_inspecteur_tiv ".
                 "FROM inspection_tiv, inspecteur_tiv ".
                 "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = inspecteur_tiv.id ".
                 "GROUP BY inspection_tiv.id_inspecteur_tiv ORDER BY inspecteur_tiv.nom";
     $db_result = $this->_db_con->query($db_query);
+    // Charge template fiche inspection TIV
+    $pageCount = $this->setSourceFile($this->_tiv_template["file"]);
+    if($pageCount == 0) {
+      print "Erreur d'ouverture du PDF ".$this->_tiv_template["file"];
+      exit();
+    }
+    $template = $this->importPage(1, '/MediaBox');
+    $this->SetFont('Times', '', 13);
     while($result = $db_result->fetch_array()) {
       $this->addPage('L');
-      $this->SetFont('Times', '', 12);
-      $this->Cell(0, 10, utf8_decode("FÉDÉRATION FRANÇAISE D'ÉTUDES ET DE SPORTS SOUS-MARINS"), 0, 0,'C');
-      $this->SetFont('Times', '', 10);
-      $this->SetX(10);
-      $this->MultiCell(20,4, utf8_decode("À retourner à la C.T.R."));
-      $this->Ln(5);
-      $this->Cell(110);
-      $this->SetFont('Times', '', 12);
-      $this->Cell(48, 5, utf8_decode("Fiche de contrôle visuel"), 1, 0, 'C');
-      $this->Ln(12);
-      // Cartouche entête gauche
-      $y = $this->GetY();
-      $this->Cell(48, 5, utf8_decode("Date de la visite :"));
-      $this->Cell(48, 5, date('d/m/Y', strtotime($this->_date)), 'B', 1, 'R');
-      $this->Ln(3);
-      $this->Cell(48, 5, utf8_decode("Nom du visiteur :"));
-      $this->Cell(48, 5, utf8_decode($result[1]), 'B', 1, 'R');
-      $this->Ln(3);
-      $this->Cell(48, 5, utf8_decode("Numéro du T.I.V. :"));
-      $this->Cell(48, 5, utf8_decode($result[2]), 'B', 1, 'R');
-      $this->Ln(3);
-      $this->Cell(48, 5, utf8_decode("Adresse du T.I.V. :"));
-      $this->MultiCell(48, 5, utf8_decode($result[3]), 'B', 'R');
-      $this->Ln(3);
-      $this->Cell(48, 5, utf8_decode("Tél. du T.I.V. :"));
-      $this->Cell(48, 5, utf8_decode($result[4]), 'B', 1, 'R');
-      // Cartouche entête droit
-      $this->Line(120, 45, 120, 90);
-      $this->SetXY(130, $y);
-      $this->Cell(34, 5, utf8_decode("Nom du club :"));
-      $this->Cell(28, 5, utf8_decode($nom_club), 'B', 0, 'C');
-      $this->Cell(5);
-      $this->Cell(28, 5, utf8_decode("Numéro :"));
-      $this->Cell(28, 5, utf8_decode($numero_club), 'B', 1, 'C');
-      $this->Ln(2); $this->SetX(130);
-      $this->Cell(34, 5, utf8_decode("Adresse du club :"));
-      $this->MultiCell(89, 5, utf8_decode($adresse_club), 'B', 'C');
-      $this->Ln(2); $this->SetX(127);
-      $y = $this->GetY();
-      $this->Cell(128, 24, "", 1);
-      $this->SetXY(130, $y + 3);
-      $this->Cell(58, 5, utf8_decode("Nombre de bouteille acceptées :"));
-      $db_query = "SELECT COUNT(inspection_tiv.id_bloc) ".
-                  "FROM inspection_tiv ".
-                  "WHERE id_inspecteur_tiv = ".$result[5]." AND decision = 'OK' AND date = '".$this->_date."'";
-      $db_count = $this->_db_con->query($db_query);
-      $count = $db_count->fetch_array();
-      $this->Cell(10, 5, utf8_decode($count[0]), 'B', 1, 'R');
-      $this->Ln(3); $this->SetX(130);
-      $this->Cell(58, 5, utf8_decode("Signature du T.I.V. :"));
-      // Affichage du tableau récapitulant les bouteilles inspectées par le TIV
-      $this->Ln(17);
+      $this->useTemplate($template);
+      foreach($this->_tiv_template["champ"] as $key => $value) {
+        $this->SetXY($value[0], $value[1]);
+        $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($value[3]), $this->_debug, 'R');
+      }
+      foreach($this->_tiv_template["result"] as $key => $value) {
+        $this->SetXY($value[0], $value[1]);
+        if($key === "adresse_tiv") {
+          $result[$key] = str_replace('\n', "\n", preg_replace("/\s([0-9]{5})/", " \\n\\1", $result[$key]));
+        }
+        $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($result[$key]), $this->_debug, 'R');
+      }
+      foreach($this->_tiv_template["query"] as $key => $value) {
+        $db_query = preg_replace("/ID_INSPECTEUR/", $result["id_inspecteur_tiv"], $value[3]);
+        $db_count = $this->_db_con->query($db_query);
+        $count = $db_count->fetch_array();
+        $this->SetXY($value[0], $value[1]);
+        $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($count[0]), $this->_debug, 'R');
+      }
+      $this->SetY($this->_tiv_template["start_info_bloc"][1]);
       $this->addInspecteurFileBlocsInformations($result[0]);
     }
   }
   function addInspecteurFileBlocsInformationsTableHeader() {
-    $bloc_header = array("Fabricant" => 27, "Marque" => 37, "Numéro bouteille" => 27,
-      "Date première épreuve" => 24, "Date dernière épreuve" => 24, "Date dernière visite" => 24,
-      "Observations lors de la visite" => 53, "Décision" => 27, "Commentaires" => 27);
-    $sub_header = array("Observations lors de la visite" => array("Extérieur" => 17, "Intérieur" => 19, "Filetage" => 17));
-    $this->SetFont('Times', '', 10);
-    $this->SetFillColor(192,192,192);
+    // Init font + position
+    $this->SetFont('Times', 'U', 10);
+    $this->SetFillColor(255,255,255);
+    $this->SetX($this->_tiv_template["start_info_bloc"][0]);
     $y = $this->GetY();
-    foreach(array_keys($bloc_header) as $row) {
-      $size = 12;
-      if($this->GetStringWidth($row) > 29) $size /= 2;
-      $x = $this->GetX();
-      $this->MultiCell($bloc_header[$row], $size, utf8_decode($row), 1, 'C', 1);
-      if(array_key_exists($row, $sub_header)) {
-        $this->SetY($y + $size);
-        $this->SetX($x);
-        foreach(array_keys($sub_header[$row]) as $sub_row) {
-          $this->Cell($sub_header[$row][$sub_row], $size, utf8_decode($sub_row), 1, 0, 'C', 1);
-        }
+    $x = $this->GetX();
+    $this->_bloc_info_to_retrieve = array();
+    foreach($this->_bloc_definition as $key => $value) {
+      $interligne = $this->_tiv_template["interligne"] * 2;
+      // Reduction taille hauteur si trop large ou si sous categorie
+      if($this->GetStringWidth($key) > $value[0] || is_array($value[1])) {
+        $interligne = $this->_tiv_template["interligne"];
       }
-      $this->SetY($y);
-      $this->SetX($x + $bloc_header[$row]);
+      $this->MultiCell($value[0], $interligne, utf8_decode($key), 1, 'C');
+      // Cas d'une sous categorie => on rappelle avec le sous tableau
+      if(is_array($value[1])) {
+        $x_sub = $x;
+        $y_sub = $this->GetY();
+        $this->SetXY($x, $y_sub);
+        foreach($value[1] as $subkey => $subvalue) {
+          $this->MultiCell($subvalue[0], $interligne, utf8_decode($subkey), 1, 'C');
+          $x_sub += $subvalue[0];
+          $this->SetXY($x_sub, $y_sub);
+          // Affichage
+          $this->_bloc_info_to_retrieve[$subvalue[1]] = $subvalue[0];
+        }
+        $this->SetY($this->GetY() - $interligne);
+      } else {
+        // Preparation structure renvoyant les champs a afficher pour chaque bloc
+        $this->_bloc_info_to_retrieve[$value[1]] = $value[0];
+      }
+      $x += $value[0];
+      $this->SetXY($x, $y);
     }
     $this->Ln();
   }
   function addInspecteurFileBlocsInformations($id_inspecteur) {
     $this->addInspecteurFileBlocsInformationsTableHeader();
-    $to_retrieve = array("constructeur" => 27, "marque" => 37, "numero" => 27, "date_premiere_epreuve" => 24,
-                         "date_derniere_epreuve" => 24, "date" => 24, "etat_exterieur" => 17, "etat_interieur" => 19,
-                         "etat_filetage" => 17, "decision" => 27, "remarque" => 27);
+    $this->SetFont('Times', '', 10);
+    $to_retrieve = $this->_bloc_info_to_retrieve;
     $db_query = "SELECT ".implode(",", array_keys($to_retrieve))." ".
                 "FROM inspection_tiv, bloc ".
                 "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = $id_inspecteur AND bloc.id = id_bloc";
     $db_result = $this->_db_con->query($db_query);
     // Compteur pour savoir le nombre de ligne que nous pouvons créer
-    $max_line_count = 8; // 8 lignes pour la première page puis 14 sur une page vierge
+    $max_line_count = 7; // 8 lignes pour la première page puis 14 sur une page vierge
     $page_line_count = 1;
     while($result = $db_result->fetch_array()) {
+      $this->SetX($this->_tiv_template["start_info_bloc"][0]);
       foreach(array_keys($to_retrieve) as $elt) {
         $this->Cell($to_retrieve[$elt], 10, utf8_decode($result[$elt]), 1, 0, 'C');
       }
@@ -196,6 +231,7 @@ class PdfTIV extends FPDF {
         $max_line_count = 14;
         $this->AddPage('L');
         $this->addInspecteurFileBlocsInformationsTableHeader();
+        $this->SetFont('Times', '', 10);
       }
     }
   }
@@ -230,6 +266,7 @@ class PdfTIV extends FPDF {
     while($result = $db_result->fetch_array()) {
       // Affichage de l'entête de la fiche (capacité du bloc, date des réépreuves etc.)
       $this->AddPage();
+      $this->ClubHeader();
       $this->addBlocInformation($result[1]);
       // Ligne de séparation
       $this->Cell(0,5,"", 'B', 1, 1);
