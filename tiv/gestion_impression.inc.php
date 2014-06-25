@@ -22,8 +22,11 @@ class PdfTIV extends FPDI {
     // Information template fiche TIV
     $this->_tiv_template = array();
     $this->_tiv_template["file"] = "template-pdf/entete-inspection-TIV-idf.pdf";
-    $this->_tiv_template["interligne"] = 7;
-    $this->_tiv_template["start_info_bloc"] = array(5, 102);
+    $this->_tiv_template["pied"] = "template-pdf/pied-page-TIV-idf.pdf";
+    $this->_tiv_template["first_page_tiv_count"]   = 6;
+    $this->_tiv_template["max_tiv_count_per_page"] = 13;
+    $this->_tiv_template["interligne"]             = 7;
+    $this->_tiv_template["start_info_bloc"]        = array(5, 102);
     // Informations globales sur la seance TIV
     $this->_tiv_template["champ"]["nom_club"]        = array(187, 36.5, 98, $nom_club);
     $this->_tiv_template["champ"]["numero_club"]     = array(187, 43.5, 98, $numero_club);
@@ -69,14 +72,7 @@ class PdfTIV extends FPDI {
     $this->Cell(0, 8, utf8_decode('Fiche TIV du '.$this->_date." - club $nom_club"), 'B', 0, 'C');
     $this->Ln(11);
   }
-  function ClubFooter() {
-    global $nom_club;
-    $this->SetY(-15);
-    $this->SetFont('Arial','I',8);
-    $this->Cell(0,10,utf8_decode('Inspection TIV du '.$this->_date." - Club $nom_club - Page ".$this->PageNo().'/{nb}'),0,0,'C');
-  }
   function addInspecteurResume() {
-    return;
     $this->AddPage();
     $this->ClubHeader();
     $this->SetFont('Times','B',16);
@@ -173,6 +169,14 @@ class PdfTIV extends FPDI {
     }
   }
   function addInspecteurFileBlocsInformationsTableHeader() {
+    // Charge template pied de page inspection TIV
+    $pageCount = $this->setSourceFile($this->_tiv_template["pied"]);
+    if($pageCount == 0) {
+      print "Erreur d'ouverture du PDF ".$this->_tiv_template["pied"];
+      exit();
+    }
+    $pied = $this->importPage(1, '/MediaBox');
+    $this->useTemplate($pied);
     // Init font + position
     $this->SetFont('Times', 'U', 10);
     $this->SetFillColor(255,255,255);
@@ -218,8 +222,9 @@ class PdfTIV extends FPDI {
                 "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = $id_inspecteur AND bloc.id = id_bloc";
     $db_result = $this->_db_con->query($db_query);
     // Compteur pour savoir le nombre de ligne que nous pouvons créer
-    $max_line_count = 7; // 8 lignes pour la première page puis 14 sur une page vierge
     $page_line_count = 1;
+    // Nombre de ligne pour la premiere page
+    $max_line_count  = $this->_tiv_template["first_page_tiv_count"];
     while($result = $db_result->fetch_array()) {
       $this->SetX($this->_tiv_template["start_info_bloc"][0]);
       foreach(array_keys($to_retrieve) as $elt) {
@@ -228,7 +233,7 @@ class PdfTIV extends FPDI {
       $this->Ln();
       if($page_line_count++ >= $max_line_count) {
         $page_line_count = 0;
-        $max_line_count = 14;
+        $max_line_count = $this->_tiv_template["max_tiv_count_per_page"];
         $this->AddPage('L');
         $this->addInspecteurFileBlocsInformationsTableHeader();
         $this->SetFont('Times', '', 10);
