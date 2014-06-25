@@ -25,6 +25,7 @@ class PdfTIV extends FPDI {
     $this->_tiv_template["file"] = "template-pdf/entete-inspection-TIV-idf.pdf";
     $this->_tiv_template["pied"] = "template-pdf/pied-page-TIV-idf.pdf";
     $this->_tiv_template["first_page_tiv_count"]   =  6;
+    $this->_tiv_template["always_show_tiv_info"]   = false;
     $this->_tiv_template["max_tiv_count_per_page"] = 13;
     $this->_tiv_template["interligne"]             =  7;
     $this->_tiv_template["interligne_bloc"]        =  10;
@@ -131,12 +132,7 @@ class PdfTIV extends FPDI {
     $this->Ln(10);
     $this->addInspectionResume();
   }
-  function addInspecteurFile() {
-    $db_query = "SELECT DISTINCT id_inspecteur_tiv, inspecteur_tiv.nom, numero_tiv, adresse_tiv, telephone_tiv, id_inspecteur_tiv ".
-                "FROM inspection_tiv, inspecteur_tiv ".
-                "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = inspecteur_tiv.id ".
-                "GROUP BY inspection_tiv.id_inspecteur_tiv ORDER BY inspecteur_tiv.nom";
-    $db_result = $this->_db_con->query($db_query);
+  function addInspectionHeader($result) {
     // Charge template fiche inspection TIV
     $pageCount = $this->setSourceFile($this->_tiv_template["file"]);
     if($pageCount == 0) {
@@ -144,30 +140,39 @@ class PdfTIV extends FPDI {
       exit();
     }
     $template = $this->importPage(1, '/MediaBox');
+    // Procede a l'affichage de la fiche
+    $this->SetFont('Times', '', 13);
+    $this->addPage('L');
+    $this->useTemplate($template);
+    foreach($this->_tiv_template["champ"] as $key => $value) {
+      $this->SetXY($value[0], $value[1]);
+      $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($value[3]), $this->_debug, 'R');
+    }
+    foreach($this->_tiv_template["result"] as $key => $value) {
+      $this->SetXY($value[0], $value[1]);
+      if($key === "adresse_tiv") {
+        $result[$key] = str_replace('\n', "\n", preg_replace("/\s([0-9]{5})/", " \\n\\1", $result[$key]));
+      }
+      $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($result[$key]), $this->_debug, 'R');
+    }
+    foreach($this->_tiv_template["query"] as $key => $value) {
+      $db_query = preg_replace("/ID_INSPECTEUR/", $result["id_inspecteur_tiv"], $value[3]);
+      $db_count = $this->_db_con->query($db_query);
+      $count = $db_count->fetch_array();
+      $this->SetXY($value[0], $value[1]);
+      $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($count[0]), $this->_debug, 'R');
+    }
+    $this->SetY($this->_tiv_template["start_info_bloc"][1]);
+  }
+  function addInspecteurFile() {
+    $db_query = "SELECT DISTINCT id_inspecteur_tiv, inspecteur_tiv.nom, numero_tiv, adresse_tiv, telephone_tiv, id_inspecteur_tiv ".
+                "FROM inspection_tiv, inspecteur_tiv ".
+                "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = inspecteur_tiv.id ".
+                "GROUP BY inspection_tiv.id_inspecteur_tiv ORDER BY inspecteur_tiv.nom";
+    $db_result = $this->_db_con->query($db_query);
     while($result = $db_result->fetch_array()) {
-      $this->SetFont('Times', '', 13);
-      $this->addPage('L');
-      $this->useTemplate($template);
-      foreach($this->_tiv_template["champ"] as $key => $value) {
-        $this->SetXY($value[0], $value[1]);
-        $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($value[3]), $this->_debug, 'R');
-      }
-      foreach($this->_tiv_template["result"] as $key => $value) {
-        $this->SetXY($value[0], $value[1]);
-        if($key === "adresse_tiv") {
-          $result[$key] = str_replace('\n', "\n", preg_replace("/\s([0-9]{5})/", " \\n\\1", $result[$key]));
-        }
-        $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($result[$key]), $this->_debug, 'R');
-      }
-      foreach($this->_tiv_template["query"] as $key => $value) {
-        $db_query = preg_replace("/ID_INSPECTEUR/", $result["id_inspecteur_tiv"], $value[3]);
-        $db_count = $this->_db_con->query($db_query);
-        $count = $db_count->fetch_array();
-        $this->SetXY($value[0], $value[1]);
-        $this->MultiCell($value[2], $this->_tiv_template["interligne"], utf8_decode($count[0]), $this->_debug, 'R');
-      }
-      $this->SetY($this->_tiv_template["start_info_bloc"][1]);
-      $this->addInspecteurFileBlocsInformations($result[0]);
+      $this->addInspectionHeader($result);
+      $this->addInspecteurFileBlocsInformations($result);
     }
   }
   function addInspecteurFileBlocsInformationsTableHeader() {
@@ -226,7 +231,7 @@ class PdfTIV extends FPDI {
     // Changement ligne
     $this->Ln();
   }
-  function addInspecteurFileBlocsInformations($id_inspecteur) {
+  function addInspecteurFileBlocsInformations($bloc_result) {
     $this->addInspecteurFileBlocsInformationsTableHeader();
     $interligne = $this->_tiv_template["interligne_bloc"];
     $start_y = $this->GetY();
@@ -234,7 +239,8 @@ class PdfTIV extends FPDI {
     $to_retrieve = $this->_bloc_info_to_retrieve;
     $db_query = "SELECT ".implode(",", array_keys($to_retrieve))." ".
                 "FROM inspection_tiv, bloc ".
-                "WHERE inspection_tiv.date = '".$this->_date."' AND id_inspecteur_tiv = $id_inspecteur AND bloc.id = id_bloc";
+                "WHERE inspection_tiv.date = '".$this->_date."' ".
+                "AND id_inspecteur_tiv = ".$bloc_result[0]." AND bloc.id = id_bloc";
     $db_result = $this->_db_con->query($db_query);
     // Compteur pour savoir le nombre de ligne que nous pouvons créer
     $page_line_count = 1;
@@ -259,9 +265,14 @@ class PdfTIV extends FPDI {
         // Reinit variable affichage
         $height = 0;
         $page_line_count = 0;
-        $max_line_count = $this->_tiv_template["max_tiv_count_per_page"];
-        $this->AddPage('L');
-        $this->addInspecteurFileBlocsInformationsTableHeader();
+        // Rajout de l'entete si on l'affiche tout le temps
+        if($this->_tiv_template["always_show_tiv_info"]) {
+          $this->addInspectionHeader($bloc_result);
+        } else {
+          $max_line_count = $this->_tiv_template["max_tiv_count_per_page"];
+          $this->AddPage('L');
+          $this->addInspecteurFileBlocsInformationsTableHeader();
+        }
         $start_y = $this->GetY();
         $this->SetFont('Times', '', 10);
       }
