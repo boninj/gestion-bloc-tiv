@@ -18,7 +18,7 @@
   </head>
   <body>
 <?php
-foreach(array("connect_db.inc.php", "configuration.inc.php", "fpdf17/fpdf.php", "logo_club.png") as $file) {
+foreach(array("connect_db.inc.php", "configuration.inc.php", "fpdf17/fpdf.php", "fpdi/fpdi.php", "logo_club.png") as $file) {
   if(!file_exists($file)) {
     print "<div class='error'>L'application n'est pas correctement installé (il manque le fichier $file).</div>";
     print "<div class='error'>Merci de suivre les instructions du fichier <a href='README'>README</a> avant de continuer.</div>";
