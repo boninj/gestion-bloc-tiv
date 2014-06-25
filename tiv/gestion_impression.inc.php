@@ -144,8 +144,8 @@ class PdfTIV extends FPDI {
       exit();
     }
     $template = $this->importPage(1, '/MediaBox');
-    $this->SetFont('Times', '', 13);
     while($result = $db_result->fetch_array()) {
+      $this->SetFont('Times', '', 13);
       $this->addPage('L');
       $this->useTemplate($template);
       foreach($this->_tiv_template["champ"] as $key => $value) {
