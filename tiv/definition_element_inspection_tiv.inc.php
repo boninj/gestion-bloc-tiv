@@ -8,12 +8,24 @@ class inspection_tivElement extends TIVElement {
     $this->_parent_url       = "./#admin";
     $this->_parent_url_label = "<img src='images/admin.png' /> Administration";
     $this->_update_label = "Mettre à jour les informations sur l&#145;inspection TIV";
+    // Structure pour l'affichage des inspections dans l'interface Web
     $this->_elements = array(
-      "id", "id_bloc", "id_inspecteur_tiv", "date", "etat_exterieur", "remarque_exterieur", "etat_interieur",
-      "remarque_interieur", "etat_filetage", "remarque_filetage", "etat_robineterie", "remarque_robineterie",
-      "decision", "remarque",);
-    $this->_columns = array("Réf.", "Numéro du bloc", "Constructeur bloc", "Marque bloc", "Capacité bloc",
-                            "Nom de l'inspecteur TIV", "Date dernière épreuve", "Date dernier TIV", "Décision", "Remarque");
+      "id"                 => "Réf.",
+      "info_bloc"          => "Info bloc",
+      "constructeur"       => "Constructeur bloc",
+      "marque"             => "Marque bloc",
+      "capacite"           => "Capacité bloc",
+      "nom"                => "Nom de l'inspecteur TIV",
+      "date_derniere_epreuve" => "Date dernière épreuve",
+      "date_dernier_tiv"   => "Date dernier TIV",
+      "decision"           => "Décision",
+      "remarque"           => "Remarque",
+      "etat_exterieur"     => "Extérieur",
+      "etat_interieur"     => "Intérieur",
+      "etat_filetage"      => "Filetage",
+      "etat_robineterie"   => "Robinet",
+    );
+    // Information pour le formulaire de modification
     $this->_forms = array(
       "id_bloc"              => array("required", "text", "Numéro du bloc associé"),
       "id_inspecteur_tiv"    => array("required", "text", "Numéro de TIV de l'inspecteur"),
@@ -133,8 +145,10 @@ $('#switch_all_ok').live(\"click\", function() {
   function getDBQuery() {
     return "
 SELECT
-  inspection_tiv.id, CONCAT('Réf :', bloc.id, ' / n° club : ', bloc.id_club), bloc.constructeur, bloc.marque,
-  bloc.capacite, inspecteur_tiv.nom, bloc.date_derniere_epreuve, bloc.date_dernier_tiv,decision,remarque 
+  inspection_tiv.id, CONCAT('Réf :', bloc.id, ' / n° club : ', bloc.id_club) as info_bloc,
+  bloc.constructeur, bloc.marque, bloc.capacite, inspecteur_tiv.nom,
+  bloc.date_derniere_epreuve, bloc.date_dernier_tiv,decision,remarque,
+  etat_exterieur, etat_interieur, etat_filetage, etat_robineterie
 FROM
   inspection_tiv
 INNER JOIN bloc           ON inspection_tiv.id_bloc = bloc.id
@@ -143,28 +157,6 @@ WHERE
   inspection_tiv.date = '".$this->_date."'
 ORDER BY
   inspecteur_tiv.nom";
-  }
-  function getHTMLHeaderTable() {
-    $header = "    <tr>\n      <th>";
-    $header .= join("</th><th>", $this->_columns);
-    if(!$this->_read_only) $header .= "</th><th>Opérations";
-    $header .= "</th>\n    </tr>\n";
-    return $header;
-  }
-  function getHTMLLineTable(&$record, $default_class) {
-    $current_class = $default_class;
-    $line = "    <tr class=\"$current_class\">\n      <td>";
-    $id = $record[0];
-    $to_display = array();
-    for($i = 0; $i < count($this->_columns); $i++) {
-      $to_display []= $record[$i];
-    }
-    if(!$this->_read_only) {
-      $to_display [] = $this->getEditUrl($id);
-    }
-    $line .= implode("</td><td>", $to_display);
-    $line .= "</td>\n    </tr>\n";
-    return $line;
   }
   function getFormInput($label, $value) {
     if($label === "id_inspecteur_tiv") {
