@@ -156,7 +156,7 @@ LEFT  JOIN inspecteur_tiv ON inspection_tiv.id_inspecteur_tiv = inspecteur_tiv.i
 WHERE
   inspection_tiv.date = '".$this->_date."'
 ORDER BY
-  inspecteur_tiv.nom";
+  inspecteur_tiv.nom,info_bloc";
   }
   function getFormInput($label, $value) {
     if($label === "id_inspecteur_tiv") {
