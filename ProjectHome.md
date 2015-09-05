@@ -1,0 +1,1 @@
+Ce projet est une application PHP/MySQL écrite dans le but de pouvoir gérer le matériel d'un club (bloc, détendeur, stabs etc.) ainsi que de préparer les TIVs (inspection des blocs de plongée tous les ans par les personnes TIVs du club).
