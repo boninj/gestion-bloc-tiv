@@ -53,7 +53,7 @@ class PdfTIV extends FPDI {
       "Numéro série Identification" => array(24, "numero"),
       "Date de 1ière requalification"  => array(24, "date_premiere_epreuve"),
       "Date dernière requalification"  => array(24, "date_derniere_epreuve"),
-      "Date visite précédente"         => array(22, "date"),
+      "Date visite précédente"         => array(22, "date_dernier_tiv"),
       "Critères notables lors de la visite" => array(
         64, array(
           "Extérieur" => array(16, "etat_exterieur"),
