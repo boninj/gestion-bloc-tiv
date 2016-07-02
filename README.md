@@ -1,4 +1,8 @@
-== A propos ==
+Application TIV
+===============
+
+A propos
+--------
 
 L'application de TIV a pour but de répertorier les blocs (ainsi que quelques petits matériels annexes comme les stabs ou les détendeurs) d'un club de plongée et de proposer d'aider le responsable du matériel dans le suivi de son matériel (date de TIV/préparation des TIVs mais également date des prochaines réépreuves etc.).
 
@@ -16,11 +20,13 @@ A noter que si jamais un de ces fichiers devait manquer, l'application vous donn
 
 Cette application est soumise à la licence GPL. Enfin, à souligner, le logiciel est fourni "en l'état" sans garantie d'aucune sorte, expresse ou implicite. En dehors de ça bon TIV !
 
-== Crédits ==
+Crédits
+-------
 
 Les images sont extraites des icônes oxygen de KDE4. Vous pouvez les récupérer à l'adresse suivante : http://www.oxygen-icons.org/
 
 A noter également que l'application s'appuie sur les librairies suivantes pour fonctionner :
+
 - jQuery      http://jquery.com/
 - DataTables  http://datatables.net/ (s'appuie sur jQuery pour fonctionner)
 - FPDF        http://www.fpdf.org/
