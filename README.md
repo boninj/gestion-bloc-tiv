@@ -14,6 +14,8 @@ Il faut également renseigner le fichier configuration.inc.php afin de rajouter l
 
 Il vous faudra également la version 1.7 de FPDF (elle est téléchargeable à l'adresse suivante : http://www.fpdf.org/). Il faudra ensuite la décompresser dans le sous-répertoire fpdf17 à la racine du répertoire de l'application.
 
+Le plugin FPDI sera aussi nécessaire pour le bon fonctionnement du logiciel. Il devra être téléchargé à l'adresse https://www.setasign.com/products/fpdi/downloads/ pour être copié dans le dossier fpdi à la racine du site.
+
 Enfin, il faut placer le logo de votre club dans le fichier logo_club.png.
 
 A noter que si jamais un de ces fichiers devait manquer, l'application vous donnera une notification sur le fichier manquant.
