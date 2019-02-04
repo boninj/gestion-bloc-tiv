@@ -234,4 +234,18 @@ CREATE TABLE `stab` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+-- 
+-- Structure de la table `palme`
+-- 
+
+CREATE TABLE `masque` (
+  `id` int(16) NOT NULL,
+  `modele` varchar(255) NOT NULL,
+  `taille` varchar(16) NOT NULL,
+  `date_achat` date NOT NULL,
+  `observation` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 -- Dump completed on 2013-02-18 22:48:34
+-- Édité à la main par boninj le 04/02/2019 à 23:22

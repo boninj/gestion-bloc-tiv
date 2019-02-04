@@ -403,7 +403,7 @@ class TIVElement {
 }
 
 include_once("definition_element_bloc.inc.php");
-include_once("definition_element_palme.inc.php");
+include_once("definition_element_masque.inc.php");
 include_once("definition_element_detendeur.inc.php");
 include_once("definition_element_palme.inc.php");
 include_once("definition_element_stab.inc.php");
