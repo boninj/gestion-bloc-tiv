@@ -4,7 +4,7 @@ Application TIV
 A propos
 --------
 
-L'application de TIV a pour but de répertorier les blocs (ainsi que quelques petits matériels annexes comme les stabs ou les détendeurs) d'un club de plongée et de proposer d'aider le responsable du matériel dans le suivi de son matériel (date de TIV/préparation des TIVs mais également date des prochaines réépreuves etc.).
+L'application de TIV a pour but de répertorier les blocs (ainsi que quelques petits matériels annexes comme les stabs, les détendeurs ou les masques) d'un club de plongée et de proposer d'aider le responsable du matériel dans le suivi de son matériel (date de TIV/préparation des TIVs mais également date des prochaines réépreuves etc.).
 
 L'application a été développé sur un serveur Apache PHP avec une base MySQL.
 
